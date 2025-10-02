@@ -25,22 +25,22 @@ export const educationData: Education[] = [
   {
     id: "2",
     instituteName: "Shree Muktajivan Vidhyalaya",
-    course: "Standard 10",
-    grades: [
-      { type: "Overall Percentage", value: "83.0 %" }
-    ],
-    logo: "assets/muk.jpeg",
-    timeframe: "2020-2021"
-  },
-  {
-    id: "2",
-    instituteName: "Shree Muktajivan Vidhyalaya",
     course: "Standard 12th Science",
     grades: [
       { type: "Overall Percentage", value: "76.0 %" }
     ],
     logo: "assets/muk.jpeg",
     timeframe: "2021-2022"
+  },
+  {
+    id: "2",
+    instituteName: "Shree Muktajivan Vidhyalaya",
+    course: "Standard 10",
+    grades: [
+      { type: "Overall Percentage", value: "83.0 %" }
+    ],
+    logo: "assets/muk.jpeg",
+    timeframe: "2020-2021"
   },
 ]
 
@@ -145,6 +145,7 @@ export const skillsData: Skill[] = [
   { id: "34", name: "TensorFlow", category: "Libraries" },
   { id: "35", name: "Seaborn", category: "Libraries" },
   { id: "36", name: "CodeceptJS", category: "Tools" },
+  { id: "37", name: "KNN", category: "Artificial Intelligence" },
 ]
 
 export const projectsData: Project[] = [
@@ -168,7 +169,7 @@ export const projectsData: Project[] = [
     logo: "https://via.placeholder.com/50",
     madeAt: 1,
     skills: [
-      "10", "13", "36", "19", "17", "22", "25"
+      "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26",
     ]
   },
   {
@@ -192,7 +193,7 @@ export const projectsData: Project[] = [
     logo: "https://via.placeholder.com/50",
     madeAt: 0,
     skills: [
-      "29", "22", "14", "13", "10", "17", "25", "24", "23"
+      "22", "14", "10", "13", "11", "12", "17", "25", "24", "23", "26"
     ]
   },
 ]
