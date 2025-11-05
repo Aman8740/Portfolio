@@ -151,18 +151,111 @@ export const skillsData: Skill[] = [
 export const projectsData: Project[] = [
   {
     id: "1",
-    name: "Automated Testing System",
+    name: "JADE",
+    slogan: "Analysis and visualization made easy",
+    description: `
+## Overview
+
+**JADE** is a powerful data visualization platform that helps you transform raw data into beautiful, interactive dashboards. Whether you're analyzing business metrics, tracking KPIs, or exploring datasets, JADE makes it simple to create stunning visualizations without writing code.
+
+## Key Features
+
+- **Drag-and-Drop Dashboard Builder**: Easily create and rearrange charts on your dashboard by dragging them around - changes save automatically.
+- **Multiple Chart Types**: Choose from Line Charts, Bar Charts, Area Charts, Pie Charts, Radar Charts, and Scatter Plots to visualize your data.
+- **Connect Any Database**: Works with all major databases including MySQL, PostgreSQL, MongoDB, and more - just enter your connection details.
+- **Import CSV Files**: Simply upload your Excel or CSV files to create instant visualizations.
+- **Connect to APIs**: Pull data from external services and APIs to keep your dashboards up-to-date automatically.
+- **Rich Text Editor**: Write your queries with helpful features like syntax highlighting and auto-completion.
+- **Fully Customizable**: Adjust colors, styles, chart types, and layouts to match your needs and branding.
+- **Works Everywhere**: Use it in your web browser or download the desktop app for Windows.
+- **Secure Sharing**: Share your dashboards with team members or clients with secure access links.
+- **Light & Dark Themes**: Switch between light and dark modes, and customize your dashboard colors.
+- **Interactive Variables**: Add filters and dropdowns to let viewers interact with your data dynamically.
+- **Live Preview**: See your changes instantly as you build and customize your charts.
+- **Mobile Friendly**: Your dashboards automatically adjust to look great on any device or screen size.
+    `,
+    logo: "assets/Jade.png",
+    madeAt: 0,
+    skills: [
+      "22", "14", "10", "13", "11", "12", "17", "25", "24", "23", "26", "29", "27"
+    ]
+  },
+  {
+    id: "2",
+    name: "Quickflow",
+    slogan: "End-to-End Process Digitalization and Automation for Pharma",
+    description: `
+## Overview
+
+**Quickflow** is a comprehensive Low Code/No Code platform specifically designed for the Pharma, Biotech, and Life Science industries. It digitizes and automates end-to-end business processes, ensuring USFDA compliance while streamlining workflows and enhancing operational efficiency across all departments.
+
+## Key Features
+
+### Quality Management
+- **Quality Management System (QMS)**: Manage change controls, deviations, CAPA, market complaints, and OOS with real-time visibility
+- **Document Management System (DMS)**: Control SOPs, STPs, and Protocols with audit trails and version control
+- **Annual Product Quality Review (APQR)**: Automate quality review processes for informed decision-making
+
+### Laboratory Management
+- **LIMS (Laboratory Information Management System)**: Complete test request lifecycle management from initiation to COA issuance
+- **Electronic Lab Notebook (ELN)**: Digital lab notebooks with enhanced collaboration and compliance
+- **e-Sheet**: Automate laboratory calculations with web-based forms and access controls
+- **Genius Lab**: Integrate standalone instruments with RS232/ethernet connectivity for raw data management
+- **Standard Management**: Oversee laboratory standards ensuring regulatory compliance and accuracy
+- **Chemical Management**: Track chemical lifecycle from procurement to disposal with safety compliance
+
+### Production & Manufacturing
+- **Batch Manufacturing Record (BMR)**: Digital oversight with customized templates, eliminating paper processes
+- **Continuous Process Verification (CPV)**: Real-time data collection, analysis, and trending for quality assurance
+- **Alarm Trending Management**: Monitor critical alarms and identify issues proactively
+
+### Quality Control
+- **eSPM**: Automate QC planning for faster turnaround times
+- **Column Management**: Optimize chromatography columns from procurement to performance monitoring
+- **QCMS-FMS**: Ensure data integrity for non-chromatographic standalone instruments
+
+### Warehouse & Inventory
+- **Warehouse Management System (WMS)**: Complete inventory lifecycle management from indenting to disposal
+- **Loose Sheet Management**: Organize unbound documents digitally with enhanced security
+
+### Digital Logbooks
+- **Electronic Logbook**: Digitize traditional logbooks for equipment usage, calibrations, and activities tracking
+
+### IT & Security
+- **User Access Management (UAM)**: Automate user access rights with RPA, enhancing security and productivity
+
+## Platform Capabilities
+
+- **Low Code/No Code Development**: Build applications without extensive programming
+- **Business Process Management**: Streamline complex workflows
+- **Robotic Process Automation**: Automate repetitive tasks
+- **Full USFDA Compliance**: Meet all regulatory requirements
+- **Audit Trails**: Complete tracking and version control
+- **Real-Time Analytics**: Monitor processes and performance instantly
+- **Data Integrity**: Ensure data security and compliance
+- **System Integration**: Connect with existing enterprise systems
+- **Instant ROI**: Quick implementation with immediate value
+    `,
+    logo: "assets/Quickflow.png",
+    madeAt: 1,
+    skills: [
+      "10", "13", "14", "11", "12", "19", "17", "22", "26", "29", "27", "25",
+    ]
+  },
+  {
+    id: "3",
+    name: "QuickTest",
     slogan: "Efficient and reliable software testing integrated with AI.",
     description: `
 ## Key Features
 
 - **Multi product configuration**: Supports Configuration for multiple products of the same organization and considers all possibilities and versions.
-- **Automated Test Management**: An automated testing system that lets users manage and run product-specific tests with minimal human intervention
-- **Flexible Configuration**: Each test can have its own configuration with different possible flows of running tests
-- **Smart Test Selection**: The system supports ignoring test cases when needed
-- **Comprehensive Reporting**: It generates detailed reports that help in identifying issues and improving software quality
-- **Video Documentation**: Provides video recordings of test runs for better analysis and debugging
-- **Rich Diagnostics**: Provides image for each failed test for investigation
+- **Automated Test Management**: An automated testing system that lets users manage and run product-specific tests with minimal human intervention.
+- **Flexible Configuration**: Each test can have its own configuration with different possible flows of running tests.
+- **Smart Test Selection**: The system supports ignoring test cases when needed.
+- **Comprehensive Reporting**: It generates detailed reports that help in identifying issues and improving software quality.
+- **Video Documentation**: Provides video recordings of test runs for better analysis and debugging.
+- **Rich Diagnostics**: Provides image for each failed test for investigation.
 - **Error Log**: For each test case provides information about what went wrong.
 - **Information banner**: Provides information about what is going on while the test is running.
     `,
@@ -172,28 +265,5 @@ export const projectsData: Project[] = [
       "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26",
     ]
   },
-  {
-    id: "2",
-    name: "JADE",
-    slogan: "Analysis and visualization made easy",
-    description: `
-## Overview
 
-**JADE** is a comprehensive data analysis and visualization platform available as desktop applications.
-
-## Core Capabilities
-
-- **Desktop Application**: Windows-based desktop application for local data processing
-- **Database Connectivity**: Lets users create connections to their own databases seamlessly
-- **CSV Data Upload**: Web application that allows users to upload datasets in CSV format
-- **Exploratory Data Analysis**: Perform comprehensive EDA using various visualization techniques
-- **Dashboard Creation**: Provides setup to create interactive dashboards and variables using SQL and NoSQL databases
-- **Customizable Views**: Lets users customize the view of charts and dashboards according to their needs
-    `,
-    logo: "https://via.placeholder.com/50",
-    madeAt: 0,
-    skills: [
-      "22", "14", "10", "13", "11", "12", "17", "25", "24", "23", "26"
-    ]
-  },
 ]
