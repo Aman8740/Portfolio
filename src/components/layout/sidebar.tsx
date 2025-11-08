@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Avatar, AvatarImage, AvatarFallback, Button, Collapsible, CollapsibleContent } from "@/components/ui"
-import { Linkedin, Github, ChevronLeft, ChevronRight } from "lucide-react"
+import { Linkedin, Github, ChevronLeft, ChevronRight, Download } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { cn } from "@/lib/utils"
 import type { PersonalInfo } from "@/types"
@@ -62,6 +62,14 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                 >
                   <Github className="w-3 h-3 sm:w-4 sm:h-4" />
                 </a>
+                <a
+                  href="/Portfolio/assets/resume.pdf"
+                  download="Aman_Shaikh_Resume.pdf"
+                  className="hover:text-primary transition-colors"
+                  title="Download Resume"
+                >
+                  <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+                </a>
                 <ThemeToggle collapsed={true} />
               </div>
             </div>
@@ -104,6 +112,13 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                   </a>
                 </div>
 
+                <div className="flex items-center space-x-3 text-sm">
+                  <Download className="w-4 h-4 text-muted-foreground" />
+                  <a href="/Portfolio/assets/resume.pdf" download="Aman_Shaikh_Resume.pdf" className="hover:text-primary">
+                    Download Resume
+                  </a>
+                </div>
+
                 <ThemeToggle />
               </div>
             </CollapsibleContent>
@@ -127,6 +142,14 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                   className="cursor-pointer hover:text-primary transition-colors"
                 >
                   <Github className="w-4 h-4 text-muted-foreground" />
+                </a>
+                <a
+                  href="/Portfolio/assets/resume.pdf"
+                  download="Aman_Shaikh_Resume.pdf"
+                  title="Download Resume"
+                  className="cursor-pointer hover:text-primary transition-colors"
+                >
+                  <Download className="w-4 h-4 text-muted-foreground" />
                 </a>
                 <div className="mt-4">
                   <ThemeToggle collapsed={true} />

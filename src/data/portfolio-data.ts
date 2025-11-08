@@ -259,7 +259,7 @@ export const projectsData: Project[] = [
 - **Error Log**: For each test case provides information about what went wrong.
 - **Information banner**: Provides information about what is going on while the test is running.
     `,
-    logo: "https://via.placeholder.com/50",
+    logo: "assets/QuickTest.png",
     madeAt: 1,
     skills: [
       "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26",
