@@ -169,10 +169,8 @@ export const projectsData: Project[] = [
 - **Fully Customizable**: Adjust colors, styles, chart types, and layouts to match your needs and branding.
 - **Works Everywhere**: Use it in your web browser or download the desktop app for Windows.
 - **Secure Sharing**: Share your dashboards with team members or clients with secure access links.
-- **Light & Dark Themes**: Switch between light and dark modes, and customize your dashboard colors.
 - **Interactive Variables**: Add filters and dropdowns to let viewers interact with your data dynamically.
 - **Live Preview**: See your changes instantly as you build and customize your charts.
-- **Mobile Friendly**: Your dashboards automatically adjust to look great on any device or screen size.
     `,
     logo: "assets/Jade.png",
     madeAt: 0,
