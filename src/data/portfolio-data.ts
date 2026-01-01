@@ -109,48 +109,81 @@ export const experienceData: Experience[] = [
 ]
 
 export const skillsData: Skill[] = [
-  { id: "1", name: "English", category: "Language" },
-  { id: "2", name: "Japanese", category: "Language" },
-  { id: "3", name: "Hindi", category: "Language" },
-  { id: "4", name: "Gujarati", category: "Language" },
-  { id: "5", name: "Decision Trees", category: "Artificial Intelligence" },
-  { id: "6", name: "Neural Networks", category: "Artificial Intelligence" },
-  { id: "7", name: "SVM", category: "Artificial Intelligence" },
-  { id: "8", name: "Linear Regression", category: "Artificial Intelligence" },
-  { id: "9", name: "Logistic Regression", category: "Artificial Intelligence" },
-  { id: "10", name: "React", category: "Frontend" },
-  { id: "11", name: "HTML", category: "Frontend" },
-  { id: "12", name: "CSS", category: "Frontend" },
-  { id: "13", name: "Node", category: "Backend" },
-  { id: "14", name: "Express", category: "Backend" },
-  { id: "15", name: "Django", category: "Backend" },
-  { id: "16", name: "Flask", category: "Backend" },
-  { id: "17", name: "TypeScript", category: "Programming Language" },
-  { id: "18", name: "Python", category: "Programming Language" },
-  { id: "19", name: "JavaScript", category: "Programming Language" },
-  { id: "20", name: "Java", category: "Programming Language" },
-  { id: "21", name: "SQL", category: "Query Language" },
-  { id: "22", name: "MongoDB", category: "Database" },
-  { id: "23", name: "MySql", category: "Database" },
-  { id: "24", name: "PostgreSQL", category: "Database" },
-  { id: "25", name: "MSSql", category: "Database" },
-  { id: "26", name: "Git", category: "Tools" },
-  { id: "27", name: "Grafana", category: "Tools" },
-  { id: "28", name: "Redux", category: "Tools" },
-  { id: "29", name: "Shadcn", category: "Libraries" },
-  { id: "30", name: "Numpy", category: "Libraries" },
-  { id: "31", name: "Matplotlib", category: "Libraries" },
-  { id: "32", name: "Pandas", category: "Libraries" },
-  { id: "33", name: "Scikit-learn", category: "Libraries" },
-  { id: "34", name: "TensorFlow", category: "Libraries" },
-  { id: "35", name: "Seaborn", category: "Libraries" },
-  { id: "36", name: "CodeceptJS", category: "Tools" },
-  { id: "37", name: "KNN", category: "Artificial Intelligence" },
+  { id: "1", name: "English", category: "Language", level: "Native" },
+  { id: "2", name: "Japanese", category: "Language", level: "Pre-Intermediate" },
+  { id: "3", name: "Hindi", category: "Language", level: "Native" },
+  { id: "4", name: "Gujarati", category: "Language", level: "Native" },
+  { id: "5", name: "Decision Trees", category: "Artificial Intelligence", level: "Intermediate" },
+  { id: "6", name: "Neural Networks", category: "Artificial Intelligence", level: "Intermediate" },
+  { id: "7", name: "SVM", category: "Artificial Intelligence", level: "Intermediate" },
+  { id: "8", name: "Linear Regression", category: "Artificial Intelligence", level: "Advanced" },
+  { id: "9", name: "Logistic Regression", category: "Artificial Intelligence", level: "Advanced" },
+  { id: "10", name: "React", category: "Frontend", level: "Advanced" },
+  { id: "11", name: "HTML", category: "Frontend", level: "Expert" },
+  { id: "12", name: "CSS", category: "Frontend", level: "Advanced" },
+  { id: "13", name: "Node", category: "Backend", level: "Advanced" },
+  { id: "14", name: "Express", category: "Backend", level: "Advanced" },
+  { id: "15", name: "Django", category: "Backend", level: "Intermediate" },
+  { id: "16", name: "Flask", category: "Backend", level: "Intermediate" },
+  { id: "17", name: "TypeScript", category: "Programming Language", level: "Advanced" },
+  { id: "18", name: "Python", category: "Programming Language", level: "Expert" },
+  { id: "19", name: "JavaScript", category: "Programming Language", level: "Expert" },
+  { id: "20", name: "Java", category: "Programming Language", level: "Intermediate" },
+  { id: "21", name: "SQL", category: "Query Language", level: "Advanced" },
+  { id: "22", name: "MongoDB", category: "Database", level: "Advanced" },
+  { id: "23", name: "MySql", category: "Database", level: "Advanced" },
+  { id: "24", name: "PostgreSQL", category: "Database", level: "Advanced" },
+  { id: "25", name: "MSSql", category: "Database", level: "Intermediate" },
+  { id: "26", name: "Git", category: "Tools", level: "Advanced" },
+  { id: "27", name: "Grafana", category: "Tools", level: "Intermediate" },
+  { id: "28", name: "Redux", category: "Tools", level: "Advanced" },
+  { id: "29", name: "Shadcn", category: "Libraries", level: "Advanced" },
+  { id: "30", name: "Numpy", category: "Libraries", level: "Advanced" },
+  { id: "31", name: "Matplotlib", category: "Libraries", level: "Advanced" },
+  { id: "32", name: "Pandas", category: "Libraries", level: "Advanced" },
+  { id: "33", name: "Scikit-learn", category: "Libraries", level: "Intermediate" },
+  { id: "34", name: "TensorFlow", category: "Libraries", level: "Intermediate" },
+  { id: "35", name: "Seaborn", category: "Libraries", level: "Intermediate" },
+  { id: "36", name: "CodeceptJS", category: "Tools", level: "Intermediate" },
+  { id: "37", name: "KNN", category: "Artificial Intelligence", level: "Intermediate" },
 ]
 
 export const projectsData: Project[] = [
   {
     id: "1",
+    name: "EXML",
+    slogan: "Explore Machine Learning - Interactive Learning Platform",
+    description: `
+## Overview
+
+**EXML** is an interactive web platform where you can learn machine learning by exploring real projects and trying out trained ML models. It combines educational content with hands-on demonstrations, making ML concepts easy to understand through practice.
+
+## What You Can Do
+
+### Learn ML Concepts
+- Read comprehensive guides on ML fundamentals, algorithms, and techniques
+- Understand classification, regression, supervised and unsupervised learning
+- Explore algorithms like KNN, Naive Bayes, Neural Networks, and SVM
+- Mathematical equations displayed with clarity and precision
+
+### Try Live ML Models
+- Upload your own data and get instant predictions
+- See model confidence scores and detailed analysis
+- Compare different algorithms and their performance
+- Explore ML pipelines through dynamic animated visualizations
+
+## Why EXML?
+
+Perfect for anyone wanting to learn machine learning through real examples. The platform makes complex ML concepts accessible by letting you interact with working models, not just read about them.
+    `,
+    logo: "assets/EXML.svg",
+    madeAt: 0,
+    skills: [
+      "18", "16", "11", "12", "19", "30", "31", "32", "33", "34", "35", "26", "24"
+    ]
+  },
+  {
+    id: "2",
     name: "JADE",
     slogan: "Analysis and visualization made easy",
     description: `
@@ -160,13 +193,11 @@ export const projectsData: Project[] = [
 
 ## Key Features
 
-- **Drag-and-Drop Dashboard Builder**: Easily create and rearrange charts on your dashboard by dragging them around - changes save automatically.
 - **Multiple Chart Types**: Choose from Line Charts, Bar Charts, Area Charts, Pie Charts, Radar Charts, and Scatter Plots to visualize your data.
 - **Connect Any Database**: Works with all major databases including MySQL, PostgreSQL, MongoDB, and more - just enter your connection details.
 - **Import CSV Files**: Simply upload your Excel or CSV files to create instant visualizations.
 - **Connect to APIs**: Pull data from external services and APIs to keep your dashboards up-to-date automatically.
 - **Rich Text Editor**: Write your queries with helpful features like syntax highlighting and auto-completion.
-- **Fully Customizable**: Adjust colors, styles, chart types, and layouts to match your needs and branding.
 - **Works Everywhere**: Use it in your web browser or download the desktop app for Windows.
 - **Secure Sharing**: Share your dashboards with team members or clients with secure access links.
 - **Interactive Variables**: Add filters and dropdowns to let viewers interact with your data dynamically.
@@ -179,7 +210,7 @@ export const projectsData: Project[] = [
     ]
   },
   {
-    id: "2",
+    id: "3",
     name: "Quickflow",
     slogan: "End-to-End Process Digitalization and Automation for Pharma",
     description: `
@@ -241,7 +272,7 @@ export const projectsData: Project[] = [
     ]
   },
   {
-    id: "3",
+    id: "4",
     name: "QuickTest",
     slogan: "Efficient and reliable software testing integrated with AI.",
     description: `

@@ -80,7 +80,7 @@ export function ExperienceTab({ experience, skills }: ExperienceTabProps) {
               <div className="flex flex-wrap gap-2">
                 {categorySkills.map((skill) => (
                   <Badge key={skill.id} variant="outline" className="text-xs sm:text-sm">
-                    {skill.name}
+                    {skill.name} - {skill.level}
                   </Badge>
                 ))}
               </div>
