@@ -63,7 +63,7 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                   <Github className="w-3 h-3 sm:w-4 sm:h-4" />
                 </a>
                 <a
-                  href="/Portfolio/assets/resume.pdf"
+                  href="/Portfolio/assets/Resume.pdf"
                   download="Aman_Shaikh_Resume.pdf"
                   className="hover:text-primary transition-colors"
                   title="Download Resume"
@@ -114,7 +114,7 @@ export function Sidebar({ personalInfo }: SidebarProps) {
 
                 <div className="flex items-center space-x-3 text-sm">
                   <Download className="w-4 h-4 text-muted-foreground" />
-                  <a href="/Portfolio/assets/resume.pdf" download="Aman_Shaikh_Resume.pdf" className="hover:text-primary">
+                  <a href="/Portfolio/assets/Resume.pdf" download="Aman_Shaikh_Resume.pdf" className="hover:text-primary">
                     Download Resume
                   </a>
                 </div>
@@ -144,7 +144,7 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                   <Github className="w-4 h-4 text-muted-foreground" />
                 </a>
                 <a
-                  href="/Portfolio/assets/resume.pdf"
+                  href="/Portfolio/assets/Resume.pdf"
                   download="Aman_Shaikh_Resume.pdf"
                   title="Download Resume"
                   className="cursor-pointer hover:text-primary transition-colors"
