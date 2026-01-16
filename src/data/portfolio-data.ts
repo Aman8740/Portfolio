@@ -184,33 +184,6 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
   },
   {
     id: "2",
-    name: "JADE",
-    slogan: "Analysis and visualization made easy",
-    description: `
-## Overview
-
-**JADE** is a powerful data visualization platform that helps you transform raw data into beautiful, interactive dashboards. Whether you're analyzing business metrics, tracking KPIs, or exploring datasets, JADE makes it simple to create stunning visualizations without writing code.
-
-## Key Features
-
-- **Multiple Chart Types**: Choose from Line Charts, Bar Charts, Area Charts, Pie Charts, Radar Charts, and Scatter Plots to visualize your data.
-- **Connect Any Database**: Works with all major databases including MySQL, PostgreSQL, MongoDB, and more - just enter your connection details.
-- **Import CSV Files**: Simply upload your Excel or CSV files to create instant visualizations.
-- **Connect to APIs**: Pull data from external services and APIs to keep your dashboards up-to-date automatically.
-- **Rich Text Editor**: Write your queries with helpful features like syntax highlighting and auto-completion.
-- **Works Everywhere**: Use it in your web browser or download the desktop app for Windows.
-- **Secure Sharing**: Share your dashboards with team members or clients with secure access links.
-- **Interactive Variables**: Add filters and dropdowns to let viewers interact with your data dynamically.
-- **Live Preview**: See your changes instantly as you build and customize your charts.
-    `,
-    logo: "assets/Jade.png",
-    madeAt: 0,
-    skills: [
-      "22", "14", "10", "13", "11", "12", "17", "25", "24", "23", "26", "29", "27"
-    ]
-  },
-  {
-    id: "3",
     name: "Quickflow",
     slogan: "End-to-End Process Digitalization and Automation for Pharma",
     description: `
@@ -272,7 +245,7 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
     ]
   },
   {
-    id: "4",
+    id: "3",
     name: "QuickTest",
     slogan: "Efficient and reliable software testing integrated with AI.",
     description: `
