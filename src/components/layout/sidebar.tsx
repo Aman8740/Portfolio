@@ -144,7 +144,7 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                   <Github className="w-4 h-4 text-muted-foreground" />
                 </a>
                 <a
-                  href="/Portfolio/assets/Resume.pdf"
+                  href="/assets/Resume.pdf"
                   download="Aman_Shaikh_Resume.pdf"
                   title="Download Resume"
                   className="cursor-pointer hover:text-primary transition-colors"
