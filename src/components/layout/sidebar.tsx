@@ -1,42 +1,57 @@
-import { useState } from "react"
-import { Avatar, AvatarImage, AvatarFallback, Button, Collapsible, CollapsibleContent } from "@/components/ui"
-import { Linkedin, Github, ChevronLeft, ChevronRight, Download } from "lucide-react"
-import { ThemeToggle } from "./theme-toggle"
-import { cn } from "@/lib/utils"
-import type { PersonalInfo } from "@/types"
+import { useState } from "react";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  Button,
+  Collapsible,
+  CollapsibleContent,
+} from "@/components/ui";
+import {
+  Linkedin,
+  Github,
+  ChevronLeft,
+  ChevronRight,
+  Download,
+} from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
+import { cn } from "@/lib/utils";
+import type { PersonalInfo } from "@/types";
 
 const handleDownloadResume = async () => {
   try {
-    const response = await fetch('/Portfolio/assets/Resume.pdf')
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'Aman_Shaikh_Resume.pdf'
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
+    const response = await fetch("/Portfolio/assets/resume.pdf");
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Aman_Shaikh_Resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Failed to download resume:', error)
+    console.error("Failed to download resume:", error);
     // Fallback to direct link
-    window.open('/Portfolio/assets/Resume.pdf', '_blank')
+    window.open("/Portfolio/assets/Resume.pdf", "_blank");
   }
-}
+};
 
 interface SidebarProps {
-  personalInfo: PersonalInfo
+  personalInfo: PersonalInfo;
 }
 
 export function Sidebar({ personalInfo }: SidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className={cn(
-      "bg-card border-r border-border flex flex-col transition-all duration-300",
-      "w-full lg:min-h-screen lg:w-auto",
-      isCollapsed ? "lg:w-16" : "lg:w-60 xl:w-72 2xl:w-80"
-    )}>
+    <div
+      className={cn(
+        "bg-card border-r border-border flex flex-col transition-all duration-300",
+        "w-full lg:min-h-screen lg:w-auto",
+        isCollapsed ? "lg:w-16" : "lg:w-60 xl:w-72 2xl:w-80",
+      )}
+    >
       <div className="p-3 sm:p-4">
         <Button
           variant="ghost"
@@ -59,11 +74,16 @@ export function Sidebar({ personalInfo }: SidebarProps) {
             <Avatar className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex-shrink-0">
               <AvatarImage src={personalInfo.photo} alt={personalInfo.name} />
               <AvatarFallback className="text-xs sm:text-sm md:text-base">
-                {personalInfo.name.split(' ').map(n => n[0]).join('')}
+                {personalInfo.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <h1 className="text-base sm:text-lg md:text-xl font-bold break-words">{personalInfo.name}</h1>
+              <h1 className="text-base sm:text-lg md:text-xl font-bold break-words">
+                {personalInfo.name}
+              </h1>
               <div className="flex items-center space-x-2 sm:space-x-3 mt-1">
                 <a
                   href={personalInfo.linkedin}
@@ -97,21 +117,30 @@ export function Sidebar({ personalInfo }: SidebarProps) {
           {/* Desktop vertical layout */}
           <div className="hidden lg:flex flex-col items-center space-y-6 px-6">
             <div className="flex flex-col items-center space-y-4">
-              <Avatar className={cn(
-                "transition-all duration-300",
-                isCollapsed ? "w-8 h-8" : "w-32 h-32"
-              )}>
-                <AvatarImage src={personalInfo.photo} alt={personalInfo.name} />
-                <AvatarFallback className={cn(
+              <Avatar
+                className={cn(
                   "transition-all duration-300",
-                  isCollapsed ? "text-xs" : "text-2xl"
-                )}>
-                  {personalInfo.name.split(' ').map(n => n[0]).join('')}
+                  isCollapsed ? "w-8 h-8" : "w-32 h-32",
+                )}
+              >
+                <AvatarImage src={personalInfo.photo} alt={personalInfo.name} />
+                <AvatarFallback
+                  className={cn(
+                    "transition-all duration-300",
+                    isCollapsed ? "text-xs" : "text-2xl",
+                  )}
+                >
+                  {personalInfo.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
                 </AvatarFallback>
               </Avatar>
 
               <CollapsibleContent>
-                <h1 className="text-2xl font-bold text-center">{personalInfo.name}</h1>
+                <h1 className="text-2xl font-bold text-center">
+                  {personalInfo.name}
+                </h1>
               </CollapsibleContent>
             </div>
 
@@ -119,14 +148,24 @@ export function Sidebar({ personalInfo }: SidebarProps) {
               <div className="w-full space-y-4">
                 <div className="flex items-center space-x-3 text-sm">
                   <Linkedin className="w-4 h-4 text-muted-foreground" />
-                  <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+                  <a
+                    href={personalInfo.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
                     LinkedIn
                   </a>
                 </div>
 
                 <div className="flex items-center space-x-3 text-sm">
                   <Github className="w-4 h-4 text-muted-foreground" />
-                  <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" className="hover:text-primary">
+                  <a
+                    href={personalInfo.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
                     GitHub
                   </a>
                 </div>
@@ -180,5 +219,5 @@ export function Sidebar({ personalInfo }: SidebarProps) {
         </div>
       </Collapsible>
     </div>
-  )
+  );
 }
