@@ -101,7 +101,7 @@ export function ProjectsTab({ projects, experience, skills, personalPhoto }: Pro
                       <div className="flex flex-wrap gap-2">
                         {projectSkills.map((skill) => (
                           <Badge key={skill.id} variant="secondary" className="text-xs">
-                            {skill.name} - {skill.level}
+                            {skill.name} : {skill.level}
                           </Badge>
                         ))}
                       </div>
