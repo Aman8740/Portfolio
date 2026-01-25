@@ -30,7 +30,7 @@ interface SidebarProps {
 export function Sidebar({ personalInfo, resumes }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const handleDownloadResume = async (fileName: string, displayName: string) => {
+  const handleDownloadResume = async (fileName: string) => {
     try {
       const response = await fetch(`/Portfolio/assets/${fileName}`);
       const blob = await response.blob();
@@ -120,7 +120,7 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
                     {resumes.map((resume) => (
                       <DropdownMenuItem
                         key={resume.id}
-                        onClick={() => handleDownloadResume(resume.fileName, resume.name)}
+                        onClick={() => handleDownloadResume(resume.fileName)}
                       >
                         {resume.name}
                       </DropdownMenuItem>
@@ -201,7 +201,7 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
                     {resumes.map((resume) => (
                       <DropdownMenuItem
                         key={resume.id}
-                        onClick={() => handleDownloadResume(resume.fileName, resume.name)}
+                        onClick={() => handleDownloadResume(resume.fileName)}
                       >
                         {resume.name}
                       </DropdownMenuItem>
@@ -247,7 +247,7 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
                     {resumes.map((resume) => (
                       <DropdownMenuItem
                         key={resume.id}
-                        onClick={() => handleDownloadResume(resume.fileName, resume.name)}
+                        onClick={() => handleDownloadResume(resume.fileName)}
                       >
                         {resume.name}
                       </DropdownMenuItem>
