@@ -1,4 +1,4 @@
-import type { PersonalInfo, Education, Certificate, Experience, Skill, Project } from '@/types'
+import type { PersonalInfo, Education, Certificate, Experience, Skill, Project, Resume } from '@/types'
 
 export const personalInfo: PersonalInfo = {
   name: "Aman Shaikh",
@@ -6,6 +6,24 @@ export const personalInfo: PersonalInfo = {
   linkedin: "https://www.linkedin.com/in/aman-shaikh-754048243",
   github: "https://github.com/Aman8740"
 }
+
+export const resumesData: Resume[] = [
+  {
+    id: "1",
+    name: "Standard Resume",
+    fileName: "resume.pdf"
+  },
+  {
+    id: "2",
+    name: "Full Stack Resume",
+    fileName: "resume_full_stack.pdf"
+  },
+  {
+    id: "3",
+    name: "AI / ML Resume",
+    fileName: "resume_AI_engineer.pdf"
+  }
+]
 
 export const educationData: Education[] = [
   {
@@ -250,6 +268,10 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
     name: "QuickTest",
     slogan: "Efficient and reliable software testing integrated with AI.",
     description: `
+## Overview
+
+**QuickTest** is an automated testing platform that streamlines software quality assurance through intelligent test management and execution. It supports multi-product configurations and delivers comprehensive diagnostics with video documentation and detailed reporting.
+
 ## Key Features
 
 - **Multi product configuration**: Supports Configuration for multiple products of the same organization and considers all possibilities and versions.
