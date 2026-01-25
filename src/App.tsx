@@ -2,13 +2,13 @@ import { ThemeProvider } from "@/hooks"
 import { Tabs, TabsContent, TabsList, TabsTrigger, ScrollArea } from "@/components/ui"
 import { Sidebar } from "@/components/layout"
 import { EducationTab, ExperienceTab, ProjectsTab } from "@/components/portfolio"
-import { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData } from "@/data"
+import { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData, resumesData } from "@/data"
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
       <div className="min-h-screen bg-background flex flex-col lg:flex-row">
-        <Sidebar personalInfo={personalInfo} />
+        <Sidebar personalInfo={personalInfo} resumes={resumesData} />
 
         <div className="flex-1 flex flex-col">
           <div className="p-3 sm:p-4 md:p-6">

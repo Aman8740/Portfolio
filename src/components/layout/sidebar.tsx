@@ -6,6 +6,10 @@ import {
   Button,
   Collapsible,
   CollapsibleContent,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui";
 import {
   Linkedin,
@@ -16,33 +20,34 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
-import type { PersonalInfo } from "@/types";
-
-const handleDownloadResume = async () => {
-  try {
-    const response = await fetch("/Portfolio/assets/resume.pdf");
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Aman_Shaikh_Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    console.error("Failed to download resume:", error);
-    // Fallback to direct link
-    window.open("/Portfolio/assets/Resume.pdf", "_blank");
-  }
-};
+import type { PersonalInfo, Resume } from "@/types";
 
 interface SidebarProps {
   personalInfo: PersonalInfo;
+  resumes: Resume[];
 }
 
-export function Sidebar({ personalInfo }: SidebarProps) {
+export function Sidebar({ personalInfo, resumes }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const handleDownloadResume = async (fileName: string, displayName: string) => {
+    try {
+      const response = await fetch(`/Portfolio/assets/${fileName}`);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to download resume:", error);
+      // Fallback to direct link
+      window.open(`/Portfolio/assets/${fileName}`, "_blank");
+    }
+  };
 
   return (
     <div
@@ -101,14 +106,27 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                 >
                   <Github className="w-3 h-3 sm:w-4 sm:h-4" />
                 </a>
-                <button
-                  onClick={handleDownloadResume}
-                  className="hover:text-primary transition-colors p-0 bg-transparent border-0 cursor-pointer"
-                  title="Download Resume"
-                  aria-label="Download Resume"
-                >
-                  <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className="hover:text-primary transition-colors p-0 bg-transparent border-0 cursor-pointer"
+                      title="Download Resume"
+                      aria-label="Download Resume"
+                    >
+                      <Download className="w-3 h-3 sm:w-4 sm:h-4" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {resumes.map((resume) => (
+                      <DropdownMenuItem
+                        key={resume.id}
+                        onClick={() => handleDownloadResume(resume.fileName, resume.name)}
+                      >
+                        {resume.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <ThemeToggle collapsed={true} />
               </div>
             </div>
@@ -170,13 +188,26 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                   </a>
                 </div>
 
-                <button
-                  onClick={handleDownloadResume}
-                  className="flex items-center space-x-3 text-sm hover:text-primary transition-colors w-full text-left bg-transparent border-0 cursor-pointer p-0"
-                >
-                  <Download className="w-4 h-4 text-muted-foreground" />
-                  <span>Download Resume</span>
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      className="flex items-center space-x-3 text-sm hover:text-primary transition-colors w-full text-left bg-transparent border-0 cursor-pointer p-0"
+                    >
+                      <Download className="w-4 h-4 text-muted-foreground" />
+                      <span>Download Resume</span>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {resumes.map((resume) => (
+                      <DropdownMenuItem
+                        key={resume.id}
+                        onClick={() => handleDownloadResume(resume.fileName, resume.name)}
+                      >
+                        {resume.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
 
                 <ThemeToggle />
               </div>
@@ -202,14 +233,27 @@ export function Sidebar({ personalInfo }: SidebarProps) {
                 >
                   <Github className="w-4 h-4 text-muted-foreground" />
                 </a>
-                <button
-                  onClick={handleDownloadResume}
-                  title="Download Resume"
-                  className="cursor-pointer hover:text-primary transition-colors bg-transparent border-0 p-0"
-                  aria-label="Download Resume"
-                >
-                  <Download className="w-4 h-4 text-muted-foreground" />
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      title="Download Resume"
+                      className="cursor-pointer hover:text-primary transition-colors bg-transparent border-0 p-0"
+                      aria-label="Download Resume"
+                    >
+                      <Download className="w-4 h-4 text-muted-foreground" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" side="right">
+                    {resumes.map((resume) => (
+                      <DropdownMenuItem
+                        key={resume.id}
+                        onClick={() => handleDownloadResume(resume.fileName, resume.name)}
+                      >
+                        {resume.name}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <div className="mt-4">
                   <ThemeToggle collapsed={true} />
                 </div>

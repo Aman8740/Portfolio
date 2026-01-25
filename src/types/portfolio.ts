@@ -51,3 +51,9 @@ export interface PersonalInfo {
   linkedin: string
   github: string
 }
+
+export interface Resume {
+  id: string
+  name: string
+  fileName: string
+}
