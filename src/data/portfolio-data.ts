@@ -2,7 +2,7 @@ import type { PersonalInfo, Education, Certificate, Experience, Skill, Project, 
 
 export const personalInfo: PersonalInfo = {
   name: "Aman Shaikh",
-  photo: "assets/pfp.jpg",
+  photo: "assets/pfp.png",
   linkedin: "https://www.linkedin.com/in/aman-shaikh-754048243",
   github: "https://github.com/Aman8740"
 }
@@ -10,18 +10,8 @@ export const personalInfo: PersonalInfo = {
 export const resumesData: Resume[] = [
   {
     id: "1",
-    name: "Standard Resume",
-    fileName: "resume.pdf"
-  },
-  {
-    id: "2",
     name: "Full Stack Resume",
-    fileName: "resume_full_stack.pdf"
-  },
-  {
-    id: "3",
-    name: "AI / ML Resume",
-    fileName: "resume_AI_engineer.pdf"
+    fileName: "Aman_Shaikh_resume_full_stack.pdf"
   }
 ]
 
@@ -284,7 +274,7 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
 - **Error Log**: For each test case provides information about what went wrong.
 - **Information banner**: Provides information about what is going on while the test is running.
     `,
-    logo: "assets/QuickTest.png",
+    logo: "assets/QuickTest.jpeg",
     madeAt: 1,
     skills: [
       "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26",

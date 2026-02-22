@@ -58,7 +58,7 @@ export function ProjectsTab({ projects, experience, skills, personalPhoto }: Pro
               <AccordionTrigger className="px-4 py-3 hover:no-underline">
                 <div className="flex items-start space-x-4 text-left w-full">
                   <Avatar className="w-10 h-10">
-                    <AvatarImage src={project.logo} alt={project.name} />
+                    <AvatarImage src={project.logo} alt={project.name} className="object-cover object-top" />
                     <AvatarFallback>
                       {project.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
@@ -70,7 +70,7 @@ export function ProjectsTab({ projects, experience, skills, personalPhoto }: Pro
 
                     <div className="flex items-center space-x-2">
                       <Avatar className="w-6 h-6">
-                        <AvatarImage src={companyInfo.logo} alt={companyInfo.name} />
+                        <AvatarImage src={companyInfo.logo} alt={companyInfo.name} className="object-cover object-top" />
                         <AvatarFallback className="text-xs">
                           {companyInfo.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
