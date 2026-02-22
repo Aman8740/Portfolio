@@ -76,8 +76,8 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
         <div className="flex flex-col justify-between h-full">
           {/* Mobile horizontal layout */}
           <div className="flex lg:hidden items-center justify-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2">
-            <Avatar className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex-shrink-0">
-              <AvatarImage src={personalInfo.photo} alt={personalInfo.name} />
+            <Avatar className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex-shrink-0 ring-2 ring-primary/30 ring-offset-2 ring-offset-background shadow-md">
+              <AvatarImage src={personalInfo.photo} alt={personalInfo.name} className="object-cover object-top" />
               <AvatarFallback className="text-xs sm:text-sm md:text-base">
                 {personalInfo.name
                   .split(" ")
@@ -138,10 +138,12 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
               <Avatar
                 className={cn(
                   "transition-all duration-300",
-                  isCollapsed ? "w-8 h-8" : "w-32 h-32",
+                  isCollapsed
+                    ? "w-10 h-10 ring-2 ring-primary/20 ring-offset-1 ring-offset-background shadow-sm"
+                    : "w-32 h-32 ring-4 ring-primary/30 ring-offset-4 ring-offset-background shadow-lg",
                 )}
               >
-                <AvatarImage src={personalInfo.photo} alt={personalInfo.name} />
+                <AvatarImage src={personalInfo.photo} alt={personalInfo.name} className="object-cover object-top" />
                 <AvatarFallback
                   className={cn(
                     "transition-all duration-300",
