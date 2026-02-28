@@ -57,3 +57,34 @@ export interface Resume {
   name: string
   fileName: string
 }
+
+export type InterviewStatus = "applied" | "scheduled" | "taken" | "passed" | "failed" | "offer" | "rejected" | "ghosted" | "cancelled"
+
+export type InterviewRound = "applied" | "phone-screen" | "technical" | "system-design" | "behavioral" | "hr" | "final" | "assignment" | "other"
+
+export type InterviewSource = "linkedin" | "naukri" | "indeed" | "company-website" | "referral" | "recruiter" | "angel-list" | "japandev" | "other"
+
+export type InterviewLocation = "remote" | "onsite" | "hybrid"
+
+export type SalaryCurrency = "inr" | "jpy"
+
+export interface Interview {
+  id: string
+  companyName: string
+  position: string
+  status: InterviewStatus
+  round: InterviewRound
+  source: InterviewSource
+  appliedVia: string
+  appliedDate: string
+  interviewDate: string
+  location: InterviewLocation
+  salaryCurrency: SalaryCurrency
+  salary: string
+  jobUrl: string
+  contactPerson: string
+  contactEmail: string
+  notes: string
+  createdAt: string
+  updatedAt: string
+}
