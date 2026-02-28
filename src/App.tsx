@@ -1,8 +1,10 @@
 import { ThemeProvider } from "@/hooks"
 import { Tabs, TabsContent, TabsList, TabsTrigger, ScrollArea } from "@/components/ui"
 import { Sidebar } from "@/components/layout"
-import { EducationTab, ExperienceTab, ProjectsTab } from "@/components/portfolio"
+import { EducationTab, ExperienceTab, ProjectsTab, InterviewsTab } from "@/components/portfolio"
 import { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData, resumesData } from "@/data"
+
+const isPrivateMode = import.meta.env.VITE_MODE === "private"
 
 function App() {
   return (
@@ -13,10 +15,13 @@ function App() {
         <div className="flex-1 flex flex-col">
           <div className="p-3 sm:p-4 md:p-6">
             <Tabs defaultValue="education" className="w-full h-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className={isPrivateMode ? "grid w-full grid-cols-4" : "grid w-full grid-cols-3"}>
                 <TabsTrigger value="education" className="text-xs sm:text-sm">Education</TabsTrigger>
                 <TabsTrigger value="experience" className="text-xs sm:text-sm">Experience</TabsTrigger>
                 <TabsTrigger value="projects" className="text-xs sm:text-sm">Projects</TabsTrigger>
+                {isPrivateMode && (
+                  <TabsTrigger value="interviews" className="text-xs sm:text-sm">Interviews</TabsTrigger>
+                )}
               </TabsList>
 
               <div className="mt-4 sm:mt-6 h-[calc(100vh-160px)] sm:h-[calc(100vh-140px)] lg:h-[calc(100vh-120px)]">
@@ -48,6 +53,16 @@ function App() {
                     </div>
                   </ScrollArea>
                 </TabsContent>
+
+                {isPrivateMode && (
+                  <TabsContent value="interviews" className="h-full">
+                    <ScrollArea className="h-full">
+                      <div className="pr-2 sm:pr-4 pb-8">
+                        <InterviewsTab />
+                      </div>
+                    </ScrollArea>
+                  </TabsContent>
+                )}
               </div>
             </Tabs>
           </div>
