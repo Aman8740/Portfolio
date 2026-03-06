@@ -74,13 +74,11 @@ const ROUND_OPTIONS: { value: InterviewRound; label: string }[] = [
 
 const SOURCE_OPTIONS: { value: InterviewSource; label: string }[] = [
   { value: "linkedin", label: "LinkedIn" },
-  { value: "naukri", label: "Naukri" },
   { value: "indeed", label: "Indeed" },
   { value: "company-website", label: "Company Website" },
-  { value: "referral", label: "Referral" },
-  { value: "recruiter", label: "Recruiter" },
-  { value: "angel-list", label: "AngelList" },
   { value: "japandev", label: "JapanDev" },
+  { value: "tokyodev", label: "TokyoDev" },
+  { value: "glassdoor", label: "GlassDoor" },
   { value: "other", label: "Other" },
 ]
 
