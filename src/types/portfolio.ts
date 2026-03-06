@@ -62,7 +62,7 @@ export type InterviewStatus = "applied" | "scheduled" | "taken" | "passed" | "fa
 
 export type InterviewRound = "applied" | "phone-screen" | "technical" | "system-design" | "behavioral" | "hr" | "final" | "assignment" | "other"
 
-export type InterviewSource = "linkedin" | "naukri" | "indeed" | "company-website" | "referral" | "recruiter" | "angel-list" | "japandev" | "other"
+export type InterviewSource = "linkedin" | "indeed" | "company-website" | "japandev" | "tokyodev" | "glassdoor" | "other"
 
 export type InterviewLocation = "remote" | "onsite" | "hybrid"
 
