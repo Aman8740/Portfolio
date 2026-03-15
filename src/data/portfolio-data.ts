@@ -193,6 +193,61 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
   },
   {
     id: "2",
+    name: "Sonara",
+    slogan: "Own every note — Real piano on your desktop",
+    description: `
+## Overview
+
+**Sonara** is a desktop piano app that sounds and feels like a real instrument. Every key plays a genuine Steinway Grand Piano recording. All 88 keys. Three pedals. The full dynamic range from the softest whisper to the loudest fortissimo — right on your laptop.
+
+## Play
+
+- Play using your mouse or desktop keyboard — no piano keyboard hardware needed
+- All 88 keys available, scrollable across the full range
+- Sustain, soft, and sostenuto pedals all work exactly like a real concert grand
+- Adjust reverb, velocity, tuning, and transpose to match your style
+- Everything feels responsive and immediate — zero perceptible latency
+
+## Record
+
+- Hit record, play anything, hit stop — Sonara captures your performance perfectly
+- Every note, timing, velocity, and pedal movement is saved
+- Play it back and it sounds exactly like you played it
+- Export your recording as an MP3 or WAV file to share anywhere
+- Save and share recordings as **.sonara files** — open them on any device with Sonara installed
+
+## Learn
+
+- Browse 30+ legendary compositions — Bach, Beethoven, Chopin, Debussy, Satie, Hans Zimmer, and more
+- Click Play on any tune and it starts — no downloading, no waiting
+- Switch to **Guided Mode** and falling notes show you exactly which keys to press and when
+- Practice one hand at a time while Sonara plays the other for you
+- Slow any piece down to 25% speed without changing how it sounds
+- Loop difficult sections on repeat until they click
+- Built-in metronome with a speed trainer that gradually brings you up to full tempo
+- See your accuracy after every session and track your improvement over time
+
+## Community
+
+- Share your own recordings to the community feed — they sit alongside official tunes as equals
+- Anyone can play your piece, learn it in guided mode, or use it as practice material
+- Like and discover pieces from other Sonara users worldwide
+- New official tunes are added regularly and appear automatically — no app update needed
+
+## Know What You're Playing
+
+- As you play, Sonara shows you the chord name above the keyboard in real time
+- See exactly which keys belong to any scale or key — highlighted directly on the piano
+- Track your progress over time — which songs you've practiced, your accuracy trends, and which specific notes you keep missing
+    `,
+    logo: "assets/sonara.png",
+    madeAt: 0,
+    skills: [
+      "10", "13", "14", "17", "19", "11", "12", "22", "29", "26"
+    ]
+  },
+  {
+    id: "3",
     name: "Quickflow",
     slogan: "End-to-End Process Digitalization and Automation for Pharma",
     description: `
@@ -254,7 +309,7 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
     ]
   },
   {
-    id: "3",
+    id: "4",
     name: "QuickTest",
     slogan: "Efficient and reliable software testing integrated with AI.",
     description: `
