@@ -195,6 +195,11 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
     id: "2",
     name: "Sonara",
     slogan: "Own every note — Real piano on your desktop",
+    projectUrl: "https://aman8740.github.io/Sonara",
+    media: [
+      "assets/studio.png",
+      "assets/library.png",
+    ],
     description: `
 ## Overview
 

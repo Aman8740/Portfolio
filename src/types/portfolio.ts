@@ -43,6 +43,8 @@ export interface Project {
   logo: string
   madeAt: number
   skills: string[]
+  projectUrl?: string;
+  media?: string[];
 }
 
 export interface PersonalInfo {
