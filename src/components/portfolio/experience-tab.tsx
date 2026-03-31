@@ -1,5 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback, Badge } from "@/components/ui"
 import ReactMarkdown from 'react-markdown'
+import { formatPortfolioDate } from "@/lib";
 import type { Experience, Skill } from "@/types"
 
 interface ExperienceTabProps {
@@ -54,7 +55,13 @@ export function ExperienceTab({ experience, skills }: ExperienceTabProps) {
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
                     <p className="text-muted-foreground font-medium">{exp.position}</p>
                     <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full w-fit">
-                      {exp.timeframe}
+                      {(() => {
+                        const tf = exp.timeframe.split('-');
+                        if (tf.length === 2) {
+                          return `${formatPortfolioDate(tf[0])} - ${formatPortfolioDate(tf[1])}`;
+                        }
+                        return formatPortfolioDate(exp.timeframe);
+                      })()}
                     </span>
                   </div>
 

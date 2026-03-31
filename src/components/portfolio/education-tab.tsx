@@ -1,5 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback, Badge } from "@/components/ui";
 import type { Education, Certificate } from "@/types";
+import { formatPortfolioDate } from "@/lib";
 
 interface EducationTabProps {
   education: Education[];
@@ -55,7 +56,14 @@ export function EducationTab({ education, certificates }: EducationTabProps) {
                       {edu.course}
                     </p>
                     <span className="text-sm text-muted-foreground bg-muted px-3 py-1 rounded-full w-fit">
-                      {edu.timeframe}
+                      {(() => {
+                        const tf = edu.timeframe.split('-');
+                        if (tf.length === 2) {
+                          // Try to format both start and end
+                          return `${formatPortfolioDate(tf[0])} - ${formatPortfolioDate(tf[1])}`;
+                        }
+                        return formatPortfolioDate(edu.timeframe);
+                      })()}
                     </span>
                   </div>
 

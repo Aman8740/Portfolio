@@ -29,7 +29,7 @@ export const educationData: Education[] = [
       { type: "Sem 6 SPI", value: "8.00" },
     ],
     logo: "assets/lj.jpg",
-    timeframe: "2022-Present"
+    timeframe: "01-Aug-2022-Present"
   },
   {
     id: "2",
@@ -39,7 +39,7 @@ export const educationData: Education[] = [
       { type: "Overall Percentage", value: "76.0 %" }
     ],
     logo: "assets/muk.jpeg",
-    timeframe: "2021-2022"
+    timeframe: "01-Jun-2021-31-May-2022"
   },
   {
     id: "2",
@@ -49,7 +49,7 @@ export const educationData: Education[] = [
       { type: "Overall Percentage", value: "83.0 %" }
     ],
     logo: "assets/muk.jpeg",
-    timeframe: "2020-2021"
+    timeframe: "01-Jun-2020-31-May-2021"
   },
 ]
 
@@ -105,7 +105,7 @@ export const experienceData: Experience[] = [
     position: "Software professional Associate",
     description: "**Building innovative solutions** for the pharma and medical industry by developing a comprehensive low-code/no-code platform. This platform streamlines document workflows throughout the organization, making processes **effortless and efficient**.",
     logo: "assets/webo.jpg",
-    timeframe: "May 2025 - Present"
+    timeframe: "01-May-2025-Present"
   },
   {
     id: "1",
@@ -113,7 +113,7 @@ export const experienceData: Experience[] = [
     position: "Software Professional intern",
     description: "Focused on **learning and implementing generative AI solutions** and exploring low-code platforms to enable **faster development cycles** with minimal resources and maximum efficiency.",
     logo: "assets/webo.jpg",
-    timeframe: "Nov 2024 - Apr 2025"
+    timeframe: "01-Nov-2024-30-Apr-2025"
   },
 ]
 

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -21,7 +21,7 @@ import {
   SelectValue,
   Textarea,
   Separator,
-} from "@/components/ui"
+} from "@/components/ui";
 import {
   Plus,
   Pencil,
@@ -36,9 +36,10 @@ import {
   Briefcase,
   IndianRupee,
   JapaneseYen,
-} from "lucide-react"
-import { useInterviews } from "@/hooks"
-import { cn } from "@/lib/utils"
+} from "lucide-react";
+import { useInterviews } from "@/hooks";
+import { cn } from "@/lib/utils";
+import { formatPortfolioDate } from "@/lib";
 import type {
   Interview,
   InterviewStatus,
@@ -46,7 +47,7 @@ import type {
   InterviewSource,
   InterviewLocation,
   SalaryCurrency,
-} from "@/types"
+} from "@/types";
 
 const STATUS_OPTIONS: { value: InterviewStatus; label: string }[] = [
   { value: "applied", label: "Applied" },
@@ -58,7 +59,7 @@ const STATUS_OPTIONS: { value: InterviewStatus; label: string }[] = [
   { value: "rejected", label: "Rejected" },
   { value: "ghosted", label: "Ghosted" },
   { value: "cancelled", label: "Cancelled" },
-]
+];
 
 const ROUND_OPTIONS: { value: InterviewRound; label: string }[] = [
   { value: "applied", label: "Applied" },
@@ -70,7 +71,7 @@ const ROUND_OPTIONS: { value: InterviewRound; label: string }[] = [
   { value: "final", label: "Final Round" },
   { value: "assignment", label: "Assignment" },
   { value: "other", label: "Other" },
-]
+];
 
 const SOURCE_OPTIONS: { value: InterviewSource; label: string }[] = [
   { value: "linkedin", label: "LinkedIn" },
@@ -79,28 +80,42 @@ const SOURCE_OPTIONS: { value: InterviewSource; label: string }[] = [
   { value: "japandev", label: "JapanDev" },
   { value: "tokyodev", label: "TokyoDev" },
   { value: "glassdoor", label: "GlassDoor" },
+  { value: "daijob", label: "Daijob" },
   { value: "other", label: "Other" },
-]
+];
 
 const LOCATION_OPTIONS: { value: InterviewLocation; label: string }[] = [
   { value: "remote", label: "Remote" },
   { value: "onsite", label: "On-site" },
   { value: "hybrid", label: "Hybrid" },
-]
+];
+
+const SALARY_CURRENCY_OPTIONS: { value: SalaryCurrency; label: string }[] = [
+  { value: "inr", label: "₹ INR" },
+  { value: "jpy", label: "¥ JPY" },
+  { value: "usd", label: "$ USD" },
+];
 
 const statusColors: Record<InterviewStatus, string> = {
-  applied: "bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30",
-  scheduled: "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30",
-  taken: "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/30",
-  passed: "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30",
+  applied:
+    "bg-purple-500/15 text-purple-700 dark:text-purple-400 border-purple-500/30",
+  scheduled:
+    "bg-blue-500/15 text-blue-700 dark:text-blue-400 border-blue-500/30",
+  taken:
+    "bg-yellow-500/15 text-yellow-700 dark:text-yellow-400 border-yellow-500/30",
+  passed:
+    "bg-green-500/15 text-green-700 dark:text-green-400 border-green-500/30",
   failed: "bg-red-500/15 text-red-700 dark:text-red-400 border-red-500/30",
-  offer: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
-  rejected: "bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30",
+  offer:
+    "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30",
+  rejected:
+    "bg-orange-500/15 text-orange-700 dark:text-orange-400 border-orange-500/30",
   ghosted: "bg-gray-500/15 text-gray-700 dark:text-gray-400 border-gray-500/30",
-  cancelled: "bg-slate-500/15 text-slate-700 dark:text-slate-400 border-slate-500/30",
-}
+  cancelled:
+    "bg-slate-500/15 text-slate-700 dark:text-slate-400 border-slate-500/30",
+};
 
-type FormData = Omit<Interview, "id" | "createdAt" | "updatedAt">
+type FormData = Omit<Interview, "id" | "createdAt" | "updatedAt">;
 
 const emptyForm: FormData = {
   companyName: "",
@@ -118,18 +133,21 @@ const emptyForm: FormData = {
   contactPerson: "",
   contactEmail: "",
   notes: "",
-}
+};
 
 export function InterviewsTab() {
-  const { interviews, addInterview, updateInterview, deleteInterview } = useInterviews()
+  const { interviews, addInterview, updateInterview, deleteInterview } =
+    useInterviews();
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [deletingId, setDeletingId] = useState<string | null>(null)
-  const [form, setForm] = useState<FormData>(emptyForm)
-  const [filterStatus, setFilterStatus] = useState<InterviewStatus | "all">("all")
-  const [searchQuery, setSearchQuery] = useState("")
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [form, setForm] = useState<FormData>(emptyForm);
+  const [filterStatus, setFilterStatus] = useState<InterviewStatus | "all">(
+    "all",
+  );
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredInterviews = interviews
     .filter((i) => filterStatus === "all" || i.status === filterStatus)
@@ -137,14 +155,14 @@ export function InterviewsTab() {
       (i) =>
         searchQuery === "" ||
         i.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        i.position.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+        i.position.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
 
   const handleOpenAdd = () => {
-    setForm(emptyForm)
-    setEditingId(null)
-    setDialogOpen(true)
-  }
+    setForm(emptyForm);
+    setEditingId(null);
+    setDialogOpen(true);
+  };
 
   const handleOpenEdit = (interview: Interview) => {
     setForm({
@@ -163,39 +181,42 @@ export function InterviewsTab() {
       contactPerson: interview.contactPerson,
       contactEmail: interview.contactEmail,
       notes: interview.notes,
-    })
-    setEditingId(interview.id)
-    setDialogOpen(true)
-  }
+    });
+    setEditingId(interview.id);
+    setDialogOpen(true);
+  };
 
   const handleSave = () => {
-    if (!form.companyName.trim() || !form.position.trim()) return
+    if (!form.companyName.trim() || !form.position.trim()) return;
     if (editingId) {
-      updateInterview(editingId, form)
+      updateInterview(editingId, form);
     } else {
-      addInterview(form)
+      addInterview(form);
     }
-    setDialogOpen(false)
-    setEditingId(null)
-    setForm(emptyForm)
-  }
+    setDialogOpen(false);
+    setEditingId(null);
+    setForm(emptyForm);
+  };
 
   const handleConfirmDelete = () => {
     if (deletingId) {
-      deleteInterview(deletingId)
-      setDeletingId(null)
-      setDeleteDialogOpen(false)
+      deleteInterview(deletingId);
+      setDeletingId(null);
+      setDeleteDialogOpen(false);
     }
-  }
+  };
 
   const handleOpenDelete = (id: string) => {
-    setDeletingId(id)
-    setDeleteDialogOpen(true)
-  }
+    setDeletingId(id);
+    setDeleteDialogOpen(true);
+  };
 
-  const updateField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
-    setForm((prev) => ({ ...prev, [key]: value }))
-  }
+  const updateField = <K extends keyof FormData>(
+    key: K,
+    value: FormData[K],
+  ) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
 
   // Stats
   const stats = {
@@ -203,7 +224,7 @@ export function InterviewsTab() {
     scheduled: interviews.filter((i) => i.status === "scheduled").length,
     passed: interviews.filter((i) => i.status === "passed").length,
     offers: interviews.filter((i) => i.status === "offer").length,
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -225,19 +246,27 @@ export function InterviewsTab() {
         </Card>
         <Card>
           <CardContent className="p-3 sm:p-4 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.scheduled}</p>
-            <p className="text-xs sm:text-sm text-muted-foreground">Scheduled</p>
+            <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">
+              {stats.scheduled}
+            </p>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Scheduled
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 sm:p-4 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">{stats.passed}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400">
+              {stats.passed}
+            </p>
             <p className="text-xs sm:text-sm text-muted-foreground">Passed</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-3 sm:p-4 text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">{stats.offers}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400">
+              {stats.offers}
+            </p>
             <p className="text-xs sm:text-sm text-muted-foreground">Offers</p>
           </CardContent>
         </Card>
@@ -295,8 +324,17 @@ export function InterviewsTab() {
                       <CardTitle className="text-base sm:text-lg truncate">
                         {interview.companyName}
                       </CardTitle>
-                      <Badge className={cn("text-[10px] sm:text-xs", statusColors[interview.status])}>
-                        {STATUS_OPTIONS.find((s) => s.value === interview.status)?.label}
+                      <Badge
+                        className={cn(
+                          "text-[10px] sm:text-xs",
+                          statusColors[interview.status],
+                        )}
+                      >
+                        {
+                          STATUS_OPTIONS.find(
+                            (s) => s.value === interview.status,
+                          )?.label
+                        }
                       </Badge>
                     </div>
                     <p className="text-sm text-muted-foreground truncate">
@@ -329,7 +367,10 @@ export function InterviewsTab() {
                     <div className="flex items-center gap-1.5">
                       <Briefcase className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">
-                        {ROUND_OPTIONS.find((r) => r.value === interview.round)?.label}
+                        {
+                          ROUND_OPTIONS.find((r) => r.value === interview.round)
+                            ?.label
+                        }
                       </span>
                     </div>
                   )}
@@ -337,7 +378,12 @@ export function InterviewsTab() {
                     <div className="flex items-center gap-1.5">
                       <Building2 className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">
-                        Found via {SOURCE_OPTIONS.find((s) => s.value === interview.source)?.label}
+                        Found via{" "}
+                        {
+                          SOURCE_OPTIONS.find(
+                            (s) => s.value === interview.source,
+                          )?.label
+                        }
                       </span>
                     </div>
                   )}
@@ -345,26 +391,37 @@ export function InterviewsTab() {
                     <div className="flex items-center gap-1.5">
                       <MapPin className="h-3.5 w-3.5 shrink-0" />
                       <span className="truncate">
-                        {LOCATION_OPTIONS.find((l) => l.value === interview.location)?.label}
+                        {
+                          LOCATION_OPTIONS.find(
+                            (l) => l.value === interview.location,
+                          )?.label
+                        }
                       </span>
                     </div>
                   )}
                   {interview.appliedDate && (
                     <div className="flex items-center gap-1.5">
                       <Calendar className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">Applied: {new Date(interview.appliedDate).toLocaleDateString()}</span>
+                      <span className="truncate">
+                        Applied: {formatPortfolioDate(interview.appliedDate)}
+                      </span>
                     </div>
                   )}
                   {interview.interviewDate && (
                     <div className="flex items-center gap-1.5">
                       <Calendar className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">Interview: {new Date(interview.interviewDate).toLocaleDateString()}</span>
+                      <span className="truncate">
+                        Interview:{" "}
+                        {formatPortfolioDate(interview.interviewDate)}
+                      </span>
                     </div>
                   )}
                   {interview.salary && (
                     <div className="flex items-center gap-1.5">
                       {interview.salaryCurrency === "jpy" ? (
                         <JapaneseYen className="h-3.5 w-3.5 shrink-0" />
+                      ) : interview.salaryCurrency === "usd" ? (
+                        <span className="font-bold">$</span>
                       ) : (
                         <IndianRupee className="h-3.5 w-3.5 shrink-0" />
                       )}
@@ -374,7 +431,9 @@ export function InterviewsTab() {
                   {interview.contactPerson && (
                     <div className="flex items-center gap-1.5">
                       <User className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">{interview.contactPerson}</span>
+                      <span className="truncate">
+                        {interview.contactPerson}
+                      </span>
                     </div>
                   )}
                   {interview.contactEmail && (
@@ -415,7 +474,9 @@ export function InterviewsTab() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingId ? "Edit Interview" : "Add Interview"}</DialogTitle>
+            <DialogTitle>
+              {editingId ? "Edit Interview" : "Add Interview"}
+            </DialogTitle>
             <DialogDescription>
               {editingId
                 ? "Update the interview details below."
@@ -452,7 +513,9 @@ export function InterviewsTab() {
                 <Label>Status</Label>
                 <Select
                   value={form.status}
-                  onValueChange={(v) => updateField("status", v as InterviewStatus)}
+                  onValueChange={(v) =>
+                    updateField("status", v as InterviewStatus)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -470,7 +533,9 @@ export function InterviewsTab() {
                 <Label>Round</Label>
                 <Select
                   value={form.round}
-                  onValueChange={(v) => updateField("round", v as InterviewRound)}
+                  onValueChange={(v) =>
+                    updateField("round", v as InterviewRound)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -492,7 +557,9 @@ export function InterviewsTab() {
                 <Label>Found Via</Label>
                 <Select
                   value={form.source}
-                  onValueChange={(v) => updateField("source", v as InterviewSource)}
+                  onValueChange={(v) =>
+                    updateField("source", v as InterviewSource)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -523,7 +590,9 @@ export function InterviewsTab() {
                 <Label>Location</Label>
                 <Select
                   value={form.location}
-                  onValueChange={(v) => updateField("location", v as InterviewLocation)}
+                  onValueChange={(v) =>
+                    updateField("location", v as InterviewLocation)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -542,19 +611,30 @@ export function InterviewsTab() {
                 <div className="flex gap-2">
                   <Select
                     value={form.salaryCurrency}
-                    onValueChange={(v) => updateField("salaryCurrency", v as SalaryCurrency)}
+                    onValueChange={(v) =>
+                      updateField("salaryCurrency", v as SalaryCurrency)
+                    }
                   >
                     <SelectTrigger className="w-[90px] shrink-0">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="inr">₹ INR</SelectItem>
-                      <SelectItem value="jpy">¥ JPY</SelectItem>
+                      {SALARY_CURRENCY_OPTIONS.map((c) => (
+                        <SelectItem key={c.value} value={c.value}>
+                          {c.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <Input
                     id="salary"
-                    placeholder={form.salaryCurrency === "jpy" ? "e.g. 5,000,000" : "e.g. 12 LPA"}
+                    placeholder={
+                      form.salaryCurrency === "jpy"
+                        ? "e.g. 5,000,000"
+                        : form.salaryCurrency === "usd"
+                          ? "e.g. 80,000"
+                          : "e.g. 12 LPA"
+                    }
                     value={form.salary}
                     onChange={(e) => updateField("salary", e.target.value)}
                   />
@@ -654,11 +734,15 @@ export function InterviewsTab() {
           <DialogHeader>
             <DialogTitle>Delete Interview</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this interview? This action cannot be undone.
+              Are you sure you want to delete this interview? This action cannot
+              be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button variant="destructive" onClick={handleConfirmDelete}>
@@ -668,5 +752,5 @@ export function InterviewsTab() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
