@@ -64,11 +64,11 @@ export type InterviewStatus = "applied" | "scheduled" | "taken" | "passed" | "fa
 
 export type InterviewRound = "applied" | "phone-screen" | "technical" | "system-design" | "behavioral" | "hr" | "final" | "assignment" | "other"
 
-export type InterviewSource = "linkedin" | "indeed" | "company-website" | "japandev" | "tokyodev" | "glassdoor" | "other"
+export type InterviewSource = "linkedin" | "indeed" | "company-website" | "japandev" | "tokyodev" | "glassdoor" | "daijob" | "other"
 
 export type InterviewLocation = "remote" | "onsite" | "hybrid"
 
-export type SalaryCurrency = "inr" | "jpy"
+export type SalaryCurrency = "inr" | "jpy" | "usd"
 
 export interface Interview {
   id: string

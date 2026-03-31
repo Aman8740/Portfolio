@@ -8,6 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback, Badge } from "@/components/ui";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import ReactMarkdown from "react-markdown";
 import type { Project, Experience, Skill } from "@/types";
+import { formatPortfolioDate } from "@/lib";
 import { useState } from "react";
 
 interface ProjectsTabProps {
@@ -119,6 +120,10 @@ export function ProjectsTab({
                       </Avatar>
                       <Badge variant="outline" className="text-xs">
                         {project.madeAt === 0 ? "Personal" : companyInfo.name}
+                        {/* If madeAt is a date, show formatted date */}
+                        {typeof project.madeAt === 'string' && project.madeAt && (
+                          <span className="ml-2">{formatPortfolioDate(project.madeAt)}</span>
+                        )}
                       </Badge>
                     </div>
                   </div>
