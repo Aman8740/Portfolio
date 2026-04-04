@@ -139,6 +139,17 @@ export function InterviewsTab() {
   const { interviews, addInterview, updateInterview, deleteInterview } =
     useInterviews();
 
+  const getDateTimestamp = (dateString: string) => {
+    const timestamp = new Date(dateString).getTime();
+    return Number.isNaN(timestamp) ? 0 : timestamp;
+  };
+
+  const isWaitingPeriodOver = (interview: Interview) => {
+    if (interview.status !== "applied" || !interview.appliedDate) return false;
+    const fourteenDaysMs = 14 * 24 * 60 * 60 * 1000;
+    return Date.now() - getDateTimestamp(interview.appliedDate) >= fourteenDaysMs;
+  };
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -156,6 +167,11 @@ export function InterviewsTab() {
         searchQuery === "" ||
         i.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         i.position.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+    .sort(
+      (a, b) =>
+        getDateTimestamp(b.appliedDate || b.createdAt) -
+        getDateTimestamp(a.appliedDate || a.createdAt),
     );
 
   const handleOpenAdd = () => {
@@ -336,6 +352,14 @@ export function InterviewsTab() {
                           )?.label
                         }
                       </Badge>
+                      {isWaitingPeriodOver(interview) && (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] sm:text-xs border-amber-500/40 text-amber-700 dark:text-amber-400"
+                        >
+                          Waiting Period Over
+                        </Badge>
+                      )}
                     </div>
                     <p className="text-sm text-muted-foreground truncate">
                       {interview.position}
