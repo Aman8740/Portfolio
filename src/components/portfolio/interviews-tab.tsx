@@ -1,9 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
   Badge,
   Button,
   Dialog,
@@ -21,25 +19,38 @@ import {
   SelectValue,
   Textarea,
   Separator,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui";
 import {
   Plus,
   Pencil,
   Trash2,
-  Building2,
-  Calendar,
-  MapPin,
-  ExternalLink,
-  User,
-  Mail,
   Search,
-  Briefcase,
-  IndianRupee,
-  JapaneseYen,
+  ArrowUpDown,
+  MoreHorizontal,
+  ExternalLink,
 } from "lucide-react";
 import { useInterviews } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { formatPortfolioDate } from "@/lib";
+import {
+  type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  type RowSelectionState,
+  type SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
 import type {
   Interview,
   InterviewStatus,
@@ -159,6 +170,10 @@ export function InterviewsTab() {
     "all",
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "appliedDate", desc: true },
+  ]);
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const filteredInterviews = interviews
     .filter((i) => filterStatus === "all" || i.status === filterStatus)
@@ -167,11 +182,6 @@ export function InterviewsTab() {
         searchQuery === "" ||
         i.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         i.position.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-    .sort(
-      (a, b) =>
-        getDateTimestamp(b.appliedDate || b.createdAt) -
-        getDateTimestamp(a.appliedDate || a.createdAt),
     );
 
   const handleOpenAdd = () => {
@@ -233,6 +243,253 @@ export function InterviewsTab() {
   ) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
+
+  const getStatusLabel = (status: InterviewStatus) => {
+    return STATUS_OPTIONS.find((option) => option.value === status)?.label ?? status;
+  };
+
+  const getSourceLabel = (source: InterviewSource) => {
+    return SOURCE_OPTIONS.find((option) => option.value === source)?.label ?? source;
+  };
+
+  const getLocationLabel = (location: InterviewLocation) => {
+    return LOCATION_OPTIONS.find((option) => option.value === location)?.label ?? location;
+  };
+
+  const SortableHeader = ({
+    column,
+    title,
+  }: {
+    column: { toggleSorting: (desc?: boolean) => void; getIsSorted: () => false | "asc" | "desc" };
+    title: string;
+  }) => (
+    <Button
+      variant="ghost"
+      className="-ml-3 h-8"
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    >
+      {title}
+      <ArrowUpDown className="ml-2 h-4 w-4" />
+    </Button>
+  );
+
+  const SelectCheckbox = ({
+    checked,
+    indeterminate,
+    onChange,
+    ariaLabel,
+  }: {
+    checked: boolean;
+    indeterminate?: boolean;
+    onChange: (checked: boolean) => void;
+    ariaLabel: string;
+  }) => {
+    const checkboxRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+      if (checkboxRef.current) {
+        checkboxRef.current.indeterminate = Boolean(indeterminate) && !checked;
+      }
+    }, [checked, indeterminate]);
+
+    return (
+      <input
+        ref={checkboxRef}
+        type="checkbox"
+        checked={checked}
+        onChange={(event) => onChange(event.target.checked)}
+        aria-label={ariaLabel}
+        className="h-4 w-4 rounded border-input accent-primary"
+      />
+    );
+  };
+
+  const formatSalaryValue = (interview: Interview) => {
+    if (!interview.salary) return "-";
+    const symbol =
+      interview.salaryCurrency === "jpy"
+        ? "\u00A5"
+        : interview.salaryCurrency === "usd"
+          ? "$"
+          : "\u20B9";
+    return `${symbol} ${interview.salary}`;
+  };
+
+  const columns: ColumnDef<Interview>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <SelectCheckbox
+          checked={table.getIsAllPageRowsSelected()}
+          indeterminate={table.getIsSomePageRowsSelected()}
+          onChange={(checked) => table.toggleAllPageRowsSelected(checked)}
+          ariaLabel="Select all rows"
+        />
+      ),
+      cell: ({ row }) => (
+        <SelectCheckbox
+          checked={row.getIsSelected()}
+          onChange={(checked) => row.toggleSelected(checked)}
+          ariaLabel={`Select interview row ${row.original.companyName}`}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "companyName",
+      header: ({ column }) => <SortableHeader column={column} title="Company" />,
+      cell: ({ row }) => (
+        <div className="min-w-[180px]">
+          <p className="font-medium leading-tight">{row.original.companyName}</p>
+          <p className="text-xs text-muted-foreground truncate">{row.original.position}</p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => <SortableHeader column={column} title="Status" />,
+      sortingFn: (rowA, rowB) => {
+        const first = getStatusLabel(rowA.original.status);
+        const second = getStatusLabel(rowB.original.status);
+        return first.localeCompare(second);
+      },
+      cell: ({ row }) => {
+        const interview = row.original;
+        return (
+          <div className="flex flex-wrap items-center gap-1.5 min-w-[180px]">
+            <Badge
+              className={cn(
+                "text-[10px] sm:text-xs",
+                statusColors[interview.status],
+              )}
+            >
+              {getStatusLabel(interview.status)}
+            </Badge>
+            {isWaitingPeriodOver(interview) && (
+              <Badge
+                variant="outline"
+                className="text-[10px] sm:text-xs border-amber-500/40 text-amber-700 dark:text-amber-400"
+              >
+                Waiting Period Over
+              </Badge>
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "appliedDate",
+      header: ({ column }) => <SortableHeader column={column} title="Applied Date" />,
+      sortingFn: (rowA, rowB) => {
+        const first = rowA.original.appliedDate || rowA.original.createdAt;
+        const second = rowB.original.appliedDate || rowB.original.createdAt;
+        return getDateTimestamp(first) - getDateTimestamp(second);
+      },
+      cell: ({ row }) =>
+        row.original.appliedDate
+          ? formatPortfolioDate(row.original.appliedDate)
+          : "-",
+    },
+    {
+      accessorKey: "interviewDate",
+      header: ({ column }) => <SortableHeader column={column} title="Interview Date" />,
+      sortingFn: (rowA, rowB) => {
+        const first = rowA.original.interviewDate || "";
+        const second = rowB.original.interviewDate || "";
+        return getDateTimestamp(first) - getDateTimestamp(second);
+      },
+      cell: ({ row }) =>
+        row.original.interviewDate
+          ? formatPortfolioDate(row.original.interviewDate)
+          : "-",
+    },
+    {
+      accessorKey: "source",
+      header: ({ column }) => <SortableHeader column={column} title="Source" />,
+      sortingFn: (rowA, rowB) => {
+        const first = getSourceLabel(rowA.original.source);
+        const second = getSourceLabel(rowB.original.source);
+        return first.localeCompare(second);
+      },
+      cell: ({ row }) => {
+        return getSourceLabel(row.original.source);
+      },
+    },
+    {
+      accessorKey: "location",
+      header: ({ column }) => <SortableHeader column={column} title="Location" />,
+      sortingFn: (rowA, rowB) => {
+        const first = getLocationLabel(rowA.original.location);
+        const second = getLocationLabel(rowB.original.location);
+        return first.localeCompare(second);
+      },
+      cell: ({ row }) => {
+        return getLocationLabel(row.original.location);
+      },
+    },
+    {
+      id: "salary",
+      header: ({ column }) => <SortableHeader column={column} title="Salary" />,
+      accessorFn: (row) => {
+        if (!row.salary) return 0;
+        const onlyNumbers = row.salary.replace(/[^\d.]/g, "");
+        return Number(onlyNumbers) || 0;
+      },
+      cell: ({ row }) => formatSalaryValue(row.original),
+    },
+    {
+      id: "actions",
+      header: "Actions",
+      cell: ({ row }) => {
+        const interview = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open row actions</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {interview.jobUrl && (
+                <DropdownMenuItem
+                  onClick={() =>
+                    window.open(interview.jobUrl, "_blank", "noopener,noreferrer")
+                  }
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                  Open Job Post
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem onClick={() => handleOpenEdit(interview)}>
+                <Pencil className="mr-2 h-4 w-4" />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onClick={() => handleOpenDelete(interview.id)}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  const table = useReactTable({
+    data: filteredInterviews,
+    columns,
+    state: { sorting, rowSelection },
+    onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
+    enableRowSelection: true,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
 
   // Stats
   const stats = {
@@ -317,182 +574,76 @@ export function InterviewsTab() {
         </Select>
       </div>
 
-      {/* Interview Cards */}
-      {filteredInterviews.length === 0 ? (
-        <Card>
-          <CardContent className="p-8 sm:p-12 text-center">
-            <Briefcase className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
-            <p className="text-muted-foreground text-sm sm:text-base">
-              {interviews.length === 0
-                ? "No interviews yet. Click 'Add Interview' to get started."
-                : "No interviews match your filters."}
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="space-y-3">
-          {filteredInterviews.map((interview) => (
-            <Card key={interview.id} className="group">
-              <CardHeader className="p-3 sm:p-4 pb-2 sm:pb-3">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <CardTitle className="text-base sm:text-lg truncate">
-                        {interview.companyName}
-                      </CardTitle>
-                      <Badge
-                        className={cn(
-                          "text-[10px] sm:text-xs",
-                          statusColors[interview.status],
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => table.toggleAllPageRowsSelected(true)}
+        >
+          Select All
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => table.toggleAllPageRowsSelected(false)}
+        >
+          Clear Selection
+        </Button>
+        <p className="text-xs sm:text-sm text-muted-foreground">
+          {table.getSelectedRowModel().rows.length} selected
+        </p>
+      </div>
+
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
                         )}
-                      >
-                        {
-                          STATUS_OPTIONS.find(
-                            (s) => s.value === interview.status,
-                          )?.label
-                        }
-                      </Badge>
-                      {isWaitingPeriodOver(interview) && (
-                        <Badge
-                          variant="outline"
-                          className="text-[10px] sm:text-xs border-amber-500/40 text-amber-700 dark:text-amber-400"
-                        >
-                          Waiting Period Over
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {interview.position}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => handleOpenEdit(interview)}
-                    >
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 text-destructive hover:text-destructive"
-                      onClick={() => handleOpenDelete(interview.id)}
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-3 sm:p-4 pt-0">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs sm:text-sm text-muted-foreground">
-                  {interview.round && (
-                    <div className="flex items-center gap-1.5">
-                      <Briefcase className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">
-                        {
-                          ROUND_OPTIONS.find((r) => r.value === interview.round)
-                            ?.label
-                        }
-                      </span>
-                    </div>
-                  )}
-                  {interview.source && (
-                    <div className="flex items-center gap-1.5">
-                      <Building2 className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">
-                        Found via{" "}
-                        {
-                          SOURCE_OPTIONS.find(
-                            (s) => s.value === interview.source,
-                          )?.label
-                        }
-                      </span>
-                    </div>
-                  )}
-                  {interview.location && (
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">
-                        {
-                          LOCATION_OPTIONS.find(
-                            (l) => l.value === interview.location,
-                          )?.label
-                        }
-                      </span>
-                    </div>
-                  )}
-                  {interview.appliedDate && (
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">
-                        Applied: {formatPortfolioDate(interview.appliedDate)}
-                      </span>
-                    </div>
-                  )}
-                  {interview.interviewDate && (
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">
-                        Interview:{" "}
-                        {formatPortfolioDate(interview.interviewDate)}
-                      </span>
-                    </div>
-                  )}
-                  {interview.salary && (
-                    <div className="flex items-center gap-1.5">
-                      {interview.salaryCurrency === "jpy" ? (
-                        <JapaneseYen className="h-3.5 w-3.5 shrink-0" />
-                      ) : interview.salaryCurrency === "usd" ? (
-                        <span className="font-bold">$</span>
-                      ) : (
-                        <IndianRupee className="h-3.5 w-3.5 shrink-0" />
-                      )}
-                      <span className="truncate">{interview.salary}</span>
-                    </div>
-                  )}
-                  {interview.contactPerson && (
-                    <div className="flex items-center gap-1.5">
-                      <User className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">
-                        {interview.contactPerson}
-                      </span>
-                    </div>
-                  )}
-                  {interview.contactEmail && (
-                    <div className="flex items-center gap-1.5">
-                      <Mail className="h-3.5 w-3.5 shrink-0" />
-                      <span className="truncate">{interview.contactEmail}</span>
-                    </div>
-                  )}
-                  {interview.jobUrl && (
-                    <div className="flex items-center gap-1.5">
-                      <ExternalLink className="h-3.5 w-3.5 shrink-0" />
-                      <a
-                        href={interview.jobUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="truncate hover:text-primary transition-colors"
-                      >
-                        Job Posting
-                      </a>
-                    </div>
-                  )}
-                </div>
-                {interview.notes && (
-                  <>
-                    <Separator className="my-2" />
-                    <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-wrap">
-                      {interview.notes}
-                    </p>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  {interviews.length === 0
+                    ? "No interviews yet. Click 'Add Interview' to get started."
+                    : "No interviews match your filters."}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <p className="text-xs sm:text-sm text-muted-foreground">
+        {table.getRowModel().rows.length} result
+        {table.getRowModel().rows.length === 1 ? "" : "s"}
+      </p>
 
       {/* Add / Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

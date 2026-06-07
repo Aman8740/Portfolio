@@ -253,6 +253,65 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
   },
   {
     id: "3",
+    name: "Kikoe",
+    slogan: "Japanese, when you need it.",
+    description: `
+## Overview
+
+**Kikoe** (聞こえ) is a personal Android assistant built for Japanese learners living in or visiting Japan. It listens passively in the background, figures out when someone else is speaking Japanese, checks what you already know, and only translates what you actually need — quietly in your ear through Bluetooth or on an always-on screen overlay when you're without headphones.
+
+The name means *audible* in Japanese. The goal is simple: remove the language barrier without removing the learning.
+
+## Listen
+
+- The app runs silently in the background at all times — no tapping, no switching screens
+- When someone speaks Japanese around you, it catches it automatically
+- It recognises your own voice and ignores it entirely — only the other person gets processed
+- A rolling 30-second buffer captures everything, so you can replay what was said even if you reacted late
+- A subtle speed indicator appears when someone is speaking unusually fast — a heads-up to focus harder
+
+## Smart Translation
+
+- Kikoe knows your JLPT level and syncs your personal vocabulary list from Renshuu — the Japanese learning platform
+- If you already know all the words in a sentence, the app stays silent and lets you understand on your own
+- If a sentence has one or two words you're shaky on, only those words appear as a small tooltip — no full translation, no noise
+- If the sentence is genuinely beyond your level, a full translation plays instantly through your earphones
+- A confidence slider in settings adjusts how aggressively it translates — push it toward Relaxed at a government office, Strict when you're feeling confident
+
+## Bluetooth First
+
+- When Bluetooth headphones are connected, all translations play privately in your ear — nobody around you hears anything
+- When you disconnect, the app switches automatically to an always-on screen overlay with text
+- The switch is instant — no settings, no buttons
+
+## Build Your Vocabulary
+
+- Every word that triggers a translation is logged silently with the full sentence and where you heard it
+- At the end of the day, browse what Japan threw at you — at the station, at a restaurant, at the combini
+- Tap any word to push it directly to your Renshuu study schedule
+- Words you encounter in real life feed back into your daily practice automatically
+
+## Phrasebook
+
+- Swipe up on the overlay to access a set of pre-loaded Japanese phrases
+- Tap one and the app speaks it aloud through the phone speaker in natural Japanese
+- Covers the situations that actually come up: asking someone to repeat themselves, ordering food, asking for a receipt, saying your Japanese isn't great yet
+- Fully editable — add your own phrases, reorder them, remove what you don't need
+
+## Track Your Progress
+
+- Every Sunday, Kikoe sends a weekly summary: how many words you heard, how many you pushed to Renshuu, and which unknown word came up most
+- The most useful metric is translation frequency over time — if you're needing it less week by week, you're learning
+    `,
+    logo: "assets/kikoe.svg",
+    madeAt: 0,
+    skills: [
+      "20",
+      "26"
+    ]
+  },
+  {
+    id: "4",
     name: "Quickflow",
     slogan: "End-to-End Process Digitalization and Automation for Pharma",
     description: `
@@ -314,7 +373,7 @@ Perfect for anyone wanting to learn machine learning through real examples. The 
     ]
   },
   {
-    id: "4",
+    id: "5",
     name: "QuickTest",
     slogan: "Efficient and reliable software testing integrated with AI.",
     description: `
