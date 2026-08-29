@@ -1,3 +1,5 @@
+import type { ComponentType } from 'react'
+
 export interface Education {
   id: string
   instituteName: string
@@ -39,12 +41,15 @@ export interface Project {
   id: string
   name: string
   slogan: string
+  sloganJa?: string
   description: string
-  logo: string
+  descriptionJa?: string
+  logo?: string
+  logoComponent?: ComponentType<{ size?: number }>
   madeAt: number
   skills: string[]
-  projectUrl?: string;
-  media?: string[];
+  projectUrl?: string
+  media?: string[]
 }
 
 export interface PersonalInfo {

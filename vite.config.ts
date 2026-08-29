@@ -11,7 +11,7 @@ export default defineConfig({
   },
   base: '/Portfolio/',
   server: {
-    host: "10.211.89.109",
+    host: "0.0.0.0",
     port: 5173
   }
 })

@@ -491,7 +491,6 @@ export function InterviewsTab() {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  // Stats
   const stats = {
     total: interviews.length,
     scheduled: interviews.filter((i) => i.status === "scheduled").length,
@@ -509,7 +508,6 @@ export function InterviewsTab() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Card>
           <CardContent className="p-3 sm:p-4 text-center">
@@ -545,7 +543,6 @@ export function InterviewsTab() {
         </Card>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -645,7 +642,6 @@ export function InterviewsTab() {
         {table.getRowModel().rows.length === 1 ? "" : "s"}
       </p>
 
-      {/* Add / Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -660,7 +656,6 @@ export function InterviewsTab() {
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
-            {/* Row: Company & Position */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="companyName">Company Name *</Label>
@@ -682,7 +677,6 @@ export function InterviewsTab() {
               </div>
             </div>
 
-            {/* Row: Status & Round */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Status</Label>
@@ -726,7 +720,6 @@ export function InterviewsTab() {
               </div>
             </div>
 
-            {/* Row: Source & Applied Via */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Found Via</Label>
@@ -759,7 +752,6 @@ export function InterviewsTab() {
               </div>
             </div>
 
-            {/* Row: Location & Salary */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Location</Label>
@@ -817,7 +809,6 @@ export function InterviewsTab() {
               </div>
             </div>
 
-            {/* Row: Dates */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="appliedDate">Applied Date</Label>
@@ -841,7 +832,6 @@ export function InterviewsTab() {
 
             <Separator />
 
-            {/* Row: Contact info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="contactPerson">Contact Person</Label>
@@ -864,7 +854,6 @@ export function InterviewsTab() {
               </div>
             </div>
 
-            {/* Job URL */}
             <div className="space-y-2">
               <Label htmlFor="jobUrl">Job Posting URL</Label>
               <Input
@@ -876,7 +865,6 @@ export function InterviewsTab() {
               />
             </div>
 
-            {/* Notes */}
             <div className="space-y-2">
               <Label htmlFor="notes">Notes</Label>
               <Textarea
@@ -903,7 +891,6 @@ export function InterviewsTab() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>

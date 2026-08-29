@@ -1,61 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 224 60% 8%;
+    --background: 220 22% 97%;
+    --foreground: 222 47% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 224 60% 8%;
+    --card-foreground: 222 47% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 224 60% 8%;
-    --primary: 243 75% 59%;
+    --popover-foreground: 222 47% 8%;
+    --primary: 245 78% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 16% 91%;
-    --secondary-foreground: 224 60% 12%;
-    --muted: 220 16% 91%;
-    --muted-foreground: 220 10% 46%;
-    --accent: 243 60% 93%;
-    --accent-foreground: 243 75% 35%;
+    --secondary: 220 16% 93%;
+    --secondary-foreground: 222 47% 12%;
+    --muted: 220 16% 93%;
+    --muted-foreground: 220 10% 44%;
+    --accent: 245 60% 94%;
+    --accent-foreground: 245 78% 38%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 15% 86%;
-    --input: 220 15% 86%;
-    --ring: 243 75% 59%;
-    --radius: 0.6rem;
-    --chart-1: 243 75% 59%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 220 15% 88%;
+    --input: 220 15% 88%;
+    --ring: 245 78% 60%;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 224 25% 8%;
-    --foreground: 210 40% 95%;
-    --card: 224 22% 11%;
-    --card-foreground: 210 40% 95%;
-    --popover: 224 22% 11%;
-    --popover-foreground: 210 40% 95%;
-    --primary: 243 80% 68%;
-    --primary-foreground: 224 25% 7%;
-    --secondary: 224 20% 17%;
-    --secondary-foreground: 210 40% 95%;
-    --muted: 224 20% 17%;
-    --muted-foreground: 220 12% 58%;
-    --accent: 243 40% 22%;
-    --accent-foreground: 243 80% 82%;
-    --destructive: 0 65% 55%;
+    --background: 225 30% 6%;
+    --foreground: 214 32% 95%;
+    --card: 225 25% 9%;
+    --card-foreground: 214 32% 95%;
+    --popover: 225 25% 9%;
+    --popover-foreground: 214 32% 95%;
+    --primary: 245 82% 70%;
+    --primary-foreground: 225 30% 6%;
+    --secondary: 225 22% 15%;
+    --secondary-foreground: 214 32% 95%;
+    --muted: 225 20% 15%;
+    --muted-foreground: 220 14% 62%;
+    --accent: 245 44% 20%;
+    --accent-foreground: 245 80% 84%;
+    --destructive: 0 62% 52%;
     --destructive-foreground: 0 0% 98%;
-    --border: 224 18% 19%;
-    --input: 224 18% 19%;
-    --ring: 243 80% 68%;
-    --chart-1: 243 80% 68%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --border: 225 20% 17%;
+    --input: 225 20% 17%;
+    --ring: 245 82% 70%;
   }
 }
 
@@ -63,7 +55,120 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground font-sans;
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border/80 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv11';
+    letter-spacing: -0.02em;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)), #a78bfa, #67e8f9);
+  }
+
+  .glow-ring {
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.35), 0 0 24px hsl(var(--primary) / 0.2);
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .card-hover:hover {
+    @apply border-primary/50;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px hsl(var(--primary) / 0.12);
+  }
+
+  .hero-gradient {
+    background: linear-gradient(165deg, hsl(220 22% 98%) 0%, hsl(225 18% 93%) 100%);
+  }
+
+  .dark .hero-gradient {
+    background: radial-gradient(ellipse at top left, hsl(245 45% 15%) 0%, hsl(225 30% 6%) 65%);
+  }
+
+  .tab-active-glow {
+    box-shadow: 0 0 14px hsl(var(--primary) / 0.45);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
+  50%       { box-shadow: 0 0 0 6px hsl(var(--primary) / 0); }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.4s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.35s ease-out forwards;
 }

@@ -1,0 +1,8 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Kikoe app icon</title>
+<desc>The kanji 聞 (to hear) in a serif calligraphy style on a warm paper background, with the hiragana こえ in furigana position above it, and a small vermillion seal accent in the lower right.</desc>
+<rect x="0" y="0" width="512" height="512" rx="92" fill="#F5EFE0"/>
+<text x="246" y="278" text-anchor="middle" dominant-baseline="central" font-family="'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Noto Serif CJK JP',serif" font-size="292" fill="#18140F">聞</text>
+<text x="330" y="108" text-anchor="start" font-family="'Noto Serif JP','Noto Serif CJK JP','Hiragino Mincho ProN',serif" font-size="52" fill="#8A7A63">こえ</text>
+<rect x="392" y="392" width="64" height="64" rx="10" fill="#C0392B"/>
+</svg>

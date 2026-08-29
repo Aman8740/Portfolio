@@ -1,0 +1,9 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Renshuu MCP icon</title>
+<desc>The kanji 練 (to practice), the first character of renshuu, in calligraphy rendered in indigo on a near-black background, with a small two-circle connector accent representing MCP.</desc>
+<rect x="0" y="0" width="512" height="512" rx="92" fill="#09090B"/>
+<text x="256" y="266" text-anchor="middle" dominant-baseline="central" font-family="'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Noto Serif CJK JP',serif" font-size="322" fill="#6366F1">練</text>
+<line x1="352" y1="352" x2="384" y2="380" stroke="#A5A8F5" stroke-width="5" stroke-linecap="round"/>
+<circle cx="346" cy="346" r="11" fill="#09090B" stroke="#A5A8F5" stroke-width="5"/>
+<circle cx="390" cy="386" r="11" fill="#A5A8F5"/>
+</svg>

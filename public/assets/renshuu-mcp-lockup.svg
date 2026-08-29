@@ -1,0 +1,12 @@
+<svg width="900" height="300" viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>Renshuu MCP logo lockup</title>
+<desc>The kanji 練 in indigo calligraphy with a small connector-node accent, beside the wordmark "renshuu" and a small "MCP" badge, on a near-black background matching the project's admin dashboard.</desc>
+<rect x="0" y="0" width="900" height="300" fill="#09090B"/>
+<text x="170" y="158" text-anchor="middle" dominant-baseline="central" font-family="'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho','Noto Serif JP','Noto Serif CJK JP',serif" font-size="200" fill="#6366F1">練</text>
+<line x1="222" y1="222" x2="248" y2="246" stroke="#A5A8F5" stroke-width="4" stroke-linecap="round"/>
+<circle cx="217" cy="217" r="8" fill="#09090B" stroke="#A5A8F5" stroke-width="4"/>
+<circle cx="253" cy="251" r="8" fill="#A5A8F5"/>
+<text x="340" y="150" text-anchor="start" font-family="Inter,-apple-system,'Segoe UI',sans-serif" font-weight="500" font-size="72" fill="#FAFAFA">renshuu</text>
+<rect x="656" y="112" width="86" height="40" rx="20" fill="#6366F1" fill-opacity="0.15"/>
+<text x="699" y="138" text-anchor="middle" font-family="Inter,-apple-system,'Segoe UI',sans-serif" font-weight="600" letter-spacing="1.2" font-size="20" fill="#A5A8F5">MCP</text>
+</svg>
