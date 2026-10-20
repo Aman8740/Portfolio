@@ -1,20 +1,17 @@
-import type { PersonalInfo, Education, Certificate, Experience, Skill, Project, Resume } from '@/types'
+import type { PersonalInfo, Education, Certificate, Experience, Skill, Project } from '@/types'
 import AutopilotMark from '@/components/portfolio/AutopilotMark'
 
 export const personalInfo: PersonalInfo = {
   name: "Aman Shaikh",
+  nameJa: "アマン・シェイク",
+  title: "Full Stack Developer",
   photo: "assets/pfp.png",
+  email: "redacted@example.com",
+  phone: "REDACTED_PHONE",
+  portfolioUrl: "https://aman8740.github.io/Portfolio/",
   linkedin: "https://www.linkedin.com/in/aman-shaikh-754048243",
   github: "https://github.com/Aman8740"
 }
-
-export const resumesData: Resume[] = [
-  {
-    id: "1",
-    name: "Full stack resume",
-    fileName: "Aman_Shaikh_resume_full_stack.pdf"
-  }
-]
 
 export const educationData: Education[] = [
   {
@@ -30,7 +27,8 @@ export const educationData: Education[] = [
       { type: "Sem 6 SPI", value: "8.00" },
     ],
     logo: "assets/lj.jpg",
-    timeframe: "01-Aug-2022-Present"
+    timeframe: "01-Aug-2022-Present",
+    expectedEnd: "2026"
   },
   {
     id: "2",
@@ -50,7 +48,7 @@ export const educationData: Education[] = [
       { type: "Overall Percentage", value: "83.0 %" }
     ],
     logo: "assets/muk.jpeg",
-    timeframe: "01-Jun-2020-31-May-2021"
+    timeframe: "01-Jun-2019-31-May-2020"
   },
 ]
 
@@ -59,43 +57,60 @@ export const certificatesData: Certificate[] = [
     id: "1",
     name: "Introduction to Java",
     institute: "LearnQuest",
-    imageUrl: "assets/JAVA1.jpeg"
+    imageUrl: "assets/JAVA1.jpeg",
+    completedOn: "24-Feb-2023",
+    url: "https://www.coursera.org/learn/introduction-to-java"
   },
   {
     id: "2",
     name: "Inheritance and Data Structures in Java",
     institute: "University of Pennsylvania",
-    imageUrl: "assets/JAVA2.jpeg"
+    imageUrl: "assets/JAVA2.jpeg",
+    shortName: "Inheritance & Data Structures in Java",
+    completedOn: "29-Aug-2023",
+    url: "https://www.coursera.org/learn/java-inheritance-data-structures"
   },
   {
     id: "3",
     name: "Database Design and Basic SQL in PostgreSQL",
     institute: "University of Michigan",
-    imageUrl: "assets/DB.jpeg"
+    imageUrl: "assets/DB.jpeg",
+    shortName: "Database Design & Basic SQL in PostgreSQL",
+    completedOn: "29-Aug-2023",
+    url: "https://www.coursera.org/learn/database-design-postgresql"
   },
   {
     id: "4",
     name: "HTML, CSS, and Javascript for Web Developers",
     institute: "Johns Hopkins University",
-    imageUrl: "assets/HTML_CSS_JS.jpeg"
+    imageUrl: "assets/HTML_CSS_JS.jpeg",
+    completedOn: "13-Feb-2024",
+    url: "https://www.coursera.org/learn/html-css-javascript-for-web-developers"
   },
   {
     id: "5",
     name: "Exploratory Data Analysis for Machine Learning",
     institute: "IBM",
-    imageUrl: "assets/ML.jpeg"
+    imageUrl: "assets/ML.jpeg",
+    completedOn: "19-Jul-2024",
+    url: "https://www.coursera.org/learn/ibm-exploratory-data-analysis-for-machine-learning"
   },
   {
     id: "6",
     name: "Building Generative AI-Powered Applications with Python",
     institute: "IBM",
-    imageUrl: "assets/AI.jpeg"
+    imageUrl: "assets/AI.jpeg",
+    shortName: "Building Generative AI-Powered Apps with Python",
+    completedOn: "28-Jun-2025",
+    url: "https://www.coursera.org/learn/building-gen-ai-powered-applications"
   },
   {
     id: "7",
     name: "AWS Cloud Technical Essentials",
     institute: "Amazon Web Services",
-    imageUrl: "assets/AWS.jpeg"
+    imageUrl: "assets/AWS.jpeg",
+    completedOn: "09-Feb-2025",
+    url: "https://www.coursera.org/learn/aws-cloud-technical-essentials"
   },
 ]
 
@@ -103,18 +118,27 @@ export const experienceData: Experience[] = [
   {
     id: "1",
     companyName: "Webosphere Technolabs LLP",
-    position: "Software professional associate",
+    position: "Software Professional Associate",
     description: "**Building innovative solutions** for the pharma and medical industry by developing a comprehensive low-code/no-code platform. This platform streamlines document workflows throughout the organization, making processes **effortless and efficient**.",
     logo: "assets/webo.jpg",
-    timeframe: "01-May-2025-Present"
+    timeframe: "01-May-2025-Present",
+    resumeBullets: [
+      "Building innovative solutions for the pharma and medical industry through a comprehensive low-code/no-code platform that streamlines document workflows.",
+      "Designed and developed end-to-end full-stack applications handling frontend interfaces, backend services, and data flow with a focus on scalability and performance.",
+      "Built reusable components, RESTful APIs, and modular systems following clean architecture and best coding practices."
+    ]
   },
   {
     id: "1",
     companyName: "Webosphere Technolabs LLP",
-    position: "Software professional intern",
+    position: "Software Professional Intern",
     description: "Focused on **learning and implementing generative AI solutions** and exploring low-code platforms to enable **faster development cycles** with minimal resources and maximum efficiency.",
     logo: "assets/webo.jpg",
-    timeframe: "01-Nov-2024-30-Apr-2025"
+    timeframe: "01-Nov-2024-30-Apr-2025",
+    resumeBullets: [
+      "Focused on learning and implementing generative AI solutions to create intelligent, data-driven workflows and features.",
+      "Explored low-code platforms to enable faster development cycles with minimal resources."
+    ]
   },
 ]
 
@@ -134,7 +158,7 @@ export const skillsData: Skill[] = [
   { id: "10", name: "React", category: "Frontend", level: "Advanced" },
   { id: "11", name: "HTML", category: "Frontend", level: "Expert" },
   { id: "12", name: "CSS", category: "Frontend", level: "Advanced" },
-  { id: "13", name: "Node", category: "Backend", level: "Advanced" },
+  { id: "13", name: "Node.js", category: "Backend", level: "Advanced" },
   { id: "14", name: "Express", category: "Backend", level: "Advanced" },
   { id: "15", name: "Django", category: "Backend", level: "Intermediate" },
   { id: "16", name: "Flask", category: "Backend", level: "Intermediate" },
@@ -144,14 +168,14 @@ export const skillsData: Skill[] = [
   { id: "20", name: "Java", category: "Programming Language", level: "Intermediate" },
   { id: "21", name: "SQL", category: "Query Language", level: "Advanced" },
   { id: "22", name: "MongoDB", category: "Database", level: "Advanced" },
-  { id: "23", name: "MySql", category: "Database", level: "Pre-Intermediate" },
+  { id: "23", name: "MySQL", category: "Database", level: "Pre-Intermediate" },
   { id: "24", name: "PostgreSQL", category: "Database", level: "Intermediate" },
-  { id: "25", name: "MSSql", category: "Database", level: "Intermediate" },
+  { id: "25", name: "MSSQL", category: "Database", level: "Intermediate" },
   { id: "26", name: "Git", category: "Tools", level: "Pre-Advanced" },
   { id: "27", name: "Grafana", category: "Tools", level: "Intermediate" },
   { id: "28", name: "Redux", category: "Tools", level: "Pre-Intermediate" },
   { id: "29", name: "Shadcn", category: "Libraries", level: "Pre-Advanced" },
-  { id: "30", name: "Numpy", category: "Libraries", level: "Advanced" },
+  { id: "30", name: "NumPy", category: "Libraries", level: "Advanced" },
   { id: "31", name: "Matplotlib", category: "Libraries", level: "Advanced" },
   { id: "32", name: "Pandas", category: "Libraries", level: "Advanced" },
   { id: "33", name: "Scikit-learn", category: "Libraries", level: "Intermediate" },
@@ -332,6 +356,16 @@ New forms, workflows, and approval processes are configured visually — no prog
     `,
     logo: "assets/Quickflow.png",
     madeAt: 1,
+    resume: {
+      order: 2,
+      headline: "End-to-End Process Digitalization & Automation for Pharma",
+      bullets: [
+        "Low Code/No Code platform for Pharma and Life Science ensuring full USFDA compliance.",
+        "Digitizes business processes across QMS, DMS, LIMS, ELN, BMR with audit trails and RPA automation.",
+        "Supports real-time analytics, version control, and enterprise system integration."
+      ],
+      tech: ["10", "13", "14", "17", "22", "25", "29", "27", "26"]
+    },
     skills: [
       "10", "13", "14", "11", "12", "19", "17", "22", "26", "29", "27", "25",
     ]
@@ -441,6 +475,16 @@ QuickTest manages separate, independent test suites for multiple products within
     `,
     logo: "assets/QuickTest.jpeg",
     madeAt: 1,
+    resume: {
+      order: 3,
+      headline: "AI-Integrated Automated Software Testing Platform",
+      bullets: [
+        "Automated QA platform with video recording, failure screenshots, and detailed error logs per test run.",
+        "Supports multi-product configuration, flexible per-test flow management, and comprehensive reports.",
+        "Features a live information banner during execution for real-time test monitoring."
+      ],
+      tech: ["10", "13", "14", "22", "17", "36", "29", "25", "26"]
+    },
     skills: [
       "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26",
     ]
@@ -498,6 +542,16 @@ EXML is for anyone who learns better by experimenting than by reading. Students 
     `,
     logo: "assets/EXML.svg",
     madeAt: 0,
+    resume: {
+      order: 1,
+      headline: "Explore Machine Learning Interactive Learning Platform",
+      bullets: [
+        "Interactive web platform with ML guides, live predictions, and dynamic pipeline visualizations.",
+        "Users upload data to get confidence scores, detailed analysis, and hands-on model demos.",
+        "Covers classification, regression, supervised and unsupervised learning workflows."
+      ],
+      tech: ["18", "16", "30", "32", "33", "34", "35", "24", "26"]
+    },
     skills: [
       "18", "16", "11", "12", "19", "30", "31", "32", "33", "34", "35", "26", "24"
     ]
@@ -505,4 +559,4 @@ EXML is for anyone who learns better by experimenting than by reading. Students 
 ]
 
 
-
+

@@ -7,6 +7,7 @@ export interface Education {
   grades: Grade[]
   logo: string
   timeframe: string
+  expectedEnd?: string
 }
 
 export interface Grade {
@@ -19,6 +20,9 @@ export interface Certificate {
   name: string
   institute: string
   imageUrl: string
+  shortName?: string
+  completedOn?: string
+  url?: string
 }
 
 export interface Experience {
@@ -28,6 +32,7 @@ export interface Experience {
   description: string
   logo: string
   timeframe: string
+  resumeBullets?: string[]
 }
 
 export interface Skill {
@@ -50,19 +55,26 @@ export interface Project {
   skills: string[]
   projectUrl?: string
   media?: string[]
+  resume?: ProjectResume
+}
+
+export interface ProjectResume {
+  order: number
+  headline: string
+  bullets: string[]
+  tech: string[]
 }
 
 export interface PersonalInfo {
   name: string
+  nameJa: string
+  title: string
   photo: string
+  email: string
+  phone: string
+  portfolioUrl: string
   linkedin: string
   github: string
-}
-
-export interface Resume {
-  id: string
-  name: string
-  fileName: string
 }
 
 export type InterviewStatus = "applied" | "scheduled" | "taken" | "passed" | "failed" | "offer" | "rejected" | "ghosted" | "cancelled"
@@ -94,4 +106,25 @@ export interface Interview {
   notes: string
   createdAt: string
   updatedAt: string
+}
+
+export interface ResumeConfig {
+  profile: string
+  languageSkillIds: string[]
+  skillGroups: string[][]
+}
+
+export interface RirekishoConfig {
+  birthDate?: string
+  gender?: string
+  postalCode?: string
+  addressFurigana?: string
+  address?: string
+  phone?: string
+  contactPostalCode?: string
+  contactAddressFurigana?: string
+  contactAddress?: string
+  contactPhone?: string
+  motivation: string
+  requests: string
 }

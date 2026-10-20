@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ThemeProvider, LanguageProvider, useLanguage } from "@/hooks";
+import { ThemeProvider, LanguageProvider, useLanguage, useHashRoute } from "@/hooks";
 import { ScrollArea } from "@/components/ui";
 import { Sidebar, LanguageToggle } from "@/components/layout";
 import { EducationTab, ExperienceTab, ProjectsTab, InterviewsTab } from "@/components/portfolio";
+import { ResumePage, RirekishoPage } from "@/components/documents";
 import {
   personalInfo,
   educationData,
@@ -10,7 +11,6 @@ import {
   experienceData,
   skillsData,
   projectsData,
-  resumesData,
 } from "@/data";
 
 const isPrivateMode = import.meta.env.VITE_MODE === "private";
@@ -43,7 +43,7 @@ function PortfolioContent() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col lg:flex-row">
-      <Sidebar personalInfo={personalInfo} resumes={resumesData} />
+      <Sidebar personalInfo={personalInfo} />
 
       <main className="flex-1 flex flex-col min-h-0 lg:min-h-screen">
         <div className="sticky top-0 z-10 bg-background/90 backdrop-blur-md border-b border-border/80">
@@ -148,6 +148,11 @@ function PortfolioContent() {
  * @returns Root JSX element
  */
 export function App() {
+  const route = useHashRoute();
+
+  if (route === "resume") return <ResumePage />;
+  if (route === "rirekisho") return <RirekishoPage />;
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
       <LanguageProvider defaultLanguage="en">

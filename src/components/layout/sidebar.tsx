@@ -1,53 +1,24 @@
 import { useState } from "react";
-import {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui";
-import { Linkedin, Github, Download, MapPin, Briefcase, Languages, Sparkles } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui";
+import { Linkedin, Github, FileText, FileUser, MapPin, Briefcase, Languages, Sparkles } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageToggle } from "./language-toggle";
 import { useLanguage } from "@/hooks";
-import type { PersonalInfo, Resume } from "@/types";
+import type { PersonalInfo } from "@/types";
 
 export interface SidebarProps {
   personalInfo: PersonalInfo;
-  resumes: Resume[];
 }
 
 /**
  * Hero panel displayed on the left side of the portfolio.
- * Shows identity, current role, Japanese language proficiency, social links, and resume download.
+ * Shows identity, current role, Japanese language proficiency, social links, and links to the generated resume and rirekisho.
  * @param personalInfo - Personal details including name, photo, and social links
- * @param resumes - List of downloadable resume files
  * @returns Rendered Sidebar component
  */
-export function Sidebar({ personalInfo, resumes }: SidebarProps) {
+export function Sidebar({ personalInfo }: SidebarProps) {
   const [avatarLoaded, setAvatarLoaded] = useState(false);
   const { language } = useLanguage();
-
-  const handleDownloadResume = (fileName: string) => {
-    fetch(`/Portfolio/assets/${fileName}`).then(
-      async (response) => {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      },
-      () => {
-        window.open(`/Portfolio/assets/${fileName}`, "_blank");
-      }
-    );
-  };
 
   const initials = personalInfo.name
     .split(" ")
@@ -70,7 +41,7 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
           </Avatar>
           <div>
             <p className="font-semibold text-sm leading-tight text-foreground">
-              {language === "ja" ? "アマン・シェイク" : personalInfo.name}
+              {language === "ja" ? personalInfo.nameJa : personalInfo.name}
             </p>
             <p className="text-xs text-muted-foreground">
               {language === "ja" ? "フルスタック・AI開発" : "Full-stack & AI"}
@@ -96,38 +67,24 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
           >
             <Github className="w-4 h-4" />
           </a>
-          {resumes.length === 1 ? (
-            <button
-              type="button"
-              onClick={() => handleDownloadResume(resumes[0].fileName)}
-              aria-label="Download resume"
-              className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-            >
-              <Download className="w-4 h-4" />
-            </button>
-          ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  aria-label="Download resume"
-                  className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-                >
-                  <Download className="w-4 h-4" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {resumes.map((resume) => (
-                  <DropdownMenuItem
-                    key={resume.id}
-                    onClick={() => handleDownloadResume(resume.fileName)}
-                  >
-                    {resume.name}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          <a
+            href="#/resume"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={language === "ja" ? "レジュメ" : "Resume"}
+            className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <FileText className="w-4 h-4" />
+          </a>
+          <a
+            href="#/rirekisho"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={language === "ja" ? "履歴書" : "Rirekisho"}
+            className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <FileUser className="w-4 h-4" />
+          </a>
           <LanguageToggle compact={true} />
           <ThemeToggle collapsed={true} />
         </div>
@@ -175,7 +132,7 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
 
           <div className="text-center mb-5 animate-fade-up">
             <h1 className="font-display text-2xl xl:text-3xl font-bold tracking-tight text-foreground">
-              {language === "ja" ? "アマン・シェイク" : personalInfo.name}
+              {language === "ja" ? personalInfo.nameJa : personalInfo.name}
             </h1>
             <div className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
               <Sparkles className="w-3 h-3" />
@@ -241,44 +198,31 @@ export function Sidebar({ personalInfo, resumes }: SidebarProps) {
               <span>GitHub</span>
             </a>
 
-            {resumes.length === 1 ? (
-              <button
-                type="button"
-                id="resume-download-btn"
-                onClick={() => handleDownloadResume(resumes[0].fileName)}
-                className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200 w-full text-left cursor-pointer"
-              >
-                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                  <Download className="w-4 h-4" />
-                </span>
-                <span>{language === "ja" ? "履歴書をダウンロード" : "Download resume"}</span>
-              </button>
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    id="resume-download-btn"
-                    className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200 w-full text-left cursor-pointer"
-                  >
-                    <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                      <Download className="w-4 h-4" />
-                    </span>
-                    <span>{language === "ja" ? "履歴書をダウンロード" : "Download resume"}</span>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" side="bottom" className="w-56">
-                  {resumes.map((resume) => (
-                    <DropdownMenuItem
-                      key={resume.id}
-                      onClick={() => handleDownloadResume(resume.fileName)}
-                    >
-                      {resume.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+            <a
+              href="#/resume"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="resume-link"
+              className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200"
+            >
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                <FileText className="w-4 h-4" />
+              </span>
+              <span>{language === "ja" ? "レジュメ（英語）" : "Resume (PDF)"}</span>
+            </a>
+
+            <a
+              href="#/rirekisho"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="rirekisho-link"
+              className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200"
+            >
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                <FileUser className="w-4 h-4" />
+              </span>
+              <span>{language === "ja" ? "履歴書（PDF）" : "Rirekisho 履歴書 (PDF)"}</span>
+            </a>
           </nav>
 
           <div className="flex-1" />
