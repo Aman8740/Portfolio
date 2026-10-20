@@ -25,11 +25,11 @@ export const resumeConfig: ResumeConfig = {
 // Rirekisho-only content. Leave a field out (or empty) to print the cell blank for hand-writing.
 // Dates use DD-Mon-YYYY, for example "15-Mar-2004".
 export const rirekishoConfig: RirekishoConfig = {
-  birthDate: undefined,
+  birthDate: "REDACTED_DOB",
   gender: undefined,
-  postalCode: undefined,
+  postalCode: "REDACTED_POSTAL",
   addressFurigana: undefined,
-  address: undefined,
+  address: "REDACTED_ADDRESS",
   phone: undefined,
   contactPostalCode: undefined,
   contactAddressFurigana: undefined,

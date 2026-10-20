@@ -27,8 +27,7 @@ export const educationData: Education[] = [
       { type: "Sem 6 SPI", value: "8.00" },
     ],
     logo: "assets/lj.jpg",
-    timeframe: "01-Aug-2022-Present",
-    expectedEnd: "2026"
+    timeframe: "01-Aug-2022-31-May-2026"
   },
   {
     id: "2",
