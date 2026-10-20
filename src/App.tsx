@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { ThemeProvider, LanguageProvider, useLanguage, useHashRoute } from "@/hooks";
 import { ScrollArea } from "@/components/ui";
 import { Sidebar, LanguageToggle } from "@/components/layout";
 import { EducationTab, ExperienceTab, ProjectsTab, InterviewsTab } from "@/components/portfolio";
-import { ResumePage, RirekishoPage } from "@/components/documents";
+
+// The generator pages exist only in the dev server (npm run dev / npm run pdf); the live site never includes them.
+const ResumePage = import.meta.env.DEV
+  ? lazy(() => import("@/components/documents/resume-page").then((m) => ({ default: m.ResumePage })))
+  : null;
+const RirekishoPage = import.meta.env.DEV
+  ? lazy(() => import("@/components/documents/rirekisho-page").then((m) => ({ default: m.RirekishoPage })))
+  : null;
 import {
   personalInfo,
   educationData,
@@ -150,8 +157,20 @@ function PortfolioContent() {
 export function App() {
   const route = useHashRoute();
 
-  if (route === "resume") return <ResumePage />;
-  if (route === "rirekisho") return <RirekishoPage />;
+  if (ResumePage && route === "resume") {
+    return (
+      <Suspense fallback={null}>
+        <ResumePage />
+      </Suspense>
+    );
+  }
+  if (RirekishoPage && route === "rirekisho") {
+    return (
+      <Suspense fallback={null}>
+        <RirekishoPage />
+      </Suspense>
+    );
+  }
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">

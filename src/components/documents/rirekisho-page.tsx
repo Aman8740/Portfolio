@@ -5,10 +5,14 @@ import * as data from "@/data";
 import { DocumentShell } from "./document-shell";
 import { ProjectPicker } from "./project-picker";
 import { RirekishoDocument } from "./rirekisho-document";
+import { SaveChoicesButton } from "./save-choices-button";
 
 function initialOptions(): { era: EraStyle; photo: boolean } {
   const query = new URLSearchParams(window.location.hash.split("?")[1] ?? "");
-  return { era: query.get("era") === "wareki" ? "wareki" : "western", photo: query.get("photo") !== "0" };
+  return {
+    era: query.has("era") ? (query.get("era") === "wareki" ? "wareki" : "western") : data.documentEra,
+    photo: query.has("photo") ? query.get("photo") !== "0" : data.documentShowPhoto,
+  };
 }
 
 /**
@@ -29,6 +33,7 @@ export function RirekishoPage() {
       toolbar={
         <>
           <ProjectPicker projects={data.projectsData} selected={ids} onChange={setIds} onReset={reset} />
+          <SaveChoicesButton choices={{ projects: ids, era, photo: showPhoto }} />
           <button type="button" className="doc-btn" aria-pressed={era === "western"} onClick={() => setEra("western")}>
             西暦
           </button>

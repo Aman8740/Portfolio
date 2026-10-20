@@ -1,7 +1,18 @@
 import type { ResumeConfig, RirekishoConfig } from '@/types'
+import selection from './document-selection.json'
 
-// Projects shown on the resume and rirekisho by default (ids from projectsData). The portfolio always shows all of them.
-export const documentProjectIds: string[] = ["6", "3", "5"]
+// Saved with "Save choices for PDF" on the resume / rirekisho pages (dev server), or edit document-selection.json.
+// Projects listed here appear on the resume and rirekisho; the portfolio itself always shows all of them.
+export const documentProjectIds: string[] = selection.projects
+export const documentEra: 'western' | 'wareki' = selection.era === 'wareki' ? 'wareki' : 'western'
+export const documentShowPhoto: boolean = selection.photo
+
+// The finished PDFs visitors can download on the live site. `npm run pdf` writes them to public/assets.
+// Remove an entry to stop offering it (the rirekisho contains your date of birth and address).
+export const publishedDocuments = [
+  { id: 'resume', label: 'Download resume', labelJa: 'レジュメをダウンロード', file: 'Aman_Shaikh_resume_full_stack.pdf' },
+  { id: 'rirekisho', label: 'Download rirekisho 履歴書', labelJa: '履歴書をダウンロード', file: 'Aman_Shaikh_rirekisho.pdf' },
+]
 
 // Resume-only content. Skill ids refer to skillsData; any entry that is not a skill id is printed as-is.
 export const resumeConfig: ResumeConfig = {

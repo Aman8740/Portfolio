@@ -367,7 +367,7 @@ export function buildRirekishoModel(
     contact: {
       postalCode: cfg.contactPostalCode ?? "",
       furigana: cfg.contactAddressFurigana ?? "",
-      text: cfg.contactAddress ?? "",
+      text: cfg.contactAddress ?? (cfg.contactPostalCode ? "" : "同上"),
       phone: cfg.contactPhone ?? "",
     },
     email: personalInfo.email,

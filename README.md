@@ -31,14 +31,20 @@ Document-specific details live next to the data they describe:
 
 ## Resume and rirekisho
 
-Open the app and use the sidebar links, or go directly to:
+**Visitors only get the finished PDFs** (sidebar download links). The generator pages below exist only in the dev server and are not part of the live site.
 
-- `#/resume`: single-page A4 resume (layout matches the original PDF)
-- `#/rirekisho`: two-page 履歴書 on the MHLW (厚生労働省) standard A4 form. Add `?era=wareki` for 和暦 dates or `?photo=0` for an empty photo box.
+Workflow after changing your data:
 
-The portfolio always shows every project. The resume and rirekisho show only the projects you choose: use the **Projects** dropdown in the toolbar (remembered in your browser, applies to both documents), or change the default list `documentProjectIds` in [src/data/document-data.ts](src/data/document-data.ts). The rirekisho lists them in Japanese from each project's `sloganJa`.
+1. `npm run dev`, then open the sidebar links (**Resume (preview)**, **Rirekisho (preview)**) or go to `#/resume` / `#/rirekisho`. Check the result.
+2. Use the toolbar to choose projects (and 西暦/和暦, photo on the rirekisho), then click **Save choices for PDF**. This writes [src/data/document-selection.json](src/data/document-selection.json).
+3. `npm run pdf` regenerates both PDFs in `public/assets/` from your data and saved choices (needs Chrome or Edge; set `BROWSER_PATH` if it is not found).
+4. Commit and push. The site then offers the new PDFs.
 
-Click **Print / Save as PDF**, choose paper **A4** and margins **None**.
+The portfolio always shows every project; only the PDFs use the chosen ones. The rirekisho lists them in Japanese from each project's `sloganJa`.
+
+Which PDFs visitors can download is set by `publishedDocuments` in [src/data/document-data.ts](src/data/document-data.ts). Remove the rirekisho entry to stop publishing it (it contains your date of birth and address).
+
+You can also print a page directly with **Print / Save as PDF** (paper A4, margins None).
 
 The builders are pure functions in [src/lib/documents.ts](src/lib/documents.ts); the pages are in [src/components/documents/](src/components/documents/).
 

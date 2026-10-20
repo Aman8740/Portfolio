@@ -3,7 +3,6 @@ import type { HistoryRow, RirekishoModel } from "@/lib";
 import "./rirekisho.css";
 
 const PAGE1_ROWS = 15;
-const PAGE2_ROW_BUDGET = 13;
 const MIN_QUALIFICATION_ROWS = 6;
 
 export interface RirekishoDocumentProps {
@@ -37,19 +36,6 @@ const ADDRESS_BOX: Box = { x: L, y: 81.0, w: S - L, h: 23.1 };
 const PHONE_BOX: Box = { x: S, y: 81.0, w: R - S, h: 23.1 };
 const CONTACT_BOX: Box = { x: L, y: 104.1, w: S - L, h: 22.8 };
 const CONTACT_PHONE_BOX: Box = { x: S, y: 104.1, w: R - S, h: 22.8 };
-
-const CHARS_PER_LINE = 54;
-const LINE_MM = 4.65;
-const USABLE_BODY_MM = 49.5;
-const ROW_MM = 9.15;
-
-function estimateLines(text: string): number {
-  return text.split("\n").reduce((total, paragraph) => {
-    let width = 0;
-    for (const ch of paragraph) width += ch.charCodeAt(0) > 0x2e80 ? 1 : 0.55;
-    return total + Math.max(1, Math.ceil(width / CHARS_PER_LINE));
-  }, 0);
-}
 
 function isLong(text: string): boolean {
   let width = 0;
@@ -105,8 +91,6 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
   const page1 = model.historyRows.slice(0, PAGE1_ROWS);
   const overflow = model.historyRows.slice(PAGE1_ROWS);
   const qualificationCount = Math.max(MIN_QUALIFICATION_ROWS, model.qualificationRows.length);
-  const rowsToTrim = Math.max(0, Math.ceil((estimateLines(model.motivation) * LINE_MM - USABLE_BODY_MM) / ROW_MM));
-  const continuationCount = Math.max(overflow.length, PAGE2_ROW_BUDGET - qualificationCount - rowsToTrim, 1);
 
   return (
     <>
@@ -214,7 +198,9 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
 
       <section className="doc-paper rk-page">
         <div className="rk-page2">
-          <SectionTable heading="学 歴・職 歴（各別にまとめて書く）" rows={overflow} count={continuationCount} />
+          {overflow.length > 0 && (
+            <SectionTable heading="学 歴・職 歴（各別にまとめて書く）" rows={overflow} count={overflow.length} />
+          )}
           <SectionTable heading="免 許・資 格" rows={model.qualificationRows} count={qualificationCount} />
 
           <div className="rk-motivation">

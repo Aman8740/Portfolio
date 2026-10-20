@@ -5,6 +5,7 @@ import * as data from "@/data";
 import { DocumentShell } from "./document-shell";
 import { ProjectPicker } from "./project-picker";
 import { ResumeDocument } from "./resume-document";
+import { SaveChoicesButton } from "./save-choices-button";
 import "@fontsource/lato/400.css";
 import "@fontsource/lato/400-italic.css";
 import "@fontsource/lato/700.css";
@@ -23,7 +24,12 @@ export function ResumePage() {
     <DocumentShell
       title={`${model.name} - Resume`}
       hint="Save as PDF · A4 · margins None."
-      toolbar={<ProjectPicker projects={data.projectsData} selected={ids} onChange={setIds} onReset={reset} />}
+      toolbar={
+        <>
+          <ProjectPicker projects={data.projectsData} selected={ids} onChange={setIds} onReset={reset} />
+          <SaveChoicesButton choices={{ projects: ids }} />
+        </>
+      }
     >
       <ResumeDocument model={model} />
     </DocumentShell>

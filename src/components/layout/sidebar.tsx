@@ -1,10 +1,29 @@
 import { useState } from "react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui";
 import { Linkedin, Github, FileText, FileUser, MapPin, Briefcase, Languages, Sparkles } from "lucide-react";
+import { publishedDocuments } from "@/data";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageToggle } from "./language-toggle";
 import { useLanguage } from "@/hooks";
 import type { PersonalInfo } from "@/types";
+
+// Dev server: links to the resume / rirekisho generator pages. Live site: downloads of the finished PDFs only.
+const documentLinks = import.meta.env.DEV
+  ? [
+      { id: "resume", href: "#/resume", download: false, icon: FileText, labelEn: "Resume (preview)", labelJa: "レジュメ（プレビュー）" },
+      { id: "rirekisho", href: "#/rirekisho", download: false, icon: FileUser, labelEn: "Rirekisho 履歴書 (preview)", labelJa: "履歴書（プレビュー）" },
+    ]
+  : publishedDocuments.map((d) => ({
+      id: d.id,
+      href: `${import.meta.env.BASE_URL}assets/${d.file}`,
+      download: true,
+      icon: d.id === "rirekisho" ? FileUser : FileText,
+      labelEn: d.label,
+      labelJa: d.labelJa,
+    }));
+
+const linkTarget = (download: boolean) =>
+  download ? { download: true } : { target: "_blank", rel: "noopener noreferrer" };
 
 export interface SidebarProps {
   personalInfo: PersonalInfo;
@@ -67,24 +86,17 @@ export function Sidebar({ personalInfo }: SidebarProps) {
           >
             <Github className="w-4 h-4" />
           </a>
-          <a
-            href="#/resume"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={language === "ja" ? "レジュメ" : "Resume"}
-            className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <FileText className="w-4 h-4" />
-          </a>
-          <a
-            href="#/rirekisho"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={language === "ja" ? "履歴書" : "Rirekisho"}
-            className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <FileUser className="w-4 h-4" />
-          </a>
+          {documentLinks.map((link) => (
+            <a
+              key={link.id}
+              href={link.href}
+              {...linkTarget(link.download)}
+              aria-label={language === "ja" ? link.labelJa : link.labelEn}
+              className="p-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <link.icon className="w-4 h-4" />
+            </a>
+          ))}
           <LanguageToggle compact={true} />
           <ThemeToggle collapsed={true} />
         </div>
@@ -198,31 +210,20 @@ export function Sidebar({ personalInfo }: SidebarProps) {
               <span>GitHub</span>
             </a>
 
-            <a
-              href="#/resume"
-              target="_blank"
-              rel="noopener noreferrer"
-              id="resume-link"
-              className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                <FileText className="w-4 h-4" />
-              </span>
-              <span>{language === "ja" ? "レジュメ（英語）" : "Resume (PDF)"}</span>
-            </a>
-
-            <a
-              href="#/rirekisho"
-              target="_blank"
-              rel="noopener noreferrer"
-              id="rirekisho-link"
-              className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200"
-            >
-              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                <FileUser className="w-4 h-4" />
-              </span>
-              <span>{language === "ja" ? "履歴書（PDF）" : "Rirekisho 履歴書 (PDF)"}</span>
-            </a>
+            {documentLinks.map((link) => (
+              <a
+                key={link.id}
+                href={link.href}
+                {...linkTarget(link.download)}
+                id={`${link.id}-link`}
+                className="group flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-foreground hover:bg-card dark:hover:bg-secondary/70 border border-transparent hover:border-border transition-all duration-200"
+              >
+                <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                  <link.icon className="w-4 h-4" />
+                </span>
+                <span>{language === "ja" ? link.labelJa : link.labelEn}</span>
+              </a>
+            ))}
           </nav>
 
           <div className="flex-1" />
