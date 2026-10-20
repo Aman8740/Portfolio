@@ -8,6 +8,8 @@ export interface Education {
   logo: string
   timeframe: string
   expectedEnd?: string
+  instituteNameJa?: string
+  courseJa?: string
 }
 
 export interface Grade {
@@ -23,6 +25,8 @@ export interface Certificate {
   shortName?: string
   completedOn?: string
   url?: string
+  nameJa?: string
+  instituteJa?: string
 }
 
 export interface Experience {
@@ -33,6 +37,9 @@ export interface Experience {
   logo: string
   timeframe: string
   resumeBullets?: string[]
+  companyNameJa?: string
+  positionJa?: string
+  summaryJa?: string
 }
 
 export interface Skill {
@@ -120,6 +127,7 @@ export interface RirekishoConfig {
   postalCode?: string
   addressFurigana?: string
   address?: string
+  addressJa?: string
   phone?: string
   contactPostalCode?: string
   contactAddressFurigana?: string

@@ -1,5 +1,8 @@
 import type { ResumeConfig, RirekishoConfig } from '@/types'
 
+// Projects shown on the resume and rirekisho by default (ids from projectsData). The portfolio always shows all of them.
+export const documentProjectIds: string[] = ["6", "3", "5"]
+
 // Resume-only content. Skill ids refer to skillsData; any entry that is not a skill id is printed as-is.
 export const resumeConfig: ResumeConfig = {
   profile:
@@ -28,7 +31,8 @@ export const rirekishoConfig: RirekishoConfig = {
   birthDate: "REDACTED_DOB",
   gender: undefined,
   postalCode: "REDACTED_POSTAL",
-  addressFurigana: undefined,
+  addressFurigana: "REDACTED_FURIGANA",
+  addressJa: "REDACTED_ADDRESS_JA",
   address: "REDACTED_ADDRESS",
   phone: undefined,
   contactPostalCode: undefined,

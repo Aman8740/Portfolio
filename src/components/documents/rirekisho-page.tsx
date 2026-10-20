@@ -1,7 +1,9 @@
 import { useMemo, useState } from "react";
 import { buildRirekishoModel, type EraStyle } from "@/lib";
+import { useDocumentProjects } from "@/hooks";
 import * as data from "@/data";
 import { DocumentShell } from "./document-shell";
+import { ProjectPicker } from "./project-picker";
 import { RirekishoDocument } from "./rirekisho-document";
 
 function initialOptions(): { era: EraStyle; photo: boolean } {
@@ -10,14 +12,15 @@ function initialOptions(): { era: EraStyle; photo: boolean } {
 }
 
 /**
- * Rirekisho route: preview, era / photo options, and print / save-as-PDF.
+ * Rirekisho route: preview, era / photo / project options, and print / save-as-PDF.
  * @returns Rendered rirekisho page
  */
 export function RirekishoPage() {
   const [initial] = useState(initialOptions);
   const [era, setEra] = useState<EraStyle>(initial.era);
   const [showPhoto, setShowPhoto] = useState(initial.photo);
-  const model = useMemo(() => buildRirekishoModel(data, { era }), [era]);
+  const { ids, setIds, reset } = useDocumentProjects();
+  const model = useMemo(() => buildRirekishoModel(data, { era, projectIds: ids }), [era, ids]);
 
   return (
     <DocumentShell
@@ -25,6 +28,7 @@ export function RirekishoPage() {
       hint="Save as PDF · A4 · margins None."
       toolbar={
         <>
+          <ProjectPicker projects={data.projectsData} selected={ids} onChange={setIds} onReset={reset} />
           <button type="button" className="doc-btn" aria-pressed={era === "western"} onClick={() => setEra("western")}>
             西暦
           </button>

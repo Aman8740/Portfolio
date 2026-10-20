@@ -27,7 +27,9 @@ export const educationData: Education[] = [
       { type: "Sem 6 SPI", value: "8.00" },
     ],
     logo: "assets/lj.jpg",
-    timeframe: "01-Aug-2022-31-May-2026"
+    timeframe: "01-Aug-2022-31-May-2026",
+    instituteNameJa: "L.J.工科技術大学（L.J. Institute of Engineering and Technology）",
+    courseJa: "情報技術学科 工学士課程"
   },
   {
     id: "2",
@@ -37,7 +39,9 @@ export const educationData: Education[] = [
       { type: "Overall Percentage", value: "76.0 %" }
     ],
     logo: "assets/muk.jpeg",
-    timeframe: "01-Jun-2021-31-May-2022"
+    timeframe: "01-Jun-2021-31-May-2022",
+    instituteNameJa: "シュリー・ムクタジーヴァン・ヴィディヤーラヤ（Shree Muktajivan Vidhyalaya）",
+    courseJa: "第12学年 理系コース"
   },
   {
     id: "2",
@@ -47,7 +51,9 @@ export const educationData: Education[] = [
       { type: "Overall Percentage", value: "83.0 %" }
     ],
     logo: "assets/muk.jpeg",
-    timeframe: "01-Jun-2019-31-May-2020"
+    timeframe: "01-Jun-2019-31-May-2020",
+    instituteNameJa: "シュリー・ムクタジーヴァン・ヴィディヤーラヤ（Shree Muktajivan Vidhyalaya）",
+    courseJa: "第10学年"
   },
 ]
 
@@ -58,7 +64,9 @@ export const certificatesData: Certificate[] = [
     institute: "LearnQuest",
     imageUrl: "assets/JAVA1.jpeg",
     completedOn: "24-Feb-2023",
-    url: "https://www.coursera.org/learn/introduction-to-java"
+    url: "https://www.coursera.org/learn/introduction-to-java",
+    nameJa: "Java入門",
+    instituteJa: "ラーンクエスト"
   },
   {
     id: "2",
@@ -67,7 +75,9 @@ export const certificatesData: Certificate[] = [
     imageUrl: "assets/JAVA2.jpeg",
     shortName: "Inheritance & Data Structures in Java",
     completedOn: "29-Aug-2023",
-    url: "https://www.coursera.org/learn/java-inheritance-data-structures"
+    url: "https://www.coursera.org/learn/java-inheritance-data-structures",
+    nameJa: "Javaにおける継承とデータ構造",
+    instituteJa: "ペンシルベニア大学"
   },
   {
     id: "3",
@@ -76,7 +86,9 @@ export const certificatesData: Certificate[] = [
     imageUrl: "assets/DB.jpeg",
     shortName: "Database Design & Basic SQL in PostgreSQL",
     completedOn: "29-Aug-2023",
-    url: "https://www.coursera.org/learn/database-design-postgresql"
+    url: "https://www.coursera.org/learn/database-design-postgresql",
+    nameJa: "データベース設計とPostgreSQLによる基本SQL",
+    instituteJa: "ミシガン大学"
   },
   {
     id: "4",
@@ -84,7 +96,9 @@ export const certificatesData: Certificate[] = [
     institute: "Johns Hopkins University",
     imageUrl: "assets/HTML_CSS_JS.jpeg",
     completedOn: "13-Feb-2024",
-    url: "https://www.coursera.org/learn/html-css-javascript-for-web-developers"
+    url: "https://www.coursera.org/learn/html-css-javascript-for-web-developers",
+    nameJa: "Web開発者のためのHTML・CSS・JavaScript",
+    instituteJa: "ジョンズ・ホプキンス大学"
   },
   {
     id: "5",
@@ -92,7 +106,9 @@ export const certificatesData: Certificate[] = [
     institute: "IBM",
     imageUrl: "assets/ML.jpeg",
     completedOn: "19-Jul-2024",
-    url: "https://www.coursera.org/learn/ibm-exploratory-data-analysis-for-machine-learning"
+    url: "https://www.coursera.org/learn/ibm-exploratory-data-analysis-for-machine-learning",
+    nameJa: "機械学習のための探索的データ分析",
+    instituteJa: "IBM"
   },
   {
     id: "6",
@@ -101,7 +117,9 @@ export const certificatesData: Certificate[] = [
     imageUrl: "assets/AI.jpeg",
     shortName: "Building Generative AI-Powered Apps with Python",
     completedOn: "28-Jun-2025",
-    url: "https://www.coursera.org/learn/building-gen-ai-powered-applications"
+    url: "https://www.coursera.org/learn/building-gen-ai-powered-applications",
+    nameJa: "Pythonによる生成AIアプリケーション開発",
+    instituteJa: "IBM"
   },
   {
     id: "7",
@@ -109,7 +127,9 @@ export const certificatesData: Certificate[] = [
     institute: "Amazon Web Services",
     imageUrl: "assets/AWS.jpeg",
     completedOn: "09-Feb-2025",
-    url: "https://www.coursera.org/learn/aws-cloud-technical-essentials"
+    url: "https://www.coursera.org/learn/aws-cloud-technical-essentials",
+    nameJa: "AWSクラウド技術基礎",
+    instituteJa: "アマゾン ウェブ サービス"
   },
 ]
 
@@ -121,6 +141,9 @@ export const experienceData: Experience[] = [
     description: "**Building innovative solutions** for the pharma and medical industry by developing a comprehensive low-code/no-code platform. This platform streamlines document workflows throughout the organization, making processes **effortless and efficient**.",
     logo: "assets/webo.jpg",
     timeframe: "01-May-2025-Present",
+    companyNameJa: "ウェボスフィア・テクノラブズ LLP（Webosphere Technolabs LLP）",
+    positionJa: "ソフトウェアプロフェッショナル アソシエイト",
+    summaryJa: "製薬・医療業界向けローコード／ノーコードプラットフォーム（文書ワークフローの効率化）の開発に従事",
     resumeBullets: [
       "Building innovative solutions for the pharma and medical industry through a comprehensive low-code/no-code platform that streamlines document workflows.",
       "Designed and developed end-to-end full-stack applications handling frontend interfaces, backend services, and data flow with a focus on scalability and performance.",
@@ -134,6 +157,9 @@ export const experienceData: Experience[] = [
     description: "Focused on **learning and implementing generative AI solutions** and exploring low-code platforms to enable **faster development cycles** with minimal resources and maximum efficiency.",
     logo: "assets/webo.jpg",
     timeframe: "01-Nov-2024-30-Apr-2025",
+    companyNameJa: "ウェボスフィア・テクノラブズ LLP（Webosphere Technolabs LLP）",
+    positionJa: "ソフトウェアプロフェッショナル インターン",
+    summaryJa: "生成AIソリューションの学習・実装およびローコードプラットフォームの検証に従事",
     resumeBullets: [
       "Focused on learning and implementing generative AI solutions to create intelligent, data-driven workflows and features.",
       "Explored low-code platforms to enable faster development cycles with minimal resources."

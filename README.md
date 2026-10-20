@@ -36,6 +36,8 @@ Open the app and use the sidebar links, or go directly to:
 - `#/resume`: single-page A4 resume (layout matches the original PDF)
 - `#/rirekisho`: two-page 履歴書 on the MHLW (厚生労働省) standard A4 form. Add `?era=wareki` for 和暦 dates or `?photo=0` for an empty photo box.
 
+The portfolio always shows every project. The resume and rirekisho show only the projects you choose: use the **Projects** dropdown in the toolbar (remembered in your browser, applies to both documents), or change the default list `documentProjectIds` in [src/data/document-data.ts](src/data/document-data.ts). The rirekisho lists them in Japanese from each project's `sloganJa`.
+
 Click **Print / Save as PDF**, choose paper **A4** and margins **None**.
 
 The builders are pure functions in [src/lib/documents.ts](src/lib/documents.ts); the pages are in [src/components/documents/](src/components/documents/).

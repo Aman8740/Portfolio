@@ -197,6 +197,7 @@
 }
 
 .rk-address-text {
+  white-space: pre-line;
   margin-top: 1.2mm !important;
   font-size: 3.5mm;
   line-height: 1.4;
@@ -361,8 +362,8 @@
   min-height: 0;
   padding: 2.2mm 2.8mm;
   overflow: hidden;
-  font-size: 3.15mm;
-  line-height: 1.65;
+  font-size: 3mm;
+  line-height: 1.55;
   white-space: pre-wrap;
 }
 

@@ -18,6 +18,7 @@ export interface DocumentSource {
   projectsData: Project[];
   resumeConfig: ResumeConfig;
   rirekishoConfig: RirekishoConfig;
+  documentProjectIds: string[];
 }
 
 export interface PartialDate {
@@ -80,6 +81,21 @@ function skillName(skillsById: Map<string, Skill>, idOrLabel: string): string {
   return skillsById.get(idOrLabel)?.name ?? idOrLabel;
 }
 
+/**
+ * Picks the projects shown in the generated documents, in a stable order.
+ * @param projects - All portfolio projects
+ * @param ids - Ids of the projects to include
+ * @returns The chosen projects, ordered by resume order then portfolio order
+ */
+export function selectDocumentProjects(projects: Project[], ids: string[]): Project[] {
+  const chosen = new Set(ids);
+  return projects
+    .map((p, index) => ({ p, key: p.resume?.order ?? 1000 + index }))
+    .filter(({ p }) => chosen.has(p.id))
+    .sort((a, b) => a.key - b.key)
+    .map(({ p }) => p);
+}
+
 export interface ResumeModel {
   name: string;
   title: string;
@@ -98,7 +114,7 @@ export interface ResumeModel {
  * @param source - Portfolio data and resume configuration
  * @returns Normalised resume content ready to render
  */
-export function buildResumeModel(source: DocumentSource): ResumeModel {
+export function buildResumeModel(source: DocumentSource, options: { projectIds?: string[] } = {}): ResumeModel {
   const { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData, resumeConfig } =
     source;
   const skillsById = new Map(skillsData.map((s) => [s.id, s]));
@@ -129,15 +145,12 @@ export function buildResumeModel(source: DocumentSource): ResumeModel {
     };
   });
 
-  const projects = projectsData
-    .filter((p) => p.resume)
-    .sort((a, b) => a.resume!.order - b.resume!.order)
-    .map((p) => ({
-      name: p.name,
-      headline: p.resume!.headline,
-      bullets: p.resume!.bullets,
-      tech: p.resume!.tech.map((id) => skillName(skillsById, id)),
-    }));
+  const projects = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds).map((p) => ({
+    name: p.name,
+    headline: p.resume?.headline ?? p.slogan,
+    bullets: p.resume?.bullets ?? [],
+    tech: (p.resume?.tech ?? p.skills).map((id) => skillName(skillsById, id)),
+  }));
 
   return {
     name: personalInfo.name,
@@ -219,6 +232,15 @@ export interface RirekishoModel {
   requests: string;
 }
 
+const LEVEL_JA: Record<string, string> = {
+  native: "母語",
+  expert: "エキスパート",
+  advanced: "上級",
+  "pre-advanced": "準上級",
+  intermediate: "中級",
+  "pre-intermediate": "初中級",
+};
+
 const LANGUAGE_JA: Record<string, string> = {
   English: "英語",
   Hindi: "ヒンディー語",
@@ -243,9 +265,11 @@ function ageAt(birth: PartialDate | null, today: Date): string {
  */
 export function buildRirekishoModel(
   source: DocumentSource,
-  options: { era: EraStyle; today?: Date },
+  options: { era: EraStyle; today?: Date; projectIds?: string[] },
 ): RirekishoModel {
-  const { personalInfo, educationData, certificatesData, experienceData, skillsData, rirekishoConfig: cfg } = source;
+  const { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData, rirekishoConfig: cfg } =
+    source;
+  const skillsById = new Map(skillsData.map((s) => [s.id, s]));
   const today = options.today ?? new Date();
   const { era } = options;
 
@@ -261,7 +285,7 @@ export function buildRirekishoModel(
     .map((e) => ({ e, tf: parseTimeframe(e.timeframe) }))
     .sort((a, b) => dateKey(a.tf.start) - dateKey(b.tf.start))
     .forEach(({ e, tf }) => {
-      const label = `${e.instituteName} ${e.course}`;
+      const label = `${e.instituteNameJa ?? e.instituteName} ${e.courseJa ?? e.course}`;
       history.push(row(tf.start, `${label} 入学`));
       if (tf.ongoing) {
         history.push(row(parsePartialDate(e.expectedEnd), `${label} 卒業見込み`));
@@ -278,11 +302,13 @@ export function buildRirekishoModel(
     .map((x) => ({ x, tf: parseTimeframe(x.timeframe) }))
     .sort((a, b) => dateKey(a.tf.start) - dateKey(b.tf.start))
     .forEach(({ x, tf }) => {
+      const position = x.positionJa ?? x.position;
       if (x.companyName === previousCompany) {
-        history.push(row(tf.start, `同社 ${x.position} に職位変更`));
+        history.push(row(tf.start, `同社 職位変更（${position}）`));
       } else {
-        history.push(row(tf.start, `${x.companyName} 入社（${x.position}）`));
+        history.push(row(tf.start, `${x.companyNameJa ?? x.companyName} 入社（${position}）`));
       }
+      if (x.summaryJa) history.push({ year: "", month: "", text: `\u3000${x.summaryJa}` });
       previousCompany = x.companyName;
       ongoingJob = tf.ongoing;
     });
@@ -291,14 +317,30 @@ export function buildRirekishoModel(
 
   const qualifications: HistoryRow[] = [...certificatesData]
     .sort((a, b) => dateKey(parsePartialDate(a.completedOn)) - dateKey(parsePartialDate(b.completedOn)))
-    .map((c) => row(parsePartialDate(c.completedOn), `${c.name}（${c.institute}）修了`));
+    .map((c) => {
+      const via = c.url?.includes("coursera.org") ? "／Coursera" : "";
+      return row(parsePartialDate(c.completedOn), `${c.nameJa ?? c.name}（${c.instituteJa ?? c.institute}${via}）修了`);
+    });
 
   const birth = parsePartialDate(cfg.birthDate);
   const languageText = skillsData
     .filter((s) => s.category === "Language")
-    .map((s) => `${LANGUAGE_JA[s.name] ?? s.name}（${s.level.toLowerCase() === "native" ? "母語" : s.level}）`)
+    .map((s) => `${LANGUAGE_JA[s.name] ?? s.name}（${LEVEL_JA[s.level.toLowerCase()] ?? s.level}）`)
     .join("、");
-  const motivation = [cfg.motivation, languageText && `【語学】${languageText}`].filter(Boolean).join("\n\n");
+  const projectLines = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds).map((p) => {
+    const tech = (p.resume?.tech ?? p.skills)
+      .map((id) => skillsById.get(id)?.name)
+      .filter(Boolean)
+      .join("、");
+    return `・${p.name}：${p.sloganJa ?? p.slogan}（${tech}）`;
+  });
+  const motivation = [
+    cfg.motivation,
+    languageText && `【語学】${languageText}`,
+    projectLines.length > 0 && `【主なプロジェクト】\n${projectLines.join("\n")}`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 
   return {
     asOf: {
@@ -319,7 +361,7 @@ export function buildRirekishoModel(
     address: {
       postalCode: cfg.postalCode ?? "",
       furigana: cfg.addressFurigana ?? "",
-      text: cfg.address ?? "",
+      text: [cfg.addressJa, cfg.address].filter(Boolean).join("\n"),
       phone: cfg.phone ?? personalInfo.phone,
     },
     contact: {
