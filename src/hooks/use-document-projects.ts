@@ -4,6 +4,8 @@ import { documentProjectIds } from "@/data";
 const STORAGE_KEY = "portfolio-document-projects";
 
 function load(): string[] {
+  const fromUrl = new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("projects");
+  if (fromUrl !== null) return fromUrl.split(",").filter(Boolean);
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (raw) {

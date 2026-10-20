@@ -367,6 +367,43 @@
   white-space: pre-wrap;
 }
 
+.rk-supp .rk-motivation {
+  margin-top: 0;
+}
+
+.rk-supp-body {
+  flex: 1;
+  min-height: 0;
+  padding: 2.2mm 2.8mm;
+  overflow: hidden;
+  font-size: 3mm;
+  line-height: 1.55;
+}
+
+.rk-supp-body p,
+.rk-supp-body ul,
+.rk-supp-body h3 {
+  margin: 0;
+  padding: 0;
+}
+
+.rk-supp-body ul {
+  list-style: none;
+}
+
+.rk-supp-body h3 {
+  font-size: 3.2mm;
+  font-weight: 600;
+}
+
+.rk-proj {
+  margin-bottom: 4.65mm;
+}
+
+.rk-tech {
+  color: #333;
+}
+
 .rk-table-plain {
   width: 100%;
   border: 0;

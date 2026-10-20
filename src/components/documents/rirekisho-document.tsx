@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { HistoryRow, RirekishoModel } from "@/lib";
 import "./rirekisho.css";
 
@@ -81,6 +81,85 @@ function SectionTable({ heading, rows, count }: { heading: string; rows: History
   );
 }
 
+const CHARS_PER_LINE = 54;
+const LINES_PER_PAGE = 47;
+
+function estimateLines(text: string): number {
+  let width = 0;
+  for (const ch of text) width += ch.charCodeAt(0) > 0x2e80 ? 1 : 0.55;
+  return Math.max(1, Math.ceil(width / CHARS_PER_LINE));
+}
+
+interface SupplementBlock {
+  key: string;
+  lines: number;
+  node: ReactNode;
+}
+
+function buildSupplementBlocks({ projects, skills, grades, links }: RirekishoModel["supplement"]): SupplementBlock[] {
+  const blocks: SupplementBlock[] = projects.map((p) => ({
+    key: `project-${p.name}`,
+    lines:
+      1 +
+      estimateLines(p.overview) +
+      p.points.reduce((sum, point) => sum + estimateLines(`・${point}`), 0) +
+      estimateLines(`使用技術：${p.tech}`) +
+      1,
+    node: (
+      <div className="rk-proj" key={`project-${p.name}`}>
+        <h3>
+          ■ {p.name}
+          {"　"}
+          {p.slogan}
+        </h3>
+        {p.overview && <p>{p.overview}</p>}
+        <ul>
+          {p.points.map((point) => (
+            <li key={point}>・{point}</li>
+          ))}
+        </ul>
+        {p.tech && <p className="rk-tech">使用技術：{p.tech}</p>}
+      </div>
+    ),
+  }));
+
+  const listBlock = (key: string, title: string, items: { label: string; text: string }[]) => {
+    if (items.length === 0) return;
+    blocks.push({
+      key,
+      lines: 2 + items.reduce((sum, item) => sum + estimateLines(`${item.label}：${item.text}`), 0),
+      node: (
+        <div className="rk-proj" key={key}>
+          <h3>■ {title}</h3>
+          {items.map((item) => (
+            <p key={item.label}>
+              <strong>{item.label}</strong>：{item.text}
+            </p>
+          ))}
+        </div>
+      ),
+    });
+  };
+  listBlock("skills", "技術スキル", skills);
+  listBlock("grades", "学業成績", grades);
+  listBlock("links", "ポートフォリオ・連絡先", links);
+  return blocks;
+}
+
+function paginate(blocks: SupplementBlock[]): SupplementBlock[][] {
+  const pages: SupplementBlock[][] = [];
+  let used = 0;
+  for (const block of blocks) {
+    if (pages.length === 0 || used + block.lines > LINES_PER_PAGE) {
+      pages.push([]);
+      used = 0;
+    }
+    pages[pages.length - 1].push(block);
+    used += block.lines;
+  }
+  return pages;
+}
+
 /**
  * Two-page 履歴書 laid out on the MHLW (厚生労働省) standard A4 form.
  * @param model - Rirekisho content built by buildRirekishoModel
@@ -91,6 +170,7 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
   const page1 = model.historyRows.slice(0, PAGE1_ROWS);
   const overflow = model.historyRows.slice(PAGE1_ROWS);
   const qualificationCount = Math.max(MIN_QUALIFICATION_ROWS, model.qualificationRows.length);
+  const supplementPages = paginate(buildSupplementBlocks(model.supplement));
 
   return (
     <>
@@ -224,6 +304,19 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
           </div>
         </div>
       </section>
+
+      {supplementPages.map((page, index) => (
+        <section className="doc-paper rk-page" key={`supplement-${index}`}>
+          <div className="rk-page2 rk-supp">
+            <div className="rk-motivation">
+              <div className="rk-box-head">
+                職務・プロジェクト経歴（補足）{supplementPages.length > 1 ? ` ${index + 1}/${supplementPages.length}` : ""}
+              </div>
+              <div className="rk-supp-body">{page.map((block) => block.node)}</div>
+            </div>
+          </div>
+        </section>
+      ))}
     </>
   );
 }

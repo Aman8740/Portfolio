@@ -82,6 +82,60 @@ function skillName(skillsById: Map<string, Skill>, idOrLabel: string): string {
 }
 
 /**
+ * Strips markdown emphasis, links and code ticks from a text fragment.
+ * @param text - Markdown text
+ * @returns Plain text on a single line
+ */
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/\*\*([^*]+)\*\*/g, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export interface ParsedDescription {
+  overview: string;
+  points: string[];
+}
+
+/**
+ * Reads a project description written in markdown: the first paragraph is the overview, list items are the key points.
+ * @param markdown - Project description (English or Japanese)
+ * @returns Overview text and key points, so any project gets a proper summary without extra data
+ */
+export function parseDescription(markdown: string | undefined): ParsedDescription {
+  let overview = "";
+  const points: string[] = [];
+  for (const raw of (markdown ?? "").split("\n")) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    if (line.startsWith("- ") || line.startsWith("* ")) points.push(stripMarkdown(line.slice(2)));
+    else if (!overview) overview = stripMarkdown(line);
+  }
+  return { overview, points };
+}
+
+function firstSentence(text: string): string {
+  const match = /^(.+?[.!?。])(\s|$)/.exec(text);
+  return match ? match[1] : text;
+}
+
+function shortPoint(point: string): string {
+  const [label, ...rest] = point.split(/\s[—–]\s|:\s/);
+  if (rest.length === 0) return truncate(point, 120);
+  return truncate(`${label}: ${firstSentence(rest.join(" "))}`, 135);
+}
+
+function truncate(text: string, max: number): string {
+  if (text.length <= max) return text;
+  const cut = text.slice(0, max);
+  const space = cut.lastIndexOf(" ");
+  return `${cut.slice(0, space > max * 0.6 ? space : max).replace(/[,;:\u2014-]+$/, "")}…`;
+}
+
+/**
  * Picks the projects shown in the generated documents, in a stable order.
  * @param projects - All portfolio projects
  * @param ids - Ids of the projects to include
@@ -145,12 +199,16 @@ export function buildResumeModel(source: DocumentSource, options: { projectIds?:
     };
   });
 
-  const projects = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds).map((p) => ({
-    name: p.name,
-    headline: p.resume?.headline ?? p.slogan,
-    bullets: p.resume?.bullets ?? [],
-    tech: (p.resume?.tech ?? p.skills).map((id) => skillName(skillsById, id)),
-  }));
+  const projects = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds).map((p) => {
+    const parsed = parseDescription(p.description);
+    const generated = [truncate(firstSentence(parsed.overview), 150), ...parsed.points.slice(0, 2).map(shortPoint)];
+    return {
+      name: p.name,
+      headline: p.resume?.headline ?? p.slogan,
+      bullets: p.resume?.bullets ?? generated.filter(Boolean),
+      tech: (p.resume?.tech ?? p.skills).map((id) => skillName(skillsById, id)),
+    };
+  });
 
   return {
     name: personalInfo.name,
@@ -230,6 +288,40 @@ export interface RirekishoModel {
   qualificationRows: HistoryRow[];
   motivation: string;
   requests: string;
+  supplement: RirekishoSupplement;
+}
+
+export interface RirekishoProjectBlock {
+  name: string;
+  slogan: string;
+  overview: string;
+  points: string[];
+  tech: string;
+}
+
+export interface RirekishoSupplement {
+  projects: RirekishoProjectBlock[];
+  skills: { label: string; text: string }[];
+  grades: { label: string; text: string }[];
+  links: { label: string; text: string }[];
+}
+
+const CATEGORY_JA: Record<string, string> = {
+  "AI Tools": "AIツール",
+  "Artificial Intelligence": "人工知能・機械学習",
+  Frontend: "フロントエンド",
+  Backend: "バックエンド",
+  "Programming Language": "プログラミング言語",
+  "Query Language": "クエリ言語",
+  Database: "データベース",
+  Tools: "ツール",
+  Libraries: "ライブラリ",
+};
+
+function gradeLabelJa(type: string): string {
+  const semester = /^Sem (\d+) SPI$/.exec(type);
+  if (semester) return `第${semester[1]}学期SPI`;
+  return type === "Overall Percentage" ? "総合得点率" : type;
 }
 
 const LEVEL_JA: Record<string, string> = {
@@ -327,17 +419,50 @@ export function buildRirekishoModel(
     .filter((s) => s.category === "Language")
     .map((s) => `${LANGUAGE_JA[s.name] ?? s.name}（${LEVEL_JA[s.level.toLowerCase()] ?? s.level}）`)
     .join("、");
-  const projectLines = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds).map((p) => {
-    const tech = (p.resume?.tech ?? p.skills)
-      .map((id) => skillsById.get(id)?.name)
-      .filter(Boolean)
-      .join("、");
-    return `・${p.name}：${p.sloganJa ?? p.slogan}（${tech}）`;
+  const selectedProjects = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds);
+  const projectBlocks: RirekishoProjectBlock[] = selectedProjects.map((p) => {
+    const parsed = parseDescription(p.descriptionJa ?? p.description);
+    return {
+      name: p.name,
+      slogan: p.sloganJa ?? p.slogan,
+      overview: parsed.overview,
+      points: parsed.points.slice(0, 8),
+      tech: (p.resume?.tech ?? p.skills)
+        .map((id) => skillsById.get(id)?.name)
+        .filter(Boolean)
+        .join("、"),
+    };
   });
+
+  const skillGroups = new Map<string, string[]>();
+  for (const s of skillsData) {
+    if (s.category === "Language") continue;
+    const list = skillGroups.get(s.category) ?? [];
+    list.push(`${s.name}（${LEVEL_JA[s.level.toLowerCase()] ?? s.level}）`);
+    skillGroups.set(s.category, list);
+  }
+
+  const supplement: RirekishoSupplement = {
+    projects: projectBlocks,
+    skills: [...skillGroups].map(([category, items]) => ({ label: CATEGORY_JA[category] ?? category, text: items.join("、") })),
+    grades: educationData
+      .filter((e) => e.grades.length > 0)
+      .map((e) => ({
+        label: e.courseJa ?? e.course,
+        text: e.grades.map((g) => `${gradeLabelJa(g.type)} ${g.value}`).join("、"),
+      })),
+    links: [
+      { label: "ポートフォリオ", text: personalInfo.portfolioUrl },
+      { label: "LinkedIn", text: personalInfo.linkedin },
+      { label: "GitHub", text: personalInfo.github },
+      { label: "メール", text: personalInfo.email },
+    ],
+  };
+
   const motivation = [
     cfg.motivation,
     languageText && `【語学】${languageText}`,
-    projectLines.length > 0 && `【主なプロジェクト】\n${projectLines.join("\n")}`,
+    projectBlocks.length > 0 && `【主なプロジェクト】${projectBlocks.map((b) => b.name).join("、")}（詳細は次ページ以降に記載）`,
   ]
     .filter(Boolean)
     .join("\n\n");
@@ -376,5 +501,6 @@ export function buildRirekishoModel(
     qualificationRows: qualifications,
     motivation,
     requests: cfg.requests,
+    supplement,
   };
 }
