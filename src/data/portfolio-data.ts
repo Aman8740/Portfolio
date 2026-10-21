@@ -1,4 +1,4 @@
-import type { PersonalInfo, Education, Certificate, Experience, Skill, Project, ResumeConfig, RirekishoConfig } from '@/types'
+import type { PersonalInfo, Education, Certificate, Experience, Skill, Project, ResumeConfig, RirekishoConfig, PrivateDetails } from '@/types'
 import selection from './document-selection.json'
 import AutopilotMark from '@/components/portfolio/AutopilotMark'
 
@@ -7,8 +7,6 @@ export const personalInfo: PersonalInfo = {
   nameJa: "アマン・シェイク",
   title: "Full Stack Developer",
   photo: "assets/pfp.png",
-  email: "redacted@example.com",
-  phone: "REDACTED_PHONE",
   portfolioUrl: "https://aman8740.github.io/Portfolio/",
   linkedin: "https://www.linkedin.com/in/aman-shaikh-754048243",
   github: "https://github.com/Aman8740"
@@ -638,18 +636,15 @@ export const resumeConfig: ResumeConfig = {
 // Rirekisho-only content. Leave a field out (or empty) to print the cell blank for hand-writing.
 // Dates use DD-Mon-YYYY, for example "15-Mar-2004".
 export const rirekishoConfig: RirekishoConfig = {
-  birthDate: "REDACTED_DOB",
-  gender: undefined,
-  postalCode: "REDACTED_POSTAL",
-  addressFurigana: "REDACTED_FURIGANA",
-  addressJa: "REDACTED_ADDRESS_JA",
-  address: "REDACTED_ADDRESS",
-  phone: undefined,
-  contactPostalCode: undefined,
-  contactAddressFurigana: undefined,
-  contactAddress: undefined,
-  contactPhone: undefined,
   motivation:
     "フルスタックのソフトウェア開発者として、スケーラブルで高性能なWebアプリケーションの設計・開発に取り組んできました。モダンなフロントエンド／バックエンド技術に加え、システム設計、自動化、クリーンアーキテクチャの実務経験があります。人工知能・機械学習の知見を活かし、データ駆動型のインテリジェントな機能やワークフローの実現にも積極的に取り組んでいます。効率的で保守しやすいコードを書くこと、そして信頼性の高い本番品質のソリューションを届けることを大切にしています。",
   requests: "貴社の規定に従います。",
 }
+
+// Email, phone and the personal rirekisho fields (birth date, gender, postal code, addresses) are NOT stored here:
+// this file is in a public repository. Put them in src/data/private.local.ts (git-ignored; see README).
+// They are read only by the dev server and `npm run pdf`; the production site never includes them.
+const localDetails = import.meta.env.DEV
+  ? Object.values(import.meta.glob<{ privateDetails: PrivateDetails }>('./private.local.ts', { eager: true }))[0]?.privateDetails
+  : undefined
+export const privateDetails: PrivateDetails = localDetails ?? { email: '', phone: '' }

@@ -77,8 +77,6 @@ export interface PersonalInfo {
   nameJa: string
   title: string
   photo: string
-  email: string
-  phone: string
   portfolioUrl: string
   linkedin: string
   github: string
@@ -135,4 +133,10 @@ export interface RirekishoConfig {
   contactPhone?: string
   motivation: string
   requests: string
+}
+
+export interface PrivateDetails {
+  email: string
+  phone: string
+  rirekisho?: Partial<RirekishoConfig>
 }

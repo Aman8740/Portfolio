@@ -19,3 +19,6 @@ src/**/*.js
 
 # Playwright MCP working files
 .playwright-mcp/
+
+# Personal contact details (email, phone, birth date, address) - never commit
+src/data/private.local.ts

@@ -49,9 +49,32 @@ The builders are pure functions in [src/lib/documents.ts](src/lib/documents.ts);
 
 ### Filling in the rirekisho
 
-Cells with no data print blank so they can be handwritten. Set these in `rirekishoConfig` to fill them:
-`birthDate` (`DD-Mon-YYYY`), `gender`, `postalCode`, `address`, `addressFurigana`, the `contact*` equivalents, and `motivation`.
-Age is calculated automatically from `birthDate`, and the ふりがな is derived from `personalInfo.nameJa`.
+Cells with no data print blank so they can be handwritten. `motivation` and `requests` live in `rirekishoConfig` in `portfolio-data.ts`.
+Age is calculated automatically from the birth date, and the ふりがな is derived from `personalInfo.nameJa`.
+
+### Private details (email, phone, birth date, address)
+
+This repository is public, so these are **not** stored in `portfolio-data.ts`. They live in `src/data/private.local.ts`, which is git-ignored and is never part of the production build:
+
+```ts
+import type { PrivateDetails } from '@/types'
+
+export const privateDetails: PrivateDetails = {
+  email: "you@example.com",
+  phone: "+00 0000000000",
+  rirekisho: {
+    birthDate: "DD-Mon-YYYY",
+    gender: undefined,
+    postalCode: "000000",
+    address: "...",
+    addressJa: "...",
+    addressFurigana: "...",
+    // optional: contactPostalCode, contactAddress, contactAddressFurigana, contactPhone
+  },
+}
+```
+
+The dev server and `npm run pdf` read this file, so the generated PDFs include these details. On a fresh clone (or GitHub Actions) the file is absent and they simply print blank. Note that the published PDFs themselves are public downloads.
 
 ## Deployment
 

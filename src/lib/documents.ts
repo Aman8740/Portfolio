@@ -3,6 +3,7 @@ import type {
   Education,
   Experience,
   PersonalInfo,
+  PrivateDetails,
   Project,
   ResumeConfig,
   RirekishoConfig,
@@ -19,6 +20,7 @@ export interface DocumentSource {
   resumeConfig: ResumeConfig;
   rirekishoConfig: RirekishoConfig;
   documentProjectIds: string[];
+  privateDetails: PrivateDetails;
   skillCategoryLabelsJa: Record<string, string>;
 }
 
@@ -215,8 +217,8 @@ export function buildResumeModel(source: DocumentSource, options: { projectIds?:
     name: personalInfo.name,
     title: personalInfo.title,
     contact: {
-      phone: personalInfo.phone,
-      email: personalInfo.email,
+      phone: source.privateDetails.phone,
+      email: source.privateDetails.email,
       portfolioUrl: personalInfo.portfolioUrl,
       linkedin: personalInfo.linkedin,
       github: personalInfo.github,
@@ -350,8 +352,8 @@ export function buildRirekishoModel(
   source: DocumentSource,
   options: { era: EraStyle; today?: Date; projectIds?: string[] },
 ): RirekishoModel {
-  const { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData, rirekishoConfig: cfg } =
-    source;
+  const { personalInfo, educationData, certificatesData, experienceData, skillsData, projectsData } = source;
+  const cfg = { ...source.rirekishoConfig, ...source.privateDetails.rirekisho };
   const skillsById = new Map(skillsData.map((s) => [s.id, s]));
   const today = options.today ?? new Date();
   const { era } = options;
@@ -458,8 +460,8 @@ export function buildRirekishoModel(
       { label: "ポートフォリオ", text: personalInfo.portfolioUrl },
       { label: "LinkedIn", text: personalInfo.linkedin },
       { label: "GitHub", text: personalInfo.github },
-      { label: "メール", text: personalInfo.email },
-    ],
+      { label: "メール", text: source.privateDetails.email },
+    ].filter((link) => link.text),
   };
 
   const strongSkills = skillsData
@@ -509,7 +511,7 @@ export function buildRirekishoModel(
       postalCode: cfg.postalCode ?? "",
       furigana: cfg.addressFurigana ?? "",
       text: [cfg.addressJa, cfg.address].filter(Boolean).join("\n"),
-      phone: cfg.phone ?? personalInfo.phone,
+      phone: cfg.phone ?? source.privateDetails.phone,
     },
     contact: {
       postalCode: cfg.contactPostalCode ?? "",
@@ -517,7 +519,7 @@ export function buildRirekishoModel(
       text: cfg.contactAddress ?? (cfg.contactPostalCode ? "" : "同上"),
       phone: cfg.contactPhone ?? "",
     },
-    email: personalInfo.email,
+    email: source.privateDetails.email,
     photoUrl: personalInfo.photo,
     historyRows: history,
     qualificationRows: qualifications,

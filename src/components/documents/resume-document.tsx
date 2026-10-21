@@ -41,14 +41,18 @@ export function ResumeDocument({ model }: ResumeDocumentProps) {
           <section className="rs-section">
             <h2 className="rs-h2">Contact</h2>
             <ul className="rs-contact">
-              <li>
-                <Phone className="rs-icon" fill="currentColor" />
-                <a href={phoneHref}>{contact.phone}</a>
-              </li>
-              <li>
-                <SolidIcon path={MAIL_PATH} />
-                <a href={`mailto:${contact.email}`}>Mail</a>
-              </li>
+              {contact.phone && (
+                <li>
+                  <Phone className="rs-icon" fill="currentColor" />
+                  <a href={phoneHref}>{contact.phone}</a>
+                </li>
+              )}
+              {contact.email && (
+                <li>
+                  <SolidIcon path={MAIL_PATH} />
+                  <a href={`mailto:${contact.email}`}>Mail</a>
+                </li>
+              )}
               <li>
                 <Globe className="rs-icon" strokeWidth={2.4} />
                 <a href={contact.portfolioUrl}>Portfolio</a>
