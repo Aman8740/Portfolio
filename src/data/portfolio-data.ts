@@ -1,4 +1,5 @@
-import type { PersonalInfo, Education, Certificate, Experience, Skill, Project } from '@/types'
+import type { PersonalInfo, Education, Certificate, Experience, Skill, Project, ResumeConfig, RirekishoConfig } from '@/types'
+import selection from './document-selection.json'
 import AutopilotMark from '@/components/portfolio/AutopilotMark'
 
 export const personalInfo: PersonalInfo = {
@@ -29,7 +30,7 @@ export const educationData: Education[] = [
     logo: "assets/lj.jpg",
     timeframe: "01-Aug-2022-31-May-2026",
     instituteNameJa: "L.J.工科技術大学（L.J. Institute of Engineering and Technology）",
-    courseJa: "情報技術学科 工学士課程"
+    courseJa: "情報技術工学部 学士課程 (B.E. in IT)"
   },
   {
     id: "2",
@@ -41,7 +42,7 @@ export const educationData: Education[] = [
     logo: "assets/muk.jpeg",
     timeframe: "01-Jun-2021-31-May-2022",
     instituteNameJa: "シュリー・ムクタジーヴァン・ヴィディヤーラヤ（Shree Muktajivan Vidhyalaya）",
-    courseJa: "第12学年 理系コース"
+    courseJa: "高等学校 12年生（理系専攻）"
   },
   {
     id: "2",
@@ -53,7 +54,7 @@ export const educationData: Education[] = [
     logo: "assets/muk.jpeg",
     timeframe: "01-Jun-2019-31-May-2020",
     instituteNameJa: "シュリー・ムクタジーヴァン・ヴィディヤーラヤ（Shree Muktajivan Vidhyalaya）",
-    courseJa: "第10学年"
+    courseJa: "中等教育 10年生"
   },
 ]
 
@@ -141,9 +142,9 @@ export const experienceData: Experience[] = [
     description: "**Building innovative solutions** for the pharma and medical industry by developing a comprehensive low-code/no-code platform. This platform streamlines document workflows throughout the organization, making processes **effortless and efficient**.",
     logo: "assets/webo.jpg",
     timeframe: "01-May-2025-Present",
-    companyNameJa: "ウェボスフィア・テクノラブズ LLP（Webosphere Technolabs LLP）",
-    positionJa: "ソフトウェアプロフェッショナル アソシエイト",
-    summaryJa: "製薬・医療業界向けローコード／ノーコードプラットフォーム（文書ワークフローの効率化）の開発に従事",
+    companyNameJa: "Webosphere Technolabs",
+    positionJa: "ソフトウェアエンジニア（アソシエイト）",
+    descriptionJa: "**製薬・医療業界向けの革新的DXソリューション**として、包括的なローコード／ノーコードプラットフォームの開発を主導。組織全体の文書作成・承認・管理ワークフローを統合し、業務プロセスの**大幅な効率化と自動化**を実現しています。",
     resumeBullets: [
       "Building innovative solutions for the pharma and medical industry through a comprehensive low-code/no-code platform that streamlines document workflows.",
       "Designed and developed end-to-end full-stack applications handling frontend interfaces, backend services, and data flow with a focus on scalability and performance.",
@@ -157,9 +158,9 @@ export const experienceData: Experience[] = [
     description: "Focused on **learning and implementing generative AI solutions** and exploring low-code platforms to enable **faster development cycles** with minimal resources and maximum efficiency.",
     logo: "assets/webo.jpg",
     timeframe: "01-Nov-2024-30-Apr-2025",
-    companyNameJa: "ウェボスフィア・テクノラブズ LLP（Webosphere Technolabs LLP）",
-    positionJa: "ソフトウェアプロフェッショナル インターン",
-    summaryJa: "生成AIソリューションの学習・実装およびローコードプラットフォームの検証に従事",
+    companyNameJa: "Webosphere Technolabs",
+    positionJa: "ソフトウェアエンジニア（インターン）",
+    descriptionJa: "**生成AIソリューションの実装と学習**に注力し、ローコード開発環境を活用して最小限のリソースで**開発サイクルを迅速化・最大効率化**する取り組みを担当しました。",
     resumeBullets: [
       "Focused on learning and implementing generative AI solutions to create intelligent, data-driven workflows and features.",
       "Explored low-code platforms to enable faster development cycles with minimal resources."
@@ -583,5 +584,72 @@ EXML is for anyone who learns better by experimenting than by reading. Students 
   },
 ]
 
+// Japanese labels for skill categories (used by the Experience tab and the rirekisho).
+export const skillCategoryLabelsJa: Record<string, string> = {
+  "AI Tools": "AI支援ツール",
+  "Language": "語学力",
+  "Frontend": "フロントエンド",
+  "Backend": "バックエンド",
+  "Programming Language": "プログラミング言語",
+  "Database": "データベース",
+  "Query Language": "クエリ言語",
+  "Tools": "開発ツール",
+  "Libraries": "ライブラリ",
+  "Artificial Intelligence": "人工知能・機械学習",
+}
 
+// ---- Resume / rirekisho (generated PDFs). Everything above is reused automatically; only what is not stored above lives here. ----
 
+// Saved with "Save choices for PDF" on the resume / rirekisho pages (dev server), or edit document-selection.json.
+// Projects listed here appear on the resume and rirekisho; the portfolio itself always shows all of them.
+export const documentProjectIds: string[] = selection.projects
+export const documentEra: 'western' | 'wareki' = selection.era === 'wareki' ? 'wareki' : 'western'
+export const documentShowPhoto: boolean = selection.photo
+
+// The finished PDFs visitors can download on the live site. `npm run pdf` writes them to public/assets.
+// Remove an entry to stop offering it (the rirekisho contains your date of birth and address).
+export const publishedDocuments = [
+  { id: 'resume', label: 'Download resume', labelJa: 'レジュメをダウンロード', file: 'Aman_Shaikh_resume_full_stack.pdf' },
+  { id: 'rirekisho', label: 'Download rirekisho 履歴書', labelJa: '履歴書をダウンロード', file: 'Aman_Shaikh_rirekisho.pdf' },
+]
+
+// Resume-only content. Skill ids refer to skillsData; any entry that is not a skill id is printed as-is.
+export const resumeConfig: ResumeConfig = {
+  profile:
+    "Full-stack software developer with strong experience designing and building scalable, high-performance web applications. Skilled in modern frontend and backend technologies with hands-on exposure to system design, automation, and clean architecture. Actively applies artificial intelligence and machine learning concepts to create intelligent, data-driven features and workflows. Passionate about writing efficient, maintainable code and delivering reliable, production-ready solutions.",
+  languageSkillIds: ["1", "3", "4", "2"],
+  skillGroups: [
+    ["19", "17"],
+    ["18", "20"],
+    ["11", "12"],
+    ["10", "29"],
+    ["13", "14"],
+    ["15", "16"],
+    ["22", "25"],
+    ["24", "23"],
+    ["26", "27", "28"],
+    ["30", "32", "31"],
+    ["33", "34"],
+    ["36", "35"],
+    ["Problem Solving", "Debugging"],
+  ],
+}
+
+// Rirekisho-only content. Leave a field out (or empty) to print the cell blank for hand-writing.
+// Dates use DD-Mon-YYYY, for example "15-Mar-2004".
+export const rirekishoConfig: RirekishoConfig = {
+  birthDate: "REDACTED_DOB",
+  gender: undefined,
+  postalCode: "REDACTED_POSTAL",
+  addressFurigana: "REDACTED_FURIGANA",
+  addressJa: "REDACTED_ADDRESS_JA",
+  address: "REDACTED_ADDRESS",
+  phone: undefined,
+  contactPostalCode: undefined,
+  contactAddressFurigana: undefined,
+  contactAddress: undefined,
+  contactPhone: undefined,
+  motivation:
+    "フルスタックのソフトウェア開発者として、スケーラブルで高性能なWebアプリケーションの設計・開発に取り組んできました。モダンなフロントエンド／バックエンド技術に加え、システム設計、自動化、クリーンアーキテクチャの実務経験があります。人工知能・機械学習の知見を活かし、データ駆動型のインテリジェントな機能やワークフローの実現にも積極的に取り組んでいます。効率的で保守しやすいコードを書くこと、そして信頼性の高い本番品質のソリューションを届けることを大切にしています。",
+  requests: "貴社の規定に従います。",
+}

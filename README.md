@@ -21,7 +21,6 @@ Edit the data once; the portfolio, resume and rirekisho all update.
 | File | Holds |
 | --- | --- |
 | [src/data/portfolio-data.ts](src/data/portfolio-data.ts) | Personal info, education, certificates, experience, skills, projects |
-| [src/data/document-data.ts](src/data/document-data.ts) | Resume-only text (profile, skill grouping) and rirekisho-only fields (birth date, address, motivation) |
 
 Document-specific details live next to the data they describe:
 
@@ -42,7 +41,7 @@ Workflow after changing your data:
 
 The portfolio always shows every project; only the PDFs use the chosen ones. The rirekisho lists them in Japanese from each project's `sloganJa`.
 
-Which PDFs visitors can download is set by `publishedDocuments` in [src/data/document-data.ts](src/data/document-data.ts). Remove the rirekisho entry to stop publishing it (it contains your date of birth and address).
+Which PDFs visitors can download is set by `publishedDocuments` in [src/data/portfolio-data.ts](src/data/portfolio-data.ts). Remove the rirekisho entry to stop publishing it (it contains your date of birth and address).
 
 You can also print a page directly with **Print / Save as PDF** (paper A4, margins None).
 

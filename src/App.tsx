@@ -58,7 +58,7 @@ function PortfolioContent() {
             <nav
               role="tablist"
               aria-label="Portfolio sections"
-              className="flex items-center gap-1 bg-secondary/70 dark:bg-secondary/50 rounded-xl p-1"
+              className="flex items-center gap-1 min-w-0 overflow-x-auto bg-secondary/70 dark:bg-secondary/50 rounded-xl p-1"
             >
               {visibleTabs.map((tab) => (
                 <button
@@ -80,7 +80,7 @@ function PortfolioContent() {
               ))}
             </nav>
 
-            <div className="flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-2 shrink-0">
               <LanguageToggle />
             </div>
           </div>

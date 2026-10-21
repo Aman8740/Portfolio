@@ -84,15 +84,7 @@ export function EducationTab({ education, certificates }: EducationTabProps) {
                       <div className="flex items-center gap-2">
                         <BookOpen className="w-4 h-4 text-primary/70 shrink-0" />
                         <h4 className="font-semibold text-base text-foreground">
-                          {isJa
-                            ? edu.course === "B.E. in Information Technology"
-                              ? "情報技術工学部 学士課程 (B.E. in IT)"
-                              : edu.course === "Standard 12th Science"
-                              ? "高等学校 12年生（理系専攻）"
-                              : edu.course === "Standard 10"
-                              ? "中等教育 10年生"
-                              : edu.course
-                            : edu.course}
+                          {isJa ? (edu.courseJa ?? edu.course) : edu.course}
                         </h4>
                       </div>
                       <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground font-medium bg-secondary/80 border border-border/60 px-3 py-1 rounded-full w-fit">
@@ -193,7 +185,7 @@ export function EducationTab({ education, certificates }: EducationTabProps) {
 
       {selectedCert && (
         <Dialog open={Boolean(selectedCert)} onOpenChange={(open) => !open && setSelectedCert(null)}>
-          <DialogContent className="max-w-2xl p-4 bg-card border-border">
+          <DialogContent aria-describedby={undefined} className="max-w-2xl p-4 bg-card border-border">
             <DialogTitle className="sr-only">{selectedCert.name}</DialogTitle>
             <div className="space-y-3">
               <div className="flex items-start justify-between gap-4">

@@ -2,6 +2,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui";
 import ReactMarkdown from "react-markdown";
 import { formatPortfolioDate } from "@/lib";
 import { useLanguage } from "@/hooks";
+import { skillCategoryLabelsJa } from "@/data";
 import {
   Briefcase,
   Bot,
@@ -23,16 +24,16 @@ export interface ExperienceTabProps {
 }
 
 const CATEGORY_META: Record<string, { labelEn: string; labelJa: string; icon: typeof Briefcase }> = {
-  "AI Tools": { labelEn: "AI tools", labelJa: "AI支援ツール", icon: Bot },
-  "Language": { labelEn: "Languages", labelJa: "語学力", icon: Languages },
-  "Frontend": { labelEn: "Frontend", labelJa: "フロントエンド", icon: Layout },
-  "Backend": { labelEn: "Backend", labelJa: "バックエンド", icon: Server },
-  "Programming Language": { labelEn: "Programming languages", labelJa: "プログラミング言語", icon: Code2 },
-  "Database": { labelEn: "Databases", labelJa: "データベース", icon: Database },
-  "Query Language": { labelEn: "Query languages", labelJa: "クエリ言語", icon: Code2 },
-  "Tools": { labelEn: "Tools & devops", labelJa: "開発ツール", icon: Wrench },
-  "Libraries": { labelEn: "Libraries & frameworks", labelJa: "ライブラリ", icon: Library },
-  "Artificial Intelligence": { labelEn: "Artificial intelligence & ML", labelJa: "人工知能・機械学習", icon: BrainCircuit },
+  "AI Tools": { labelEn: "AI tools", labelJa: skillCategoryLabelsJa["AI Tools"], icon: Bot },
+  "Language": { labelEn: "Languages", labelJa: skillCategoryLabelsJa["Language"], icon: Languages },
+  "Frontend": { labelEn: "Frontend", labelJa: skillCategoryLabelsJa["Frontend"], icon: Layout },
+  "Backend": { labelEn: "Backend", labelJa: skillCategoryLabelsJa["Backend"], icon: Server },
+  "Programming Language": { labelEn: "Programming languages", labelJa: skillCategoryLabelsJa["Programming Language"], icon: Code2 },
+  "Database": { labelEn: "Databases", labelJa: skillCategoryLabelsJa["Database"], icon: Database },
+  "Query Language": { labelEn: "Query languages", labelJa: skillCategoryLabelsJa["Query Language"], icon: Code2 },
+  "Tools": { labelEn: "Tools & devops", labelJa: skillCategoryLabelsJa["Tools"], icon: Wrench },
+  "Libraries": { labelEn: "Libraries & frameworks", labelJa: skillCategoryLabelsJa["Libraries"], icon: Library },
+  "Artificial Intelligence": { labelEn: "Artificial intelligence & ML", labelJa: skillCategoryLabelsJa["Artificial Intelligence"], icon: BrainCircuit },
 };
 
 const CATEGORY_ORDER: string[] = [
@@ -179,11 +180,7 @@ export function ExperienceTab({ experience, skills }: ExperienceTabProps) {
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-2">
                         <h4 className="font-semibold text-base text-foreground flex items-center gap-2">
                           <span>
-                            {isJa
-                              ? index === 0
-                                ? "ソフトウェアエンジニア（アソシエイト）"
-                                : "ソフトウェアエンジニア（インターン）"
-                              : exp.position}
+                            {isJa ? (exp.positionJa ?? exp.position) : exp.position}
                           </span>
                           {index === 0 && (
                             <span className="text-[11px] font-semibold text-primary bg-primary/10 px-2.5 py-0.5 rounded-full">
@@ -207,11 +204,7 @@ export function ExperienceTab({ experience, skills }: ExperienceTabProps) {
 
                       <div className="text-sm leading-relaxed prose prose-sm dark:prose-invert max-w-none prose-p:text-muted-foreground prose-strong:text-foreground prose-strong:font-semibold">
                         <ReactMarkdown>
-                          {isJa
-                            ? index === 0
-                              ? "**製薬・医療業界向けの革新的DXソリューション**として、包括的なローコード／ノーコードプラットフォームの開発を主導。組織全体の文書作成・承認・管理ワークフローを統合し、業務プロセスの**大幅な効率化と自動化**を実現しています。"
-                              : "**生成AIソリューションの実装と学習**に注力し、ローコード開発環境を活用して最小限のリソースで**開発サイクルを迅速化・最大効率化**する取り組みを担当しました。"
-                            : exp.description}
+                          {isJa ? (exp.descriptionJa ?? exp.description) : exp.description}
                         </ReactMarkdown>
                       </div>
                     </div>

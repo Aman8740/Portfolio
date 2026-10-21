@@ -39,7 +39,7 @@ export interface Experience {
   resumeBullets?: string[]
   companyNameJa?: string
   positionJa?: string
-  summaryJa?: string
+  descriptionJa?: string
 }
 
 export interface Skill {

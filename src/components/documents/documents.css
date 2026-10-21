@@ -441,3 +441,11 @@ html.doc-mode body {
   justify-content: center;
   margin-top: 4px;
 }
+
+/* Keep each entry whole when a long resume continues onto a second page */
+.rs-project,
+.rs-entry,
+.rs-certs li {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}

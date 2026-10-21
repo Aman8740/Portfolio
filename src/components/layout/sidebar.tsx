@@ -46,8 +46,8 @@ export function Sidebar({ personalInfo }: SidebarProps) {
 
   return (
     <>
-      <div className="flex lg:hidden items-center justify-between px-4 py-3 border-b border-border bg-card/90 backdrop-blur-sm sticky top-0 z-10">
-        <div className="flex items-center gap-3">
+      <div className="flex lg:hidden items-center justify-between px-3 sm:px-4 py-3 gap-2 border-b border-border bg-card/90 backdrop-blur-sm sticky top-0 z-10">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <Avatar className="w-9 h-9 ring-2 ring-primary/30 ring-offset-1 ring-offset-background">
             <AvatarImage
               src={personalInfo.photo}
@@ -58,16 +58,16 @@ export function Sidebar({ personalInfo }: SidebarProps) {
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div>
-            <p className="font-semibold text-sm leading-tight text-foreground">
+          <div className="min-w-0">
+            <p className="font-semibold text-sm leading-tight truncate text-foreground">
               {language === "ja" ? personalInfo.nameJa : personalInfo.name}
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground truncate">
               {language === "ja" ? "フルスタック・AI開発" : "Full-stack & AI"}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-0.5 sm:gap-1.5 shrink-0">
           <a
             href={personalInfo.linkedin}
             target="_blank"

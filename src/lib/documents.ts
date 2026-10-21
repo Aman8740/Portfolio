@@ -19,6 +19,7 @@ export interface DocumentSource {
   resumeConfig: ResumeConfig;
   rirekishoConfig: RirekishoConfig;
   documentProjectIds: string[];
+  skillCategoryLabelsJa: Record<string, string>;
 }
 
 export interface PartialDate {
@@ -255,6 +256,7 @@ function eraYear(year: number, month: number | undefined, style: EraStyle): stri
   return `${w.era}${w.year === 1 ? "元" : w.year}`;
 }
 
+const FULL_SPACE = String.fromCharCode(0x3000);
 const KATAKANA_TO_HIRAGANA_OFFSET = 0x60;
 
 /**
@@ -287,6 +289,7 @@ export interface RirekishoModel {
   historyRows: HistoryRow[];
   qualificationRows: HistoryRow[];
   motivation: string;
+  motivationCompact: string;
   requests: string;
   supplement: RirekishoSupplement;
 }
@@ -305,18 +308,6 @@ export interface RirekishoSupplement {
   grades: { label: string; text: string }[];
   links: { label: string; text: string }[];
 }
-
-const CATEGORY_JA: Record<string, string> = {
-  "AI Tools": "AIツール",
-  "Artificial Intelligence": "人工知能・機械学習",
-  Frontend: "フロントエンド",
-  Backend: "バックエンド",
-  "Programming Language": "プログラミング言語",
-  "Query Language": "クエリ言語",
-  Database: "データベース",
-  Tools: "ツール",
-  Libraries: "ライブラリ",
-};
 
 function gradeLabelJa(type: string): string {
   const semester = /^Sem (\d+) SPI$/.exec(type);
@@ -372,6 +363,15 @@ export function buildRirekishoModel(
     align,
   });
 
+  const selectedProjects = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds);
+  const jobs = [...experienceData]
+    .map((x) => ({ x, tf: parseTimeframe(x.timeframe) }))
+    .sort((a, b) => dateKey(a.tf.start) - dateKey(b.tf.start));
+  const latestJobOfCompany = new Map<string, number>();
+  jobs.forEach(({ x }, index) => latestJobOfCompany.set(x.id, index));
+  const projectNamesFor = (companyId: string) =>
+    selectedProjects.filter((p) => String(p.madeAt) === companyId).map((p) => p.name);
+
   const history: HistoryRow[] = [{ year: "", month: "", text: "学　歴", align: "center" }];
   [...educationData]
     .map((e) => ({ e, tf: parseTimeframe(e.timeframe) }))
@@ -390,17 +390,18 @@ export function buildRirekishoModel(
   history.push({ year: "", month: "", text: "職　歴", align: "center" });
   let previousCompany = "";
   let ongoingJob = false;
-  [...experienceData]
-    .map((x) => ({ x, tf: parseTimeframe(x.timeframe) }))
-    .sort((a, b) => dateKey(a.tf.start) - dateKey(b.tf.start))
-    .forEach(({ x, tf }) => {
+  jobs.forEach(({ x, tf }, index) => {
       const position = x.positionJa ?? x.position;
       if (x.companyName === previousCompany) {
-        history.push(row(tf.start, `同社 職位変更（${position}）`));
+        history.push(row(tf.start, `同社 職位変更${FULL_SPACE}${position}`));
       } else {
-        history.push(row(tf.start, `${x.companyNameJa ?? x.companyName} 入社（${position}）`));
+        history.push(row(tf.start, `${x.companyNameJa ?? x.companyName} 入社${FULL_SPACE}${position}`));
       }
-      if (x.summaryJa) history.push({ year: "", month: "", text: `\u3000${x.summaryJa}` });
+      if (x.descriptionJa) history.push({ year: "", month: "", text: `\u3000${stripMarkdown(x.descriptionJa)}` });
+      if (latestJobOfCompany.get(x.id) === index) {
+        const names = projectNamesFor(x.id);
+        if (names.length > 0) history.push({ year: "", month: "", text: `\u3000\u62c5\u5f53\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\uff1a${names.join("\u3001")}` });
+      }
       previousCompany = x.companyName;
       ongoingJob = tf.ongoing;
     });
@@ -419,7 +420,6 @@ export function buildRirekishoModel(
     .filter((s) => s.category === "Language")
     .map((s) => `${LANGUAGE_JA[s.name] ?? s.name}（${LEVEL_JA[s.level.toLowerCase()] ?? s.level}）`)
     .join("、");
-  const selectedProjects = selectDocumentProjects(projectsData, options.projectIds ?? source.documentProjectIds);
   const projectBlocks: RirekishoProjectBlock[] = selectedProjects.map((p) => {
     const parsed = parseDescription(p.descriptionJa ?? p.description);
     return {
@@ -444,7 +444,10 @@ export function buildRirekishoModel(
 
   const supplement: RirekishoSupplement = {
     projects: projectBlocks,
-    skills: [...skillGroups].map(([category, items]) => ({ label: CATEGORY_JA[category] ?? category, text: items.join("、") })),
+    skills: [...skillGroups].map(([category, items]) => ({
+      label: source.skillCategoryLabelsJa[category] ?? category,
+      text: items.join("、"),
+    })),
     grades: educationData
       .filter((e) => e.grades.length > 0)
       .map((e) => ({
@@ -459,9 +462,28 @@ export function buildRirekishoModel(
     ],
   };
 
-  const motivation = [
+  const strongSkills = skillsData
+    .filter((s) => s.category !== "Language" && ["expert", "advanced"].includes(s.level.toLowerCase()))
+    .map((s) => s.name)
+    .join("、");
+  const companyById = new Map(experienceData.map((x) => [x.id, x.companyNameJa ?? x.companyName]));
+  const projectSummary = selectedProjects.map((p) => {
+    const owner = p.madeAt === 0 ? "個人開発" : (companyById.get(String(p.madeAt)) ?? "").replace(/（.*）/, "");
+    return `・${p.name}（${owner}）：${p.sloganJa ?? p.slogan}`;
+  });
+  const motivationBase = [
     cfg.motivation,
+    strongSkills && `【得意な技術】${strongSkills}`,
     languageText && `【語学】${languageText}`,
+  ];
+  const motivation = [
+    ...motivationBase,
+    projectSummary.length > 0 && `【主なプロジェクト】（詳細は次ページ以降に記載）\n${projectSummary.join("\n")}`,
+  ]
+    .filter(Boolean)
+    .join("\n\n");
+  const motivationCompact = [
+    ...motivationBase,
     projectBlocks.length > 0 && `【主なプロジェクト】${projectBlocks.map((b) => b.name).join("、")}（詳細は次ページ以降に記載）`,
   ]
     .filter(Boolean)
@@ -500,6 +522,7 @@ export function buildRirekishoModel(
     historyRows: history,
     qualificationRows: qualifications,
     motivation,
+    motivationCompact,
     requests: cfg.requests,
     supplement,
   };

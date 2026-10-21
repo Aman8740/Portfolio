@@ -142,7 +142,7 @@ function ZoomableImageModal({ src, alt, onClose }: ZoomableImageModalProps) {
 
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-5xl p-0 bg-background/95 border-border overflow-hidden rounded-2xl shadow-2xl flex flex-col">
+      <DialogContent aria-describedby={undefined} className="max-w-5xl p-0 bg-background/95 border-border overflow-hidden rounded-2xl shadow-2xl flex flex-col">
         <div className="flex items-center justify-between px-4 py-3 border-b border-border/80 bg-card/80 backdrop-blur-sm z-20">
           <DialogTitle className="text-sm font-semibold truncate text-foreground pr-4">
             {alt}

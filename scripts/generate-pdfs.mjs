@@ -9,7 +9,7 @@ import { createServer } from "vite";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
-// Keep these file names in sync with publishedDocuments in src/data/document-data.ts.
+// Keep these file names in sync with publishedDocuments in src/data/portfolio-data.ts.
 const outputs = [
   { route: "resume", file: path.join(root, "public", "assets", "Aman_Shaikh_resume_full_stack.pdf") },
   { route: "rirekisho", file: path.join(root, "public", "assets", "Aman_Shaikh_rirekisho.pdf") },

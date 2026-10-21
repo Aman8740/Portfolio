@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { HistoryRow, RirekishoModel } from "@/lib";
 import "./rirekisho.css";
 
@@ -161,14 +161,39 @@ function paginate(blocks: SupplementBlock[]): SupplementBlock[][] {
 }
 
 /**
+ * Appeal text that falls back to the compact form when the full text would not fit the form's box.
+ * @param full - Text including the per-project summary lines
+ * @param compact - Shorter text listing only the project names
+ * @returns Rendered box body
+ */
+function MotivationBody({ full, compact }: { full: string; compact: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [useCompact, setUseCompact] = useState(false);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (el && !useCompact && el.scrollHeight > el.clientHeight + 1) setUseCompact(true);
+  }, [useCompact]);
+
+  return (
+    <div className="rk-motivation-body" ref={ref}>
+      {useCompact ? compact : full}
+    </div>
+  );
+}
+
+/**
  * Two-page 履歴書 laid out on the MHLW (厚生労働省) standard A4 form.
  * @param model - Rirekisho content built by buildRirekishoModel
  * @param showPhoto - Whether to print the portrait in the photo box
  * @returns Rendered rirekisho pages
  */
 export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) {
-  const page1 = model.historyRows.slice(0, PAGE1_ROWS);
-  const overflow = model.historyRows.slice(PAGE1_ROWS);
+  const isSpacer = (r: HistoryRow) => !r.year && !r.month && !r.text;
+  const history = model.historyRows.length > PAGE1_ROWS ? model.historyRows.filter((r) => !isSpacer(r)) : model.historyRows;
+  const splitAt = history.length - PAGE1_ROWS === 1 ? PAGE1_ROWS - 1 : PAGE1_ROWS;
+  const page1 = history.slice(0, splitAt);
+  const overflow = history.slice(splitAt);
   const qualificationCount = Math.max(MIN_QUALIFICATION_ROWS, model.qualificationRows.length);
   const supplementPages = paginate(buildSupplementBlocks(model.supplement));
 
@@ -285,7 +310,7 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
 
           <div className="rk-motivation">
             <div className="rk-box-head">志望の動機、特技、好きな学科、アピールポイントなど</div>
-            <div className="rk-motivation-body">{model.motivation}</div>
+            <MotivationBody key={model.motivation} full={model.motivation} compact={model.motivationCompact} />
           </div>
 
           <div className="rk-requests">

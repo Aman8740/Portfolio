@@ -16,3 +16,6 @@ Thumbs.db
 
 # Stray compiler output next to TypeScript sources (Vite resolves .js before .ts)
 src/**/*.js
+
+# Playwright MCP working files
+.playwright-mcp/
