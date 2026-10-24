@@ -206,6 +206,7 @@ export const skillsData: Skill[] = [
   { id: "34", name: "TensorFlow", category: "Libraries", level: "Intermediate" },
   { id: "35", name: "Seaborn", category: "Libraries", level: "Intermediate" },
   { id: "36", name: "CodeceptJS", category: "Tools", level: "Pre-Advanced" },
+  { id: "41", name: "Docker", category: "Tools", level: "Intermediate" },
   { id: "37", name: "KNN", category: "Artificial Intelligence", level: "Intermediate" },
 ]
 
@@ -277,10 +278,10 @@ Most delivery automation follows a fixed script. Autopilot reasons: it reads the
         "Runs up to ten changes in parallel in isolated environments, each with a hard spending cap; it cannot approve reviews, delete history or access anything outside its workspace.",
         "Writes tests before implementation, attaches screenshots and test evidence to the task ticket, and keeps a permanent audit trail of every action, rationale and cost."
       ],
-      tech: ["13", "17", "21", "26", "38", "39"]
+      tech: ["13", "17", "21", "26", "41", "38", "39"]
     },
     skills: [
-      "13", "17", "21", "26", "38", "39"
+      "13", "17", "21", "26", "41", "38", "39"
     ]
   },
   {
@@ -408,10 +409,10 @@ New forms, workflows, and approval processes are configured visually — no prog
         "Digitizes business processes across QMS, DMS, LIMS, ELN, BMR with audit trails and RPA automation.",
         "Supports real-time analytics, version control, and enterprise system integration."
       ],
-      tech: ["10", "13", "14", "17", "22", "25", "29", "27", "26"]
+      tech: ["10", "13", "14", "17", "22", "25", "29", "27", "26", "41"]
     },
     skills: [
-      "10", "13", "14", "11", "12", "19", "17", "22", "26", "29", "27", "25",
+      "10", "13", "14", "11", "12", "19", "17", "22", "26", "41", "29", "27", "25",
     ]
   },
   {
@@ -429,10 +430,10 @@ New forms, workflows, and approval processes are configured visually — no prog
         "Two permission modes from one codebase: full access, and read-only where write and delete operations are not registered at all.",
         "Two always-on instances that restart automatically, plus an isolated instance per Autopilot test run so shared reference data is never touched."
       ],
-      tech: ["13", "17", "26", "38", "40"]
+      tech: ["13", "17", "26", "41", "38", "40"]
     },
     skills: [
-      "13", "17", "26", "38", "40"
+      "13", "17", "26", "41", "38", "40"
     ],
     description: `
 ## Overview
@@ -537,10 +538,10 @@ QuickTest manages separate, independent test suites for multiple products within
         "Supports multi-product configuration, flexible per-test flow management, and comprehensive reports.",
         "Features a live information banner during execution for real-time test monitoring."
       ],
-      tech: ["10", "13", "14", "22", "17", "36", "29", "25", "26"]
+      tech: ["10", "13", "14", "22", "17", "36", "29", "25", "26", "41"]
     },
     skills: [
-      "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26",
+      "22", "14", "10", "13", "11", "12", "19", "17", "36", "29", "25", "26", "41",
     ]
   },
   {
@@ -655,7 +656,7 @@ export const resumeConfig: ResumeConfig = {
     ["15", "16"],
     ["22", "25"],
     ["24", "23"],
-    ["26", "27", "28"],
+    ["26", "41", "27", "28"],
     ["30", "32", "31"],
     ["33", "34"],
     ["36", "35"],
