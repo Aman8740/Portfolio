@@ -99,7 +99,8 @@ html.doc-mode body {
     display: block;
     zoom: 1 !important;
   }
-  .doc-paper {
+  .doc-paper,
+  .resume-paper {
     box-shadow: none !important;
     margin: 0 !important;
   }
@@ -119,6 +120,7 @@ html.doc-mode body {
 /* ---------- Resume ---------- */
 /* 1u = 1/980 of the page width, matching the measurements taken from the original PDF. */
 .resume-paper {
+  --page-h: 264mm;
   --u: calc(210mm / 980);
   --navy: #1b2340;
   --ink: #3b3b3b;
@@ -128,7 +130,7 @@ html.doc-mode body {
   font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
   font-size: calc(13 * var(--u));
   line-height: 1.3;
-  break-inside: avoid;
+  min-height: var(--page-h);
 }
 
 .resume-paper a {
@@ -150,7 +152,7 @@ html.doc-mode body {
 
 .rs-head {
   padding: calc(24 * var(--u)) calc(40 * var(--u)) 0;
-  height: calc(107 * var(--u));
+  height: calc(109.6 * var(--u));
   box-sizing: border-box;
   border-bottom: calc(3.5 * var(--u)) solid var(--navy);
 }
@@ -174,30 +176,62 @@ html.doc-mode body {
   color: var(--muted);
 }
 
+/* Row heights are the distances between heading pairs measured in the original resume (minimums, so longer content still aligns). */
 .rs-body {
   display: grid;
   grid-template-columns: calc(297 * var(--u)) 1fr;
-  min-height: calc(297mm - 107 * var(--u));
+  grid-template-rows:
+    minmax(calc(172.7 * var(--u)), auto)
+    minmax(calc(190.1 * var(--u)), auto)
+    minmax(calc(339.3 * var(--u)), auto)
+    1fr;
+  min-height: calc(var(--page-h) - 109.6 * var(--u));
 }
 
-.rs-side {
+.rs-side,
+.rs-main {
+  display: contents;
+}
+
+.rs-side > .rs-section,
+.rs-main > .rs-section {
   box-sizing: border-box;
-  padding: calc(17 * var(--u)) calc(18 * var(--u)) 0 calc(36 * var(--u));
+  min-width: 0;
+  margin: 0;
+  padding-top: calc(17 * var(--u));
+}
+
+.rs-side > .rs-section {
+  grid-column: 1;
+  padding-right: calc(18 * var(--u));
+  padding-left: calc(36 * var(--u));
   border-right: 1px solid #d3d5db;
 }
 
-.rs-main {
-  box-sizing: border-box;
-  padding: calc(17 * var(--u)) calc(30 * var(--u)) 0 calc(26 * var(--u));
-  min-width: 0;
+.rs-main > .rs-section {
+  grid-column: 2;
+  padding-right: calc(30 * var(--u));
+  padding-left: calc(26 * var(--u));
 }
 
-.rs-section {
-  margin-bottom: calc(28 * var(--u));
+.rs-side > .rs-section:nth-child(1),
+.rs-main > .rs-section:nth-child(1) {
+  grid-row: 1;
 }
 
-.rs-side .rs-section:first-child {
-  margin-bottom: calc(31 * var(--u));
+.rs-side > .rs-section:nth-child(2),
+.rs-main > .rs-section:nth-child(2) {
+  grid-row: 2;
+}
+
+.rs-side > .rs-section:nth-child(3),
+.rs-main > .rs-section:nth-child(3) {
+  grid-row: 3;
+}
+
+.rs-side > .rs-section:nth-child(4),
+.rs-main > .rs-section:nth-child(4) {
+  grid-row: 4;
 }
 
 .rs-side .rs-h2 {
@@ -232,14 +266,6 @@ html.doc-mode body {
   color: var(--navy);
 }
 
-
-.rs-section-languages {
-  margin-bottom: calc(75 * var(--u));
-}
-
-.rs-section-skills {
-  margin-bottom: calc(28 * var(--u));
-}
 
 .rs-bullets li {
   position: relative;
@@ -289,10 +315,6 @@ html.doc-mode body {
   margin-bottom: calc(10 * var(--u));
 }
 
-.rs-section:first-child {
-  margin-bottom: calc(37 * var(--u));
-}
-
 .rs-entry-head,
 .rs-project-head {
   display: flex;
@@ -327,10 +349,6 @@ html.doc-mode body {
   font-size: calc(12.4 * var(--u));
   line-height: calc(18 * var(--u));
   color: #555;
-}
-
-.rs-section-education {
-  margin-bottom: calc(30 * var(--u));
 }
 
 .rs-work {

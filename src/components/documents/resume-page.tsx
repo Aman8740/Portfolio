@@ -27,7 +27,8 @@ export function ResumePage() {
   return (
     <DocumentShell
       title={`${model.name} - Resume`}
-      hint="Save as PDF · A4 · margins None."
+      hint="Save as PDF · margins None."
+      pageSize="210mm 264mm"
       toolbar={
         <>
           <ProjectPicker projects={data.projectsData} selected={ids} onChange={setIds} onReset={reset} />
