@@ -41,7 +41,7 @@ Workflow after changing your data:
 
 The portfolio always shows every project; only the PDFs use the chosen ones. The rirekisho lists them in Japanese from each project's `sloganJa`.
 
-Which PDFs visitors can download is set by `publishedDocuments` in [src/data/portfolio-data.ts](src/data/portfolio-data.ts). Remove the rirekisho entry to stop publishing it (it contains your date of birth and address).
+Which PDFs visitors can download is set by `publishedDocuments` in [src/data/portfolio-data.ts](src/data/portfolio-data.ts). Remove an entry to stop publishing that PDF. The published PDFs never contain email, phone, birth date, gender, postal code or address (see below).
 
 You can also print a page directly with **Print / Save as PDF** (paper A4, margins None).
 
@@ -74,7 +74,9 @@ export const privateDetails: PrivateDetails = {
 }
 ```
 
-The dev server and `npm run pdf` read this file, so the generated PDFs include these details. On a fresh clone (or GitHub Actions) the file is absent and they simply print blank. Note that the published PDFs themselves are public downloads.
+The dev server reads this file, so the preview pages (`#/resume`, `#/rirekisho`) and **Print / Save as PDF** include these details. Use that for the copies you send to employers.
+
+`npm run pdf` builds the **public** PDFs in `public/assets/` with all of these details left out (the personal cells print blank, so they can be filled in by hand). The same applies on a fresh clone or GitHub Actions, where the file does not exist.
 
 ## Deployment
 

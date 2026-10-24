@@ -8,6 +8,14 @@ function readRoute(): AppRoute {
 }
 
 /**
+ * True when the page is opened by `npm run pdf` to produce the published PDFs (hash contains `public=1`).
+ * @returns Whether contact details must be left out of the document
+ */
+export function isPublicExport(): boolean {
+  return new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("public") === "1";
+}
+
+/**
  * Tracks the current hash route so document pages work on static hosting.
  * @returns The active route: "portfolio", "resume" or "rirekisho"
  */

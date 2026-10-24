@@ -1,5 +1,6 @@
 // Generates the resume and rirekisho PDFs from the portfolio data using a local Chrome or Edge.
-// Uses the choices saved in src/data/document-selection.json. Run with: npm run pdf
+// Uses the choices saved in src/data/document-selection.json. The published PDFs leave out all private details (email, phone, birth date, address).
+// Run with: npm run pdf
 import { spawn, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -63,7 +64,7 @@ try {
   await server.listen();
   const base = server.resolvedUrls.local[0];
   for (const { route, file } of outputs) {
-    await printToPdf(browser, `${base}#/${route}`, file, profileDir);
+    await printToPdf(browser, `${base}#/${route}?public=1`, file, profileDir);
     console.log(`${route}: ${path.relative(root, file)} (${Math.round(statSync(file).size / 1024)} KB)`);
   }
 } finally {

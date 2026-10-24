@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { buildRirekishoModel, type EraStyle } from "@/lib";
-import { useDocumentProjects } from "@/hooks";
+import { buildRirekishoModel, withoutPrivateDetails, type EraStyle } from "@/lib";
+import { isPublicExport, useDocumentProjects } from "@/hooks";
 import * as data from "@/data";
 import { DocumentShell } from "./document-shell";
 import { ProjectPicker } from "./project-picker";
@@ -24,7 +24,11 @@ export function RirekishoPage() {
   const [era, setEra] = useState<EraStyle>(initial.era);
   const [showPhoto, setShowPhoto] = useState(initial.photo);
   const { ids, setIds, reset } = useDocumentProjects();
-  const model = useMemo(() => buildRirekishoModel(data, { era, projectIds: ids }), [era, ids]);
+  const source = useMemo(
+    () => (isPublicExport() ? { ...data, privateDetails: withoutPrivateDetails() } : data),
+    [],
+  );
+  const model = useMemo(() => buildRirekishoModel(source, { era, projectIds: ids }), [source, era, ids]);
 
   return (
     <DocumentShell

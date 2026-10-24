@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { buildResumeModel } from "@/lib";
-import { useDocumentProjects } from "@/hooks";
+import { buildResumeModel, withoutPrivateDetails } from "@/lib";
+import { isPublicExport, useDocumentProjects } from "@/hooks";
 import * as data from "@/data";
 import { DocumentShell } from "./document-shell";
 import { ProjectPicker } from "./project-picker";
@@ -18,7 +18,11 @@ import "@fontsource/dejavu-sans/700.css";
  */
 export function ResumePage() {
   const { ids, setIds, reset } = useDocumentProjects();
-  const model = useMemo(() => buildResumeModel(data, { projectIds: ids }), [ids]);
+  const source = useMemo(
+    () => (isPublicExport() ? { ...data, privateDetails: withoutPrivateDetails() } : data),
+    [],
+  );
+  const model = useMemo(() => buildResumeModel(source, { projectIds: ids }), [source, ids]);
 
   return (
     <DocumentShell

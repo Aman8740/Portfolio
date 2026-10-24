@@ -237,6 +237,14 @@ export function buildResumeModel(source: DocumentSource, options: { projectIds?:
   };
 }
 
+/**
+ * Drops every private detail (email, phone, birth date, gender, postal code, addresses) for the published PDFs.
+ * @returns Empty private details; the cells simply print blank
+ */
+export function withoutPrivateDetails(): PrivateDetails {
+  return { email: "", phone: "" };
+}
+
 export type EraStyle = "western" | "wareki";
 
 /**
@@ -516,7 +524,7 @@ export function buildRirekishoModel(
     contact: {
       postalCode: cfg.contactPostalCode ?? "",
       furigana: cfg.contactAddressFurigana ?? "",
-      text: cfg.contactAddress ?? (cfg.contactPostalCode ? "" : "同上"),
+      text: cfg.contactAddress ?? (cfg.contactPostalCode || !(cfg.address || cfg.addressJa) ? "" : "同上"),
       phone: cfg.contactPhone ?? "",
     },
     email: source.privateDetails.email,

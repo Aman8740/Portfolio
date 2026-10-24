@@ -269,6 +269,16 @@ Most delivery automation follows a fixed script. Autopilot reasons: it reads the
       "assets/autopilot-run.png",
       "assets/autopilot-Kb-draft.png",
     ],
+    resume: {
+      order: 4,
+      headline: "AI-Driven Delivery Pipeline for Quickflow",
+      bullets: [
+        "Takes an approved task through requirements, implementation, automated verification, human review, documentation and a knowledge-base article, with no hand-written code.",
+        "Runs up to ten changes in parallel in isolated environments, each with a hard spending cap; it cannot approve reviews, delete history or access anything outside its workspace.",
+        "Writes tests before implementation, attaches screenshots and test evidence to the task ticket, and keeps a permanent audit trail of every action, rationale and cost."
+      ],
+      tech: ["13", "17", "21", "26", "38", "39"]
+    },
     skills: [
       "13", "17", "21", "26", "38", "39"
     ]
@@ -323,6 +333,16 @@ Every action is tested independently against simulated responses, covering both 
 すべての機能は模擬レスポンスを用いた単体テストで検証されています。また、定期的な自動チェックにより、renshuu側のAPI仕様変更を検知して常に最新の動作を維持します。
     `,
     madeAt: 0,
+    resume: {
+      order: 6,
+      headline: "MCP Server Connecting AI Assistants to renshuu.org",
+      bullets: [
+        "Lets AI assistants read exact JLPT progress for vocabulary, kanji and grammar, and look up mastery and study history for any item.",
+        "Adds or removes items on study lists and returns a combined readiness summary across active schedules, all from within the chat.",
+        "Serves many renshuu accounts from one deployment with strict per-request credential isolation; mock-based tests plus a scheduled monthly check of renshuu's service definition."
+      ],
+      tech: ["2", "13", "17", "19", "26", "38"]
+    },
     skills: [
       "2", "13", "17", "19", "26", "38"
     ]
@@ -401,6 +421,16 @@ New forms, workflows, and approval processes are configured visually — no prog
     sloganJa: "AIアシスタントからQuickflowを直接操作できる専用コネクタ。",
     logo: "assets/Quickflow.png",
     madeAt: 1,
+    resume: {
+      order: 5,
+      headline: "MCP Connector Giving AI Assistants Controlled Access to Quickflow",
+      bullets: [
+        "Exposes 109 operations across forms, documents, quality records, laboratory requests, dashboards and master data to any connected AI assistant.",
+        "Two permission modes from one codebase: full access, and read-only where write and delete operations are not registered at all.",
+        "Two always-on instances that restart automatically, plus an isolated instance per Autopilot test run so shared reference data is never touched."
+      ],
+      tech: ["13", "17", "26", "38", "40"]
+    },
     skills: [
       "13", "17", "26", "38", "40"
     ],
