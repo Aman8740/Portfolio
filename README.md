@@ -64,7 +64,7 @@ export const privateDetails: PrivateDetails = {
   phone: "+00 0000000000",
   rirekisho: {
     birthDate: "DD-Mon-YYYY",
-    gender: undefined,
+    gender: "男 or 女 (optional)",
     postalCode: "000000",
     address: "...",
     addressJa: "...",
