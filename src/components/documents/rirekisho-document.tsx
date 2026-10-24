@@ -101,8 +101,14 @@ function buildSupplementBlocks({ projects, skills, grades, links }: RirekishoMod
     key: `project-${p.name}`,
     lines:
       1 +
-      estimateLines(p.overview) +
-      p.points.reduce((sum, point) => sum + estimateLines(`・${point}`), 0) +
+      p.sections.reduce(
+        (sum, sec, i) =>
+          sum +
+          (i > 0 && sec.heading ? 1 : 0) +
+          sec.paragraphs.reduce((n, text) => n + estimateLines(text), 0) +
+          sec.bullets.reduce((n, text) => n + estimateLines(`・${text}`), 0),
+        0,
+      ) +
       estimateLines(`使用技術：${p.tech}`) +
       1,
     node: (
@@ -112,12 +118,19 @@ function buildSupplementBlocks({ projects, skills, grades, links }: RirekishoMod
           {"　"}
           {p.slogan}
         </h3>
-        {p.overview && <p>{p.overview}</p>}
-        <ul>
-          {p.points.map((point) => (
-            <li key={point}>・{point}</li>
-          ))}
-        </ul>
+        {p.sections.map((sec, i) => (
+          <div className="rk-sec" key={`${sec.heading}-${i}`}>
+            {i > 0 && sec.heading && <p className="rk-sec-h">▼ {sec.heading}</p>}
+            {sec.paragraphs.map((text) => (
+              <p key={text}>{text}</p>
+            ))}
+            <ul>
+              {sec.bullets.map((text) => (
+                <li key={text}>・{text}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
         {p.tech && <p className="rk-tech">使用技術：{p.tech}</p>}
       </div>
     ),

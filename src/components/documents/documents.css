@@ -467,3 +467,9 @@ html.doc-mode body {
   break-inside: avoid;
   page-break-inside: avoid;
 }
+
+/* Bottom margin comparable to the original resume (about 21 pt), kept inside the cells so the divider still reaches the page edge */
+.rs-side > .rs-section:nth-child(4),
+.rs-main > .rs-section:nth-child(4) {
+  padding-bottom: calc(17.5 * var(--u));
+}

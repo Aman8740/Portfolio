@@ -24,6 +24,9 @@ export const educationData: Education[] = [
       { type: "Sem 4 SPI", value: "9.32" },
       { type: "Sem 5 SPI", value: "7.90" },
       { type: "Sem 6 SPI", value: "8.00" },
+      { type: "Sem 7 SPI", value: "7.90" },
+      { type: "Sem 8 SPI", value: "10.00" },
+      { type: "CGPA", value: "8.80" },
     ],
     logo: "assets/lj.jpg",
     timeframe: "01-Aug-2022-31-May-2026",
@@ -129,6 +132,26 @@ export const certificatesData: Certificate[] = [
     url: "https://www.coursera.org/learn/aws-cloud-technical-essentials",
     nameJa: "AWSクラウド技術基礎",
     instituteJa: "アマゾン ウェブ サービス"
+  },
+  {
+    id: "8",
+    name: "Ethical Hacking Essentials (EHE)",
+    institute: "EC-Council",
+    imageUrl: "assets/CS.jpeg",
+    completedOn: "31-Jan-2026",
+    url: "https://coursera.org/share/06a154b13a8387f8bf8d3c23333002d1",
+    nameJa: "エシカルハッキング基礎（EHE）",
+    instituteJa: "EC-Council"
+  },
+  {
+    id: "9",
+    name: "Back-End Development with .NET",
+    institute: "Microsoft",
+    imageUrl: "assets/Net.jpeg",
+    completedOn: "24-Apr-2026",
+    url: "https://coursera.org/share/94b6d94bff63e725944fc79d49b580ea",
+    nameJa: ".NETによるバックエンド開発",
+    instituteJa: "マイクロソフト"
   },
 ]
 
@@ -382,6 +405,32 @@ Every action is tested independently against simulated responses, covering both 
 ## How it's used
 
 New forms, workflows, and approval processes are configured visually — no programming required. Multi-step approval chains, conditional logic, and e-signatures are built through a visual designer. The platform integrates with existing enterprise systems and produces the audit-ready records regulators expect, without the implementation overhead that compliance software usually brings.
+
+## Quickflow MCP
+
+**Quickflow MCP** gives AI assistants structured, controlled access to the Quickflow platform. Instead of navigating the interface manually, an AI can look up records, fill in forms, trigger approval workflows, and manage data directly — the same operations any Quickflow user performs, now available to any AI assistant that connects to it.
+
+### Two permission modes
+
+The connector runs as two distinct deployments from a single codebase:
+
+- **Full access** — every operation the platform supports, including creating, updating, and deleting records. This is the mode Autopilot uses when it needs to interact with a live Quickflow environment to verify that an implemented change behaves correctly end-to-end.
+- **Read-only** — only retrieval and display operations exist in this mode. Write and delete operations are not registered at all — they are absent, not blocked. An AI running in read-only mode cannot affect any data, regardless of what it is instructed to do.
+
+### What it covers
+
+109 distinct operations spanning the entire Quickflow platform:
+
+- Forms, templates, and form submission workflows
+- Document management, version control, and approval chains
+- Quality records: CAPA actions, deviations, change controls, and complaints
+- Laboratory requests, test results, and certificate of analysis records
+- Dashboards, analytical reports, and trend data
+- Master data and system configuration
+
+### Infrastructure
+
+Two instances run continuously in the background — one per permission mode — and restart automatically if they go down. When Autopilot tests a change in an isolated environment, it starts a third instance scoped entirely to that run. Nothing it does during testing touches the shared reference data.
     `,
     descriptionJa: `
 ## 概要
@@ -398,6 +447,25 @@ New forms, workflows, and approval processes are configured visually — no prog
 ## 特長
 
 プログラミング不要で、直感的な画面操作のみで新しいフォームや承認ワークフローを構築できます。多段階承認や条件分岐、電子署名に標準対応し、既存の基幹システムとも柔軟に連携します。
+
+## Quickflow MCP
+
+**Quickflow MCP**は、AIアシスタントがQuickflowプラットフォームと直接対話するための連携システムです。人間が画面を一つひとつクリックする代わりに、AIがデータの検索、フォーム入力、ワークフローの承認、レコード管理を迅速かつ正確に実行できます。
+
+### 2つの安全アクセスモード
+
+単一の基盤から用途に応じた2つの権限モードを提供します。
+
+- **フルアクセスモード**: データの取得・作成・更新・削除の全機能を利用可能。AutopilotなどのAIエージェントが、実装した機能が実際の環境で正しく動くか自動テストする際に活用されます。
+- **読み取り専用モード**: データの参照・表示機能のみを提供。作成・削除の命令はシステム構造上排除されているため、誤った操作でデータを改ざんする心配がありません。
+
+### 対応領域
+
+Quickflowの全機能（各種フォーム、文書管理、品質記録、検査依頼、ダッシュボード、マスタ設定など）にわたる109種類のアクションを網羅しています。
+
+### 安定した常時稼働
+
+2つのインスタンスがバックグラウンドで常時稼働し、万が一の停止時も自動復旧します。Autopilotが検証を行う際は、他と隔離されたテスト専用のインスタンスが自動生成されるため、本番データに影響を与えません。
     `,
     logo: "assets/Quickflow.png",
     madeAt: 1,
@@ -407,81 +475,14 @@ New forms, workflows, and approval processes are configured visually — no prog
       bullets: [
         "Low Code/No Code platform for Pharma and Life Science ensuring full USFDA compliance.",
         "Digitizes business processes across QMS, DMS, LIMS, ELN, BMR with audit trails and RPA automation.",
-        "Supports real-time analytics, version control, and enterprise system integration."
+        "Supports real-time analytics, version control, and enterprise system integration.",
+        "Includes Quickflow MCP: 109 operations for AI assistants, in full-access and read-only modes."
       ],
-      tech: ["10", "13", "14", "17", "22", "25", "29", "27", "26", "41"]
+      tech: ["10", "13", "14", "17", "22", "25", "29", "27", "26", "41", "38", "40"]
     },
     skills: [
-      "10", "13", "14", "11", "12", "19", "17", "22", "26", "41", "29", "27", "25",
+      "10", "13", "14", "11", "12", "19", "17", "22", "26", "41", "29", "27", "25", "38", "40",
     ]
-  },
-  {
-    id: "4",
-    name: "Quickflow MCP",
-    slogan: "Quickflow, as a tool your AI can actually use.",
-    sloganJa: "AIアシスタントからQuickflowを直接操作できる専用コネクタ。",
-    logo: "assets/Quickflow.png",
-    madeAt: 1,
-    resume: {
-      order: 5,
-      headline: "MCP Connector Giving AI Assistants Controlled Access to Quickflow",
-      bullets: [
-        "Exposes 109 operations across forms, documents, quality records, laboratory requests, dashboards and master data to any connected AI assistant.",
-        "Two permission modes from one codebase: full access, and read-only where write and delete operations are not registered at all.",
-        "Two always-on instances that restart automatically, plus an isolated instance per Autopilot test run so shared reference data is never touched."
-      ],
-      tech: ["13", "17", "26", "41", "38", "40"]
-    },
-    skills: [
-      "13", "17", "26", "41", "38", "40"
-    ],
-    description: `
-## Overview
-
-**Quickflow MCP** gives AI assistants structured, controlled access to the Quickflow platform. Instead of navigating the interface manually, an AI can look up records, fill in forms, trigger approval workflows, and manage data directly — the same operations any Quickflow user performs, now available to any AI assistant that connects to it.
-
-## Two permission modes
-
-The connector runs as two distinct deployments from a single codebase:
-
-- **Full access** — every operation the platform supports, including creating, updating, and deleting records. This is the mode Autopilot uses when it needs to interact with a live Quickflow environment to verify that an implemented change behaves correctly end-to-end.
-- **Read-only** — only retrieval and display operations exist in this mode. Write and delete operations are not registered at all — they are absent, not blocked. An AI running in read-only mode cannot affect any data, regardless of what it is instructed to do.
-
-## What it covers
-
-109 distinct operations spanning the entire Quickflow platform:
-
-- Forms, templates, and form submission workflows
-- Document management, version control, and approval chains
-- Quality records: CAPA actions, deviations, change controls, and complaints
-- Laboratory requests, test results, and certificate of analysis records
-- Dashboards, analytical reports, and trend data
-- Master data and system configuration
-
-## Infrastructure
-
-Two instances run continuously in the background — one per permission mode — and restart automatically if they go down. When Autopilot tests a change in an isolated environment, it starts a third instance scoped entirely to that run. Nothing it does during testing touches the shared reference data.
-    `,
-    descriptionJa: `
-## 概要
-
-**Quickflow MCP**は、AIアシスタントがQuickflowプラットフォームと直接対話するための連携システムです。人間が画面を一つひとつクリックする代わりに、AIがデータの検索、フォーム入力、ワークフローの承認、レコード管理を迅速かつ正確に実行できます。
-
-## 2つの安全アクセスモード
-
-単一の基盤から用途に応じた2つの権限モードを提供します。
-
-- **フルアクセスモード**: データの取得・作成・更新・削除の全機能を利用可能。AutopilotなどのAIエージェントが、実装した機能が実際の環境で正しく動くか自動テストする際に活用されます。
-- **読み取り専用モード**: データの参照・表示機能のみを提供。作成・削除の命令はシステム構造上排除されているため、誤った操作でデータを改ざんする心配がありません。
-
-## 対応領域
-
-Quickflowの全機能（各種フォーム、文書管理、品質記録、検査依頼、ダッシュボード、マスタ設定など）にわたる109種類のアクションを網羅しています。
-
-## 安定した常時稼働
-
-2つのインスタンスがバックグラウンドで常時稼働し、万が一の停止時も自動復旧します。Autopilotが検証を行う際は、他と隔離されたテスト専用のインスタンスが自動生成されるため、本番データに影響を与えません。
-    `
   },
   {
     id: "5",
@@ -507,6 +508,10 @@ Each product in the organisation has its own test suite with its own configurati
 ## Multi-product and multi-version
 
 QuickTest manages separate, independent test suites for multiple products within the same organisation. Each product maintains its own version history, so regression runs can target any previous configuration. Test setups for one product or version have no effect on another — runs are fully isolated from each other.
+
+## QuickTest MCP
+
+QuickTest is also exposed to AI assistants through a dedicated MCP connector, so an assistant can work with QuickTest directly instead of going through the user interface.
     `,
     descriptionJa: `
 ## 概要
@@ -527,6 +532,10 @@ QuickTest manages separate, independent test suites for multiple products within
 ## 複数製品・複数バージョンの並行管理
 
 同一組織内の複数製品のテストを独立して管理できます。過去のバージョンに対する回帰テストも容易に実行でき、環境間の干渉を防ぎます。
+
+## QuickTest MCP
+
+QuickTestは専用のMCPコネクタを通じてAIアシスタントからも利用でき、画面操作を介さずにQuickTestを直接扱えます。
     `,
     logo: "assets/QuickTest.jpeg",
     madeAt: 1,
@@ -536,7 +545,8 @@ QuickTest manages separate, independent test suites for multiple products within
       bullets: [
         "Automated QA platform with video recording, failure screenshots, and detailed error logs per test run.",
         "Supports multi-product configuration, flexible per-test flow management, and comprehensive reports.",
-        "Features a live information banner during execution for real-time test monitoring."
+        "Features a live information banner during execution for real-time test monitoring.",
+        "Includes QuickTest MCP, a dedicated connector so AI assistants can work with QuickTest directly."
       ],
       tech: ["10", "13", "14", "22", "17", "36", "29", "25", "26", "41"]
     },

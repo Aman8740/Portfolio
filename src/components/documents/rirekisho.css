@@ -432,3 +432,12 @@
     page-break-after: auto;
   }
 }
+
+.rk-sec-h {
+  margin-top: 1.4mm !important;
+  font-weight: 600;
+}
+
+.rk-sec p + p {
+  margin-top: 0.8mm !important;
+}

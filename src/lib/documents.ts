@@ -120,6 +120,49 @@ export function parseDescription(markdown: string | undefined): ParsedDescriptio
   return { overview, points };
 }
 
+export interface DescriptionSection {
+  heading: string;
+  paragraphs: string[];
+  bullets: string[];
+}
+
+/**
+ * Splits a markdown project description into its sections (heading, paragraphs, bullet points), so no part is lost.
+ * @param markdown - Project description (English or Japanese)
+ * @returns Sections in order; the first usually holds the overview and has the "Overview" heading
+ */
+export function parseSections(markdown: string | undefined): DescriptionSection[] {
+  const sections: DescriptionSection[] = [];
+  let current: DescriptionSection | null = null;
+  let paragraph: string[] = [];
+  const flush = () => {
+    if (current && paragraph.length > 0) current.paragraphs.push(stripMarkdown(paragraph.join(" ")));
+    paragraph = [];
+  };
+  for (const raw of (markdown ?? "").split("\n")) {
+    const line = raw.trim();
+    const heading = /^#{2,3}\s+(.*)$/.exec(line);
+    if (heading) {
+      flush();
+      current = { heading: stripMarkdown(heading[1]), paragraphs: [], bullets: [] };
+      sections.push(current);
+      continue;
+    }
+    if (!current) {
+      if (!line) continue;
+      current = { heading: "", paragraphs: [], bullets: [] };
+      sections.push(current);
+    }
+    if (!line) flush();
+    else if (line.startsWith("- ") || line.startsWith("* ")) {
+      flush();
+      current.bullets.push(stripMarkdown(line.slice(2)));
+    } else paragraph.push(line);
+  }
+  flush();
+  return sections.filter((s) => s.paragraphs.length > 0 || s.bullets.length > 0);
+}
+
 function firstSentence(text: string): string {
   const match = /^(.+?[.!?。])(\s|$)/.exec(text);
   return match ? match[1] : text;
@@ -307,8 +350,7 @@ export interface RirekishoModel {
 export interface RirekishoProjectBlock {
   name: string;
   slogan: string;
-  overview: string;
-  points: string[];
+  sections: DescriptionSection[];
   tech: string;
 }
 
@@ -431,12 +473,10 @@ export function buildRirekishoModel(
     .map((s) => `${LANGUAGE_JA[s.name] ?? s.name}（${LEVEL_JA[s.level.toLowerCase()] ?? s.level}）`)
     .join("、");
   const projectBlocks: RirekishoProjectBlock[] = selectedProjects.map((p) => {
-    const parsed = parseDescription(p.descriptionJa ?? p.description);
     return {
       name: p.name,
       slogan: p.sloganJa ?? p.slogan,
-      overview: parsed.overview,
-      points: parsed.points.slice(0, 8),
+      sections: parseSections(p.descriptionJa ?? p.description),
       tech: (p.resume?.tech ?? p.skills)
         .map((id) => skillsById.get(id)?.name)
         .filter(Boolean)

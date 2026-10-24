@@ -2,7 +2,7 @@
 // Uses the choices saved in src/data/document-selection.json. The published PDFs leave out all private details (email, phone, birth date, address).
 // Run with: npm run pdf
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, rmSync, statSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -56,6 +56,24 @@ function printToPdf(browser, url, outFile, profileDir) {
   });
 }
 
+// The first load of a page can be printed before its layout has settled, so print again until two
+// consecutive prints produce the same page size.
+function pageHeight(file) {
+  const match = /\/MediaBox\s*\[\s*0\s+0\s+[\d.]+\s+([\d.]+)\s*\]/.exec(readFileSync(file, "latin1"));
+  return match ? Number(match[1]) : null;
+}
+
+async function printStable(browser, url, file, profileDir) {
+  let previous = null;
+  for (let attempt = 1; attempt <= 6; attempt++) {
+    await printToPdf(browser, url, file, profileDir);
+    const height = pageHeight(file);
+    if (previous !== null && height !== null && Math.abs(height - previous) < 0.5) return;
+    previous = height;
+  }
+  console.warn(`Page size did not settle for ${url}; using the last print.`);
+}
+
 const browser = findBrowser();
 const profileDir = mkdtempSync(path.join(tmpdir(), "portfolio-pdf-"));
 const server = await createServer({ root, logLevel: "error", server: { host: "127.0.0.1", port: 0 } });
@@ -64,7 +82,7 @@ try {
   await server.listen();
   const base = server.resolvedUrls.local[0];
   for (const { route, file } of outputs) {
-    await printToPdf(browser, `${base}#/${route}?public=1`, file, profileDir);
+    await printStable(browser, `${base}#/${route}?public=1`, file, profileDir);
     console.log(`${route}: ${path.relative(root, file)} (${Math.round(statSync(file).size / 1024)} KB)`);
   }
 } finally {
