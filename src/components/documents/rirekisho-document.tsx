@@ -81,46 +81,38 @@ function SectionTable({ heading, rows, count }: { heading: string; rows: History
   );
 }
 
-const CHARS_PER_LINE = 54;
-const LINES_PER_PAGE = 47;
-
-function estimateLines(text: string): number {
-  let width = 0;
-  for (const ch of text) width += ch.charCodeAt(0) > 0x2e80 ? 1 : 0.55;
-  return Math.max(1, Math.ceil(width / CHARS_PER_LINE));
-}
-
-interface SupplementBlock {
+interface SupplementUnit {
   key: string;
-  lines: number;
   node: ReactNode;
 }
 
-function buildSupplementBlocks({ projects, skills, grades, links }: RirekishoModel["supplement"]): SupplementBlock[] {
-  const blocks: SupplementBlock[] = projects.map((p) => ({
-    key: `project-${p.name}`,
-    lines:
-      1 +
-      p.sections.reduce(
-        (sum, sec, i) =>
-          sum +
-          (i > 0 && sec.heading ? 1 : 0) +
-          sec.paragraphs.reduce((n, text) => n + estimateLines(text), 0) +
-          sec.bullets.reduce((n, text) => n + estimateLines(`・${text}`), 0),
-        0,
-      ) +
-      estimateLines(`使用技術：${p.tech}`) +
-      1,
-    node: (
-      <div className="rk-proj" key={`project-${p.name}`}>
-        <h3>
-          ■ {p.name}
-          {"　"}
-          {p.slogan}
-        </h3>
-        {p.sections.map((sec, i) => (
-          <div className="rk-sec" key={`${sec.heading}-${i}`}>
-            {i > 0 && sec.heading && <p className="rk-sec-h">▼ {sec.heading}</p>}
+/**
+ * Cuts the supplement into units that are never split across pages: each project's header with its first
+ * section, then one unit per further section (its heading stays with its content), plus the other lists.
+ * @param supplement - Projects, skills, grades and links from the model
+ * @returns Units in reading order
+ */
+function buildSupplementUnits({ projects, skills, grades, links }: RirekishoModel["supplement"]): SupplementUnit[] {
+  const units: SupplementUnit[] = [];
+
+  for (const p of projects) {
+    const last = p.sections.length - 1;
+    const sections = p.sections.length > 0 ? p.sections : [{ heading: "", paragraphs: [], bullets: [] }];
+    sections.forEach((sec, i) => {
+      const isFirst = i === 0;
+      const isLast = i === Math.max(last, 0);
+      units.push({
+        key: `project-${p.name}-${i}`,
+        node: (
+          <div className={`rk-unit${isLast ? " rk-unit-last" : ""}`} key={`project-${p.name}-${i}`}>
+            {isFirst && (
+              <h3>
+                ■ {p.name}
+                {"　"}
+                {p.slogan}
+              </h3>
+            )}
+            {!isFirst && sec.heading && <p className="rk-sec-h">▼ {sec.heading}</p>}
             {sec.paragraphs.map((text) => (
               <p key={text}>{text}</p>
             ))}
@@ -129,20 +121,19 @@ function buildSupplementBlocks({ projects, skills, grades, links }: RirekishoMod
                 <li key={text}>・{text}</li>
               ))}
             </ul>
+            {isLast && p.tech && <p className="rk-tech">使用技術：{p.tech}</p>}
           </div>
-        ))}
-        {p.tech && <p className="rk-tech">使用技術：{p.tech}</p>}
-      </div>
-    ),
-  }));
+        ),
+      });
+    });
+  }
 
-  const listBlock = (key: string, title: string, items: { label: string; text: string }[]) => {
+  const listUnit = (key: string, title: string, items: { label: string; text: string }[]) => {
     if (items.length === 0) return;
-    blocks.push({
+    units.push({
       key,
-      lines: 2 + items.reduce((sum, item) => sum + estimateLines(`${item.label}：${item.text}`), 0),
       node: (
-        <div className="rk-proj" key={key}>
+        <div className="rk-unit rk-unit-last" key={key}>
           <h3>■ {title}</h3>
           {items.map((item) => (
             <p key={item.label}>
@@ -153,24 +144,95 @@ function buildSupplementBlocks({ projects, skills, grades, links }: RirekishoMod
       ),
     });
   };
-  listBlock("skills", "技術スキル", skills);
-  listBlock("grades", "学業成績", grades);
-  listBlock("links", "ポートフォリオ・連絡先", links);
-  return blocks;
+  listUnit("skills", "技術スキル", skills);
+  listUnit("grades", "学業成績", grades);
+  listUnit("links", "ポートフォリオ・連絡先", links);
+  return units;
 }
 
-function paginate(blocks: SupplementBlock[]): SupplementBlock[][] {
-  const pages: SupplementBlock[][] = [];
-  let used = 0;
-  for (const block of blocks) {
-    if (pages.length === 0 || used + block.lines > LINES_PER_PAGE) {
-      pages.push([]);
-      used = 0;
-    }
-    pages[pages.length - 1].push(block);
-    used += block.lines;
-  }
-  return pages;
+/**
+ * Supplement pages (projects, skills, grades, links). Pages are filled from the heights the browser actually
+ * renders, so nothing is ever cut off; a hidden copy of the content is measured against the real page body.
+ * @param supplement - Supplement content from the model
+ * @returns Rendered supplement pages
+ */
+function SupplementPages({ supplement }: { supplement: RirekishoModel["supplement"] }) {
+  const units = buildSupplementUnits(supplement);
+  const signature = JSON.stringify(supplement);
+  const unitsRef = useRef<HTMLDivElement>(null);
+  const probeRef = useRef<HTMLDivElement>(null);
+  const [pages, setPages] = useState<number[][]>(() => [units.map((_, i) => i)]);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const list = unitsRef.current;
+      const probe = probeRef.current;
+      if (!list || !probe) return;
+      // The page can be shown with CSS zoom: getBoundingClientRect is scaled by it, clientHeight is not.
+      const scale = probe.offsetHeight > 0 ? probe.getBoundingClientRect().height / probe.offsetHeight : 1;
+      const style = getComputedStyle(probe);
+      const capacity =
+        (probe.clientHeight - parseFloat(style.paddingTop) - parseFloat(style.paddingBottom)) * scale - 2;
+      const units = [...list.children].map((el) => ({
+        height: el.getBoundingClientRect().height,
+        margin: (parseFloat(getComputedStyle(el).marginBottom) || 0) * scale,
+      }));
+      const next: number[][] = [[]];
+      let used = 0;
+      units.forEach(({ height, margin }, i) => {
+        const current = next[next.length - 1];
+        // The margin after the last unit on a page is not needed, so only the unit itself has to fit.
+        if (current.length > 0 && used + height > capacity) {
+          next.push([]);
+          used = 0;
+        }
+        next[next.length - 1].push(i);
+        used += height + margin;
+      });
+      setPages((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    };
+    measure();
+    let cancelled = false;
+    document.fonts?.ready.then(() => {
+      if (!cancelled) measure();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [signature]);
+
+  return (
+    <>
+      <section className="rk-page rk-measure" aria-hidden="true">
+        <div className="rk-page2 rk-supp">
+          <div className="rk-motivation">
+            <div className="rk-box-head">&nbsp;</div>
+            <div className="rk-supp-body" ref={probeRef} />
+          </div>
+        </div>
+        <div className="rk-page2 rk-supp rk-measure-list">
+          <div className="rk-motivation">
+            <div className="rk-supp-body rk-measure-body" ref={unitsRef}>
+              {units.map((u) => u.node)}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {pages.map((indexes, n) => (
+        <section className="doc-paper rk-page" key={`supplement-${n}`}>
+          <div className="rk-page2 rk-supp">
+            <div className="rk-motivation">
+              <div className="rk-box-head">
+                職務・プロジェクト経歴（補足）{pages.length > 1 ? ` ${n + 1}/${pages.length}` : ""}
+              </div>
+              <div className="rk-supp-body">{indexes.map((i) => units[i]?.node)}</div>
+            </div>
+          </div>
+        </section>
+      ))}
+    </>
+  );
 }
 
 /**
@@ -208,7 +270,6 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
   const page1 = history.slice(0, splitAt);
   const overflow = history.slice(splitAt);
   const qualificationCount = Math.max(MIN_QUALIFICATION_ROWS, model.qualificationRows.length);
-  const supplementPages = paginate(buildSupplementBlocks(model.supplement));
 
   return (
     <>
@@ -343,18 +404,7 @@ export function RirekishoDocument({ model, showPhoto }: RirekishoDocumentProps) 
         </div>
       </section>
 
-      {supplementPages.map((page, index) => (
-        <section className="doc-paper rk-page" key={`supplement-${index}`}>
-          <div className="rk-page2 rk-supp">
-            <div className="rk-motivation">
-              <div className="rk-box-head">
-                職務・プロジェクト経歴（補足）{supplementPages.length > 1 ? ` ${index + 1}/${supplementPages.length}` : ""}
-              </div>
-              <div className="rk-supp-body">{page.map((block) => block.node)}</div>
-            </div>
-          </div>
-        </section>
-      ))}
+      <SupplementPages supplement={model.supplement} />
     </>
   );
 }

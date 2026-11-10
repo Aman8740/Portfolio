@@ -45,6 +45,8 @@ Which PDFs visitors can download is set by `publishedDocuments` in [src/data/por
 
 You can also print a page directly with **Print / Save as PDF** (paper A4, margins None).
 
+Page sizes: the resume is a single page sized to its content (never shorter than the original, at most 330 mm); a longer selection of projects is split over A4 pages. The rirekisho is always A4: the two form pages first, then as many supplement pages as the projects need. The supplement pages are filled from the heights the browser actually renders, so nothing is cut off.
+
 The builders are pure functions in [src/lib/documents.ts](src/lib/documents.ts); the pages are in [src/components/documents/](src/components/documents/).
 
 ### Filling in the rirekisho

@@ -57,19 +57,21 @@ function printToPdf(browser, url, outFile, profileDir) {
 }
 
 // The first load of a page can be printed before its layout has settled, so print again until two
-// consecutive prints produce the same page size.
-function pageHeight(file) {
-  const match = /\/MediaBox\s*\[\s*0\s+0\s+[\d.]+\s+([\d.]+)\s*\]/.exec(readFileSync(file, "latin1"));
-  return match ? Number(match[1]) : null;
+// consecutive prints produce the same page size and page count.
+function pageSignature(file) {
+  const text = readFileSync(file, "latin1");
+  const box = /\/MediaBox\s*\[\s*0\s+0\s+[\d.]+\s+([\d.]+)\s*\]/.exec(text);
+  const count = [...text.matchAll(/\/Type\s*\/Pages[^>]*?\/Count\s+(\d+)|\/Count\s+(\d+)[^>]*?\/Type\s*\/Pages/g)].map((m) => m[1] ?? m[2]);
+  return `${box ? Number(box[1]).toFixed(0) : "?"}x${count.join(",")}`;
 }
 
 async function printStable(browser, url, file, profileDir) {
   let previous = null;
   for (let attempt = 1; attempt <= 6; attempt++) {
     await printToPdf(browser, url, file, profileDir);
-    const height = pageHeight(file);
-    if (previous !== null && height !== null && Math.abs(height - previous) < 0.5) return;
-    previous = height;
+    const signature = pageSignature(file);
+    if (signature === previous) return;
+    previous = signature;
   }
   console.warn(`Page size did not settle for ${url}; using the last print.`);
 }

@@ -13,7 +13,7 @@ import "@fontsource/dejavu-sans/400.css";
 import "@fontsource/dejavu-sans/700.css";
 
 const ORIGINAL_PAGE_MM = 264;
-const A4_HEIGHT_MM = 297;
+const MAX_SINGLE_PAGE_MM = 330;
 
 /**
  * Resume route: preview, project selection, and print / save-as-PDF.
@@ -28,8 +28,8 @@ export function ResumePage() {
   const model = useMemo(() => buildResumeModel(source, { projectIds: ids }), [source, ids]);
   const [pageSize, setPageSize] = useState(`210mm ${ORIGINAL_PAGE_MM}mm`);
 
-  // One page sized to the content (never shorter than the original resume, never taller than A4);
-  // longer content falls back to A4 pages.
+  // One page sized to the content (never shorter than the original resume, at most 330 mm so it stays a
+  // sensible page); anything longer is split over A4 pages.
   useEffect(() => {
     const paper = document.querySelector<HTMLElement>(".resume-paper");
     const zoomed = document.querySelector<HTMLElement>(".doc-zoom");
@@ -38,7 +38,7 @@ export function ResumePage() {
       const zoom = parseFloat(getComputedStyle(zoomed).zoom) || 1;
       const mm = paper.getBoundingClientRect().height / zoom / (96 / 25.4);
       setPageSize(
-        mm <= A4_HEIGHT_MM ? `210mm ${Math.max(ORIGINAL_PAGE_MM, Math.ceil(mm + 0.6))}mm` : "A4",
+        mm <= MAX_SINGLE_PAGE_MM ? `210mm ${Math.max(ORIGINAL_PAGE_MM, Math.ceil(mm + 0.6))}mm` : "A4",
       );
     };
     measure();

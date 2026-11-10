@@ -377,7 +377,7 @@
   padding: 2.2mm 2.8mm;
   overflow: hidden;
   font-size: 3mm;
-  line-height: 1.55;
+  line-height: 1.5;
 }
 
 .rk-supp-body p,
@@ -440,4 +440,47 @@
 
 .rk-sec p + p {
   margin-top: 0.8mm !important;
+}
+
+.rk-unit {
+  display: flow-root;
+}
+
+.rk-unit-last {
+  margin-bottom: 4mm;
+}
+
+/* Hidden copy used to measure real heights before filling the pages */
+.rk-measure {
+  position: absolute !important;
+  left: -100000px;
+  top: 0;
+  width: 210mm;
+  height: auto !important;
+  overflow: visible !important;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rk-measure .rk-page2 {
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+.rk-measure .rk-measure-list {
+  height: auto;
+}
+
+.rk-measure .rk-measure-list .rk-motivation,
+.rk-measure .rk-measure-list .rk-measure-body {
+  height: auto;
+  flex: none;
+  overflow: visible;
+}
+
+@media print {
+  .rk-measure {
+    display: none !important;
+  }
 }
