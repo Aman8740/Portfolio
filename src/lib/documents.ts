@@ -120,14 +120,15 @@ export function parseDescription(markdown: string | undefined): ParsedDescriptio
   return { overview, points };
 }
 
+export type DescriptionBlock = { kind: "text"; text: string } | { kind: "list"; items: string[] };
+
 export interface DescriptionSection {
   heading: string;
-  paragraphs: string[];
-  bullets: string[];
+  blocks: DescriptionBlock[];
 }
 
 /**
- * Splits a markdown project description into its sections (heading, paragraphs, bullet points), so no part is lost.
+ * Splits a markdown project description into its sections, keeping paragraphs and bullet lists in their original order.
  * @param markdown - Project description (English or Japanese)
  * @returns Sections in order; the first usually holds the overview and has the "Overview" heading
  */
@@ -136,31 +137,37 @@ export function parseSections(markdown: string | undefined): DescriptionSection[
   let current: DescriptionSection | null = null;
   let paragraph: string[] = [];
   const flush = () => {
-    if (current && paragraph.length > 0) current.paragraphs.push(stripMarkdown(paragraph.join(" ")));
+    if (current && paragraph.length > 0) current.blocks.push({ kind: "text", text: stripMarkdown(paragraph.join(" ")) });
     paragraph = [];
+  };
+  const addItem = (item: string) => {
+    if (!current) return;
+    const last = current.blocks[current.blocks.length - 1];
+    if (last?.kind === "list") last.items.push(item);
+    else current.blocks.push({ kind: "list", items: [item] });
   };
   for (const raw of (markdown ?? "").split("\n")) {
     const line = raw.trim();
     const heading = /^#{2,3}\s+(.*)$/.exec(line);
     if (heading) {
       flush();
-      current = { heading: stripMarkdown(heading[1]), paragraphs: [], bullets: [] };
+      current = { heading: stripMarkdown(heading[1]), blocks: [] };
       sections.push(current);
       continue;
     }
     if (!current) {
       if (!line) continue;
-      current = { heading: "", paragraphs: [], bullets: [] };
+      current = { heading: "", blocks: [] };
       sections.push(current);
     }
     if (!line) flush();
     else if (line.startsWith("- ") || line.startsWith("* ")) {
       flush();
-      current.bullets.push(stripMarkdown(line.slice(2)));
+      addItem(stripMarkdown(line.slice(2)));
     } else paragraph.push(line);
   }
   flush();
-  return sections.filter((s) => s.paragraphs.length > 0 || s.bullets.length > 0);
+  return sections.filter((s) => s.blocks.length > 0);
 }
 
 function firstSentence(text: string): string {

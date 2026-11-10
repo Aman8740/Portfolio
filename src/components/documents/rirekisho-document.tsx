@@ -97,7 +97,7 @@ function buildSupplementUnits({ projects, skills, grades, links }: RirekishoMode
 
   for (const p of projects) {
     const last = p.sections.length - 1;
-    const sections = p.sections.length > 0 ? p.sections : [{ heading: "", paragraphs: [], bullets: [] }];
+    const sections = p.sections.length > 0 ? p.sections : [{ heading: "", blocks: [] }];
     sections.forEach((sec, i) => {
       const isFirst = i === 0;
       const isLast = i === Math.max(last, 0);
@@ -113,14 +113,17 @@ function buildSupplementUnits({ projects, skills, grades, links }: RirekishoMode
               </h3>
             )}
             {!isFirst && sec.heading && <p className="rk-sec-h">▼ {sec.heading}</p>}
-            {sec.paragraphs.map((text) => (
-              <p key={text}>{text}</p>
-            ))}
-            <ul>
-              {sec.bullets.map((text) => (
-                <li key={text}>・{text}</li>
-              ))}
-            </ul>
+            {sec.blocks.map((block, b) =>
+              block.kind === "text" ? (
+                <p key={`${b}-${block.text}`}>{block.text}</p>
+              ) : (
+                <ul key={`${b}-list`}>
+                  {block.items.map((text) => (
+                    <li key={text}>・{text}</li>
+                  ))}
+                </ul>
+              ),
+            )}
             {isLast && p.tech && <p className="rk-tech">使用技術：{p.tech}</p>}
           </div>
         ),
